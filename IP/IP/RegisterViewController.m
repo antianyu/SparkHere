@@ -51,6 +51,9 @@
     
     self.title=@"Register";
     
+    UIBarButtonItem *doneButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
+    self.navigationItem.rightBarButtonItem=doneButtonItem;
+    
     [usernameTextField becomeFirstResponder];
     
     usernameTextField.textColor=[UIColor whiteColor];
@@ -88,7 +91,7 @@
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction)registerButtonClicked:(id)sender
+- (void)doneButtonClicked
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
     [self constructUser];

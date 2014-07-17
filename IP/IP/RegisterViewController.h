@@ -15,7 +15,6 @@
 @property (strong, nonatomic) IBOutlet UITextField *confirmPwdTextField;
 @property (strong, nonatomic) IBOutlet UITextField *nicknameTextField;
 
-- (IBAction)registerButtonClicked:(id)sender;
 - (IBAction)viewTouchDown:(id)sender;
 
 @end

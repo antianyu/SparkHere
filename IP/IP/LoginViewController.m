@@ -86,6 +86,10 @@
 - (IBAction)registerButtonClicked:(id)sender
 {
     RegisterViewController *controller=[[RegisterViewController alloc]init];
+    
+    UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Login" style:UIBarButtonItemStyleBordered target:self action:nil];
+    self.navigationItem.backBarButtonItem=backButton;
+    
     [self.navigationController pushViewController:controller animated:YES];
 }
 
