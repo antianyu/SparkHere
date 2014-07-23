@@ -7,6 +7,7 @@
 //
 
 #import "EditChannelViewController.h"
+#import "ChooseCategoryViewController.h"
 #import "Settings.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -23,6 +24,7 @@
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     int inputError;
+    NSArray *categoryList;
 }
 
 @synthesize channelNameTextField;
@@ -30,18 +32,10 @@
 @synthesize longitudeTextField;
 @synthesize latitudeTextField;
 @synthesize rangeTextField;
+@synthesize categoryButton;
 @synthesize descriptionTextView;
 @synthesize channel;
 @synthesize editChannel;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -98,8 +92,14 @@
     descriptionTextView.layer.cornerRadius=5;
     descriptionTextView.tintColor=[UIColor whiteColor];
     
+    categoryButton.titleLabel.textAlignment=NSTextAlignmentCenter;
+    categoryButton.titleLabel.text=[categoryList objectAtIndex:0];
+    
     appDelegate=[[UIApplication sharedApplication]delegate];
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
+    categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];
     
     if (editChannel)
     {
@@ -108,6 +108,7 @@
         latitudeTextField.text=[NSString stringWithFormat:@"%f", channel.location.latitude];
         longitudeTextField.text=[NSString stringWithFormat:@"%f", channel.location.longitude];
         rangeTextField.text=[NSString stringWithFormat:@"%f", channel.range];
+        categoryButton.titleLabel.text=[categoryList objectAtIndex:channel.category];
         descriptionTextView.text=channel.description;
     }
 }
@@ -167,6 +168,20 @@
                                            otherButtonTitles:nil];
         [alert show];
     }
+}
+
+- (IBAction)categoryButtonClicked:(id)sender
+{
+    ChooseCategoryViewController *controller=[[ChooseCategoryViewController alloc]init];
+    controller.category=channel.category;
+    controller.delegate=self;
+    
+    self.hidesBottomBarWhenPushed=YES;
+    
+    UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
+    self.navigationItem.backBarButtonItem=backButton;
+    
+    [self.navigationController pushViewController:controller animated:YES];    
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -425,6 +440,7 @@
             newChannel[@"followersNumber"]=[NSNumber numberWithInt:channel.followersNumber];
         }
         newChannel[@"defaultPrivilege"]=[NSNumber numberWithInt:privilegeSegmentedControl.selectedSegmentIndex+1];
+        newChannel[@"category"]=[NSNumber numberWithInt:channel.category];
     }
 }
 
@@ -593,6 +609,12 @@
      {
          [self establishRequest];
      }];
+}
+
+- (void)passIntDelegate:(int)value
+{
+    categoryButton.titleLabel.text=[categoryList objectAtIndex:value];
+    channel.category=value;
 }
 
 @end

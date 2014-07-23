@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyChannelsViewController : UIViewController
+@interface MyChannelsViewController : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *channelTableView;
 

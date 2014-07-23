@@ -8,15 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "Channel.h"
+#import "PassIntDelegate.h"
 
-@interface EditChannelViewController : UIViewController <UITextFieldDelegate>
+@interface EditChannelViewController : UIViewController <UITextFieldDelegate, PassIntDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *channelNameTextField;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *privilegeSegmentedControl;
 @property (strong, nonatomic) IBOutlet UITextField *latitudeTextField;
 @property (strong, nonatomic) IBOutlet UITextField *longitudeTextField;
 @property (strong, nonatomic) IBOutlet UITextField *rangeTextField;
+@property (strong, nonatomic) IBOutlet UIButton *categoryButton;
 @property (strong, nonatomic) IBOutlet UITextView *descriptionTextView;
+
+- (IBAction)categoryButtonClicked:(id)sender;
 
 @property (strong, nonatomic) Channel *channel;
 @property BOOL editChannel;

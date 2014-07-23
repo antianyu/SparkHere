@@ -18,6 +18,7 @@
 @property (nonatomic) double range;
 @property (nonatomic) int followersNumber;
 @property (nonatomic) int defaultPrivilege;
+@property (nonatomic) int category;
 
 -(id)init;
 -(id)initWithPFObject:(PFObject *)object;

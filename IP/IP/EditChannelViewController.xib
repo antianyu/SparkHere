@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditChannelViewController">
             <connections>
+                <outlet property="categoryButton" destination="vNb-Rw-REf" id="COb-6t-wIg"/>
                 <outlet property="channelNameTextField" destination="lw9-P7-RkX" id="dKh-8v-5sB"/>
                 <outlet property="descriptionTextView" destination="3iY-W5-5Aw" id="mvu-xN-C8L"/>
                 <outlet property="latitudeTextField" destination="9wO-qx-S1D" id="1pR-vQ-o2B"/>
@@ -56,7 +57,14 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FAO-ga-UPA">
-                    <rect key="frame" x="20" y="209" width="93" height="21"/>
+                    <rect key="frame" x="20" y="247" width="93" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UuH-lz-2HT">
+                    <rect key="frame" x="20" y="209" width="75" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -112,8 +120,19 @@
                         <outlet property="delegate" destination="-1" id="uX3-Ga-j0t"/>
                     </connections>
                 </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vNb-Rw-REf">
+                    <rect key="frame" x="125" y="205" width="175" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Technology &amp; Science" backgroundImage="Button_175">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="categoryButtonClicked:" destination="-1" eventType="touchUpInside" id="Jzv-v8-LQB"/>
+                    </connections>
+                </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3iY-W5-5Aw">
-                    <rect key="frame" x="20" y="238" width="280" height="310"/>
+                    <rect key="frame" x="20" y="276" width="280" height="272"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -124,7 +143,7 @@
                     </connections>
                 </textView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <connections>
@@ -132,4 +151,7 @@
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="Button_175" width="175" height="30"/>
+    </resources>
 </document>

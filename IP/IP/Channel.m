@@ -17,6 +17,7 @@
 @synthesize range;
 @synthesize followersNumber;
 @synthesize defaultPrivilege;
+@synthesize category;
 
 -(id)init
 {
@@ -29,6 +30,7 @@
         range=0;
         followersNumber=0;
         defaultPrivilege=0;
+        category=0;
     }
     return self;
 }
@@ -44,6 +46,7 @@
         range=[object[@"range"] doubleValue];
         followersNumber=[object[@"followersNumber"] intValue];
         defaultPrivilege=[object[@"defaultPrivilege"] intValue];
+        category=[object[@"category"] intValue];
     }
     return self;
 }

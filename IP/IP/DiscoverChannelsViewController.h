@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "User.h"
 
-@interface DiscoverChannelsViewController : UIViewController
+@interface DiscoverChannelsViewController : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate>
 
-@property (strong, nonatomic) IBOutlet UITableView *channelTableView;
+@property (strong, nonatomic) IBOutlet UITableView *categoryTableView;
 
 @end

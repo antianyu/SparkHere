@@ -66,6 +66,11 @@
 		55A2B7E91949FC2F003DA300 /* MessageDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55A2B7E81949FC2F003DA300 /* MessageDetailViewController.xib */; };
 		55A2B7EF194A122D003DA300 /* ChannelDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A2B7ED194A122D003DA300 /* ChannelDetailViewController.m */; };
 		55A2B7F0194A122D003DA300 /* ChannelDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */; };
+		55C7E9FF19802E1F00D68603 /* Category.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55C7E9FE19802E1F00D68603 /* Category.plist */; };
+		55C7EA031980314300D68603 /* DiscoverListsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C7EA011980314300D68603 /* DiscoverListsViewController.m */; };
+		55C7EA041980314300D68603 /* DiscoverListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA021980314300D68603 /* DiscoverListsViewController.xib */; };
+		55C7EA0819804C1500D68603 /* ChooseCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C7EA0619804C1500D68603 /* ChooseCategoryViewController.m */; };
+		55C7EA0919804C1500D68603 /* ChooseCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA0719804C1500D68603 /* ChooseCategoryViewController.xib */; };
 		55D8153119560FE2002FA253 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D8152F19560FE2002FA253 /* ChangePasswordViewController.m */; };
 		55D8153219560FE2002FA253 /* ChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55D8153019560FE2002FA253 /* ChangePasswordViewController.xib */; };
 		55E9DEE41975AF4200DEB12A /* ManagePrivilegeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E9DEE21975AF4200DEB12A /* ManagePrivilegeViewController.m */; };
@@ -168,6 +173,14 @@
 		55A2B7EC194A122D003DA300 /* ChannelDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelDetailViewController.h; sourceTree = "<group>"; };
 		55A2B7ED194A122D003DA300 /* ChannelDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelDetailViewController.m; sourceTree = "<group>"; };
 		55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChannelDetailViewController.xib; sourceTree = "<group>"; };
+		55C7E9FE19802E1F00D68603 /* Category.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Category.plist; sourceTree = "<group>"; };
+		55C7EA001980314300D68603 /* DiscoverListsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverListsViewController.h; sourceTree = "<group>"; };
+		55C7EA011980314300D68603 /* DiscoverListsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverListsViewController.m; sourceTree = "<group>"; };
+		55C7EA021980314300D68603 /* DiscoverListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscoverListsViewController.xib; sourceTree = "<group>"; };
+		55C7EA0519804C1500D68603 /* ChooseCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseCategoryViewController.h; sourceTree = "<group>"; };
+		55C7EA0619804C1500D68603 /* ChooseCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseCategoryViewController.m; sourceTree = "<group>"; };
+		55C7EA0719804C1500D68603 /* ChooseCategoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseCategoryViewController.xib; sourceTree = "<group>"; };
+		55C7EA0A19804FA300D68603 /* PassIntDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassIntDelegate.h; sourceTree = "<group>"; };
 		55D8152E19560FE2002FA253 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
 		55D8152F19560FE2002FA253 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
 		55D8153019560FE2002FA253 /* ChangePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangePasswordViewController.xib; sourceTree = "<group>"; };
@@ -214,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				5514A848197708D6003B6294 /* PassBoolDelegate.h */,
+				55C7EA0A19804FA300D68603 /* PassIntDelegate.h */,
 			);
 			name = Delegate;
 			sourceTree = "<group>";
@@ -297,6 +311,7 @@
 				5538862619487BE7004B74D8 /* InfoPlist.strings */,
 				5538862919487BE7004B74D8 /* main.m */,
 				5538862B19487BE7004B74D8 /* IP-Prefix.pch */,
+				55C7E9FE19802E1F00D68603 /* Category.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -342,9 +357,15 @@
 				551FDDE7197492C700FB94AA /* EditChannelViewController.h */,
 				551FDDE8197492C700FB94AA /* EditChannelViewController.m */,
 				551FDDE9197492C700FB94AA /* EditChannelViewController.xib */,
+				55C7EA0519804C1500D68603 /* ChooseCategoryViewController.h */,
+				55C7EA0619804C1500D68603 /* ChooseCategoryViewController.m */,
+				55C7EA0719804C1500D68603 /* ChooseCategoryViewController.xib */,
 				551758531964A5D800AF9C20 /* DiscoverChannelsViewController.h */,
 				551758541964A5D800AF9C20 /* DiscoverChannelsViewController.m */,
 				551758551964A5D800AF9C20 /* DiscoverChannelsViewController.xib */,
+				55C7EA001980314300D68603 /* DiscoverListsViewController.h */,
+				55C7EA011980314300D68603 /* DiscoverListsViewController.m */,
+				55C7EA021980314300D68603 /* DiscoverListsViewController.xib */,
 				55A2B7EC194A122D003DA300 /* ChannelDetailViewController.h */,
 				55A2B7ED194A122D003DA300 /* ChannelDetailViewController.m */,
 				55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */,
@@ -457,6 +478,7 @@
 				5514A8461976BCF3003B6294 /* ChooseNewSuperAdminViewController.xib in Resources */,
 				55054D1B195375C000ACD295 /* MyProfileViewController.xib in Resources */,
 				556C63171949D9D70030FEFF /* SettingsViewController.xib in Resources */,
+				55C7EA041980314300D68603 /* DiscoverListsViewController.xib in Resources */,
 				551CA5E2195323B500D3A0EB /* LoginViewController.xib in Resources */,
 				5517584D1964A1AA00AF9C20 /* MyChannelsViewController.xib in Resources */,
 				551FDDEB197492C700FB94AA /* EditChannelViewController.xib in Resources */,
@@ -466,7 +488,9 @@
 				5558D3AF1954D32B006BF7FA /* RegisterViewController.xib in Resources */,
 				5517584619644F8100AF9C20 /* MessageTableViewCell.xib in Resources */,
 				556C630D1949D9BB0030FEFF /* HelpViewController.xib in Resources */,
+				55C7EA0919804C1500D68603 /* ChooseCategoryViewController.xib in Resources */,
 				55E9DEE51975AF4200DEB12A /* ManagePrivilegeViewController.xib in Resources */,
+				55C7E9FF19802E1F00D68603 /* Category.plist in Resources */,
 				5530973319507A4F00B4D8F8 /* AppSettings.plist in Resources */,
 				551758611964B35900AF9C20 /* MyPostsViewController.xib in Resources */,
 				551758571964A5D800AF9C20 /* DiscoverChannelsViewController.xib in Resources */,
@@ -500,6 +524,7 @@
 				5514A8451976BCF3003B6294 /* ChooseNewSuperAdminViewController.m in Sources */,
 				5538862E19487BE7004B74D8 /* AppDelegate.m in Sources */,
 				55526403194F941D00A9A024 /* User.m in Sources */,
+				55C7EA0819804C1500D68603 /* ChooseCategoryViewController.m in Sources */,
 				556C63111949D9C70030FEFF /* AboutViewController.m in Sources */,
 				551ADBD119708E8500792132 /* MBProgressHUD.m in Sources */,
 				55A2B7E41949F80F003DA300 /* MessageDetailViewController.m in Sources */,
@@ -509,6 +534,7 @@
 				551758561964A5D800AF9C20 /* DiscoverChannelsViewController.m in Sources */,
 				556C630C1949D9BB0030FEFF /* HelpViewController.m in Sources */,
 				5558D3AE1954D32B006BF7FA /* RegisterViewController.m in Sources */,
+				55C7EA031980314300D68603 /* DiscoverListsViewController.m in Sources */,
 				551CA5E1195323B500D3A0EB /* LoginViewController.m in Sources */,
 				551FDDEA197492C700FB94AA /* EditChannelViewController.m in Sources */,
 				551758601964B35900AF9C20 /* MyPostsViewController.m in Sources */,
