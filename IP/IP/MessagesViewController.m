@@ -114,7 +114,7 @@
     NSInteger row = [indexPath row];
     Message *message=[appDelegate.messageList objectAtIndex:row];
     cell.senderLabel.text = message.sender.nickname;
-    cell.contentLabel.text = message.content;
+    [cell setContent:message.content];
     cell.channelLabel.text = message.channel.channelName;
     
     return cell;

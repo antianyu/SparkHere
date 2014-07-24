@@ -12,21 +12,13 @@
 #import "ChooseNewSuperAdminViewController.h"
 #import "Settings.h"
 #import "User.h"
+#import "UIAlertViewOperation.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 
 @interface ChannelDetailViewController ()
 
 @end
-
-typedef enum
-{
-    UIAlertViewOperationGoBack,
-    UIAlertViewOperationDeleteChannel,
-    UIAlertViewOperationPublishMessage,
-    UIAlertViewOperationChooseNewSuperAdmin
-    
-} UIAlertViewOperation;
 
 @implementation ChannelDetailViewController
 {
@@ -78,13 +70,15 @@ typedef enum
     
     buttons=[[NSMutableArray alloc]init];
     
+    appDelegate=[[UIApplication sharedApplication]delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [appDelegate setDefaultViewStyle:followButton];
+    
     [descriptionLabel setNumberOfLines:0];
     descriptionLabel.font=[UIFont systemFontOfSize:17];
     descriptionLabel.lineBreakMode=NSLineBreakByWordWrapping;
     descriptionLabel.textColor=[UIColor whiteColor];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
 }
 
@@ -218,6 +212,8 @@ typedef enum
                                        cancelButtonTitle:@"Cancel"
                                        otherButtonTitles:@"Confirm",nil];
     [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    UITextField *textField=[alert textFieldAtIndex:0];
+    textField.tintColor=[UIColor colorWithRed:0 green:0.5 blue:1 alpha:1];
     [alert show];
 }
 

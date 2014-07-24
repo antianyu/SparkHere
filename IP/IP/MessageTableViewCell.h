@@ -15,5 +15,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *channelLabel;
 
 - (void)setFontSize:(int)fontSize;
+- (void)setContent:(NSString *)content;
 
 @end

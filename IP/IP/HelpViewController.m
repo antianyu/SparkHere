@@ -78,13 +78,12 @@
     
     "This is help page!\n\n"
     
-                        "This is help page!\n\n";
+    "This is help page!\n\n";
     
     [helpLabel setNumberOfLines:0];
     helpLabel.font=[UIFont systemFontOfSize:17];
     helpLabel.lineBreakMode=NSLineBreakByWordWrapping;
     helpLabel.text=helpString;
-    
     
     CGSize constraint=CGSizeMake(self.view.frame.size.width-40, 20000);
     NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:helpLabel.font, NSFontAttributeName, nil];

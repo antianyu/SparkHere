@@ -7,7 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyProfileViewController">
             <connections>
                 <outlet property="aboutButton" destination="PCp-Ni-LXF" id="9t2-8l-xmc"/>
-                <outlet property="changePwdButton" destination="5UH-22-RGo" id="yXT-rA-Ltm"/>
+                <outlet property="editProfileButton" destination="5UH-22-RGo" id="N69-4S-37p"/>
                 <outlet property="helpButton" destination="UXz-K1-pWu" id="Sfp-Wt-0An"/>
                 <outlet property="logoutButton" destination="gKA-Wb-a46" id="egi-ZB-ait"/>
                 <outlet property="myPostsButton" destination="ZDS-SS-61K" id="3iy-gY-Lb1"/>
@@ -47,7 +47,7 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="changePwdButtonClicked:" destination="-1" eventType="touchUpInside" id="mpM-ih-6n2"/>
+                        <action selector="editProfileButtonClicked:" destination="-1" eventType="touchUpInside" id="HAX-7U-1jP"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ltk-iO-ADE">

@@ -23,16 +23,27 @@
     [channelLabel setTextColor:[UIColor grayColor]];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-}
-
 - (void)setFontSize:(int)fontSize
 {
     senderLabel.font=[UIFont systemFontOfSize:fontSize-6];
     contentLabel.font=[UIFont systemFontOfSize:fontSize];
     channelLabel.font=[UIFont systemFontOfSize:fontSize-6];
+}
+
+- (void)setContent:(NSString *)content
+{
+    contentLabel.text=content;
+    
+    CGSize constraint=CGSizeMake(280, 1000);
+    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:contentLabel.font, NSFontAttributeName, nil];
+    
+    CGSize actualSize=[content boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+    
+    contentLabel.frame=CGRectMake(20, 27, 280, actualSize.height);
+    
+    CGRect frame=self.frame;
+    frame.size.height=actualSize.height+63;
+    self.frame=frame;
 }
 
 @end

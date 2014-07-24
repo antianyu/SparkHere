@@ -9,7 +9,7 @@
 #import "MyProfileViewController.h"
 #import "LoginViewController.h"
 #import "MyPostsViewController.h"
-#import "ChangePasswordViewController.h"
+#import "EditProfileViewController.h"
 #import "SettingsViewController.h"
 #import "HelpViewController.h"
 #import "AboutViewController.h"
@@ -28,7 +28,7 @@
 
 @synthesize logoutButton;
 @synthesize myPostsButton;
-@synthesize changePwdButton;
+@synthesize editProfileButton;
 @synthesize settingsButton;
 @synthesize helpButton;
 @synthesize aboutButton;
@@ -60,10 +60,10 @@
     [myPostsButton setBackgroundColor:[UIColor colorWithRed:146/255.0 green:43/255.0 blue:236/255.0 alpha:1]];
     [myPostsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-    changePwdButton.titleLabel.lineBreakMode=TRUE;
-    [changePwdButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [changePwdButton setBackgroundColor:[UIColor colorWithRed:53/255.0 green:174/255.0 blue:238/255.0 alpha:1]];
-    [changePwdButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    editProfileButton.titleLabel.lineBreakMode=TRUE;
+    [editProfileButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [editProfileButton setBackgroundColor:[UIColor colorWithRed:53/255.0 green:174/255.0 blue:238/255.0 alpha:1]];
+    [editProfileButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     settingsButton.titleLabel.lineBreakMode=TRUE;
     [settingsButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
@@ -85,7 +85,7 @@
         [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
         logoutButton.frame=CGRectMake(40, 17, 100, 100);
         myPostsButton.frame=CGRectMake(180, 17, 100, 100);
-        changePwdButton.frame=CGRectMake(40, 134, 100, 100);
+        editProfileButton.frame=CGRectMake(40, 134, 100, 100);
         settingsButton.frame=CGRectMake(180, 134, 100, 100);
         helpButton.frame=CGRectMake(40, 251, 100, 100);
         aboutButton.frame=CGRectMake(180, 251, 100, 100);
@@ -125,9 +125,9 @@
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (IBAction)changePwdButtonClicked:(id)sender
+- (IBAction)editProfileButtonClicked:(id)sender
 {
-    ChangePasswordViewController *controller=[[ChangePasswordViewController alloc]init];
+    EditProfileViewController *controller=[[EditProfileViewController alloc]init];
     
     UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
     self.navigationItem.backBarButtonItem=backButton;

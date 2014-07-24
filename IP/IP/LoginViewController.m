@@ -54,23 +54,18 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    appDelegate=[[UIApplication sharedApplication]delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
     [usernameTextField becomeFirstResponder];
     
-    usernameTextField.backgroundColor=[UIColor clearColor];
-    usernameTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    usernameTextField.layer.borderWidth=1.5;
-    usernameTextField.layer.cornerRadius=5;
-    
-    passwordTextField.backgroundColor=[UIColor clearColor];
-    passwordTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    passwordTextField.layer.borderWidth=1.5;
-    passwordTextField.layer.cornerRadius=5;
+    [appDelegate setDefaultViewStyle:usernameTextField];
+    [appDelegate setDefaultViewStyle:passwordTextField];
+    [appDelegate setDefaultViewStyle:loginButton];
+    [appDelegate setDefaultViewStyle:registerButton];
     
     usernameTextField.text=@"user2";
     passwordTextField.text=@"222";
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
 }
 
 - (IBAction)loginButtonClicked:(id)sender

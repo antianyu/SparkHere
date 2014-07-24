@@ -13,14 +13,14 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *logoutButton;
 @property (strong, nonatomic) IBOutlet UIButton *myPostsButton;
-@property (strong, nonatomic) IBOutlet UIButton *changePwdButton;
+@property (strong, nonatomic) IBOutlet UIButton *editProfileButton;
 @property (strong, nonatomic) IBOutlet UIButton *settingsButton;
 @property (strong, nonatomic) IBOutlet UIButton *helpButton;
 @property (strong, nonatomic) IBOutlet UIButton *aboutButton;
 
 - (IBAction)logoutButtonClicked:(id)sender;
 - (IBAction)myPostsButtonClicked:(id)sender;
-- (IBAction)changePwdButtonClicked:(id)sender;
+- (IBAction)editProfileButtonClicked:(id)sender;
 - (IBAction)settingsButtonClicked:(id)sender;
 - (IBAction)helpButtonClicked:(id)sender;
 - (IBAction)aboutButtonClicked:(id)sender;

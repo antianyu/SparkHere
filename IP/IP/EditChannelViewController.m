@@ -8,10 +8,14 @@
 
 #import "EditChannelViewController.h"
 #import "ChooseCategoryViewController.h"
+#import "ImagePickerViewController.h"
 #import "Settings.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import <Parse/Parse.h>
+#import <MobileCoreServices/UTCoreTypes.h>
+#import "UIAlertViewOperation.h"
+#import "TextInputError.h"
 
 @interface EditChannelViewController ()
 
@@ -23,7 +27,8 @@
     PFObject *newChannel;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
-    int inputError;
+    UIAlertViewOperation operation;
+    TextInputError inputError;
     NSArray *categoryList;
 }
 
@@ -33,6 +38,8 @@
 @synthesize latitudeTextField;
 @synthesize rangeTextField;
 @synthesize categoryButton;
+@synthesize chooseLogoButton;
+@synthesize logoImageView;
 @synthesize descriptionTextView;
 @synthesize channel;
 @synthesize editChannel;
@@ -64,42 +71,24 @@
     
     descriptionTextView.text=detailString;
     
-    [channelNameTextField becomeFirstResponder];
-    
-    channelNameTextField.backgroundColor=[UIColor clearColor];
-    channelNameTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    channelNameTextField.layer.borderWidth=1.5;
-    channelNameTextField.layer.cornerRadius=5;
-    
-    latitudeTextField.backgroundColor=[UIColor clearColor];
-    latitudeTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    latitudeTextField.layer.borderWidth=1.5;
-    latitudeTextField.layer.cornerRadius=5;
-    
-    longitudeTextField.backgroundColor=[UIColor clearColor];
-    longitudeTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    longitudeTextField.layer.borderWidth=1.5;
-    longitudeTextField.layer.cornerRadius=5;
-    
-    rangeTextField.backgroundColor=[UIColor clearColor];
-    rangeTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    rangeTextField.layer.borderWidth=1.5;
-    rangeTextField.layer.cornerRadius=5;
-    
-    descriptionTextView.backgroundColor=[UIColor clearColor];
-    descriptionTextView.layer.borderColor=[[UIColor whiteColor]CGColor];
-    descriptionTextView.layer.borderWidth=1.5;
-    descriptionTextView.layer.cornerRadius=5;
-    descriptionTextView.tintColor=[UIColor whiteColor];
-    
-    categoryButton.titleLabel.textAlignment=NSTextAlignmentCenter;
-    categoryButton.titleLabel.text=[categoryList objectAtIndex:0];
-    
     appDelegate=[[UIApplication sharedApplication]delegate];
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];
+    
+    [channelNameTextField becomeFirstResponder];
+    
+    [appDelegate setDefaultViewStyle:channelNameTextField];
+    [appDelegate setDefaultViewStyle:latitudeTextField];
+    [appDelegate setDefaultViewStyle:longitudeTextField];
+    [appDelegate setDefaultViewStyle:rangeTextField];
+    [appDelegate setDefaultViewStyle:descriptionTextView];
+    [appDelegate setDefaultViewStyle:categoryButton];
+    [appDelegate setDefaultViewStyle:chooseLogoButton];
+    
+    categoryButton.titleLabel.textAlignment=NSTextAlignmentCenter;
+    [categoryButton setTitle:[categoryList objectAtIndex:0] forState:UIControlStateNormal];
     
     if (editChannel)
     {
@@ -108,7 +97,7 @@
         latitudeTextField.text=[NSString stringWithFormat:@"%f", channel.location.latitude];
         longitudeTextField.text=[NSString stringWithFormat:@"%f", channel.location.longitude];
         rangeTextField.text=[NSString stringWithFormat:@"%f", channel.range];
-        categoryButton.titleLabel.text=[categoryList objectAtIndex:channel.category];
+        [categoryButton setTitle:[categoryList objectAtIndex:channel.category] forState:UIControlStateNormal];
         descriptionTextView.text=channel.description;
     }
 }
@@ -137,7 +126,7 @@
 
 - (IBAction)segmentControlValueChanged:(id)sender
 {
-    inputError=-1;
+    inputError=TextInputErrorNone;
     if([sender selectedSegmentIndex]==0)
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages";
@@ -182,6 +171,18 @@
     self.navigationItem.backBarButtonItem=backButton;
     
     [self.navigationController pushViewController:controller animated:YES];    
+}
+
+- (IBAction)chooseLogoButtonClicked:(id)sender
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    operation=UIAlertViewOperationChooseImage;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -316,34 +317,80 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        if (!editChannel)
+        if (operation==UIAlertViewOperationChannelUpdated)
         {
-            appDelegate.refreshMyChannelList=true;
+            if (!editChannel)
+            {
+                appDelegate.refreshMyChannelList=true;
+            }
+            else if (editChannel && ![channel.channelName isEqualToString:newChannel[@"channelName"]])
+            {
+                appDelegate.refreshMessageList=true;
+                appDelegate.refreshMyChannelList=true;
+            }
+            [self.navigationController popViewControllerAnimated:YES];
         }
-        else if (editChannel && ![channel.channelName isEqualToString:newChannel[@"channelName"]])
+        else
         {
-            appDelegate.refreshMessageList=true;
-            appDelegate.refreshMyChannelList=true;
+            if (buttonIndex==1)
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                                 message:@"Image picker is not supported on your phone!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Confirm"
+                                                       otherButtonTitles:nil];
+                    [alert show];
+                }
+            }
+            else
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                                 message:@"Camera is not supported on your phone!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Confirm"
+                                                       otherButtonTitles:nil];
+                    [alert show];
+                }
+            }
         }
-        [self.navigationController popViewControllerAnimated:YES];
     }
-    else if(inputError==0)
+    else if(inputError==TextInputErrorChannelName)
     {
         [channelNameTextField becomeFirstResponder];
     }
-    else if(inputError==1)
+    else if(inputError==TextInputErrorLatitude)
     {
         [latitudeTextField becomeFirstResponder];
     }
-    else if(inputError==2)
+    else if(inputError==TextInputErrorLongitude)
     {
         [longitudeTextField becomeFirstResponder];
     }
-    else if(inputError==3)
+    else if(inputError==TextInputErrorRange)
     {
         [rangeTextField becomeFirstResponder];
     }
-    else if(inputError==4)
+    else if(inputError==TextInputErrorDescription)
     {
         [descriptionTextView becomeFirstResponder];
     }
@@ -353,7 +400,7 @@
 {
     if (channelNameTextField.text.length==0)
     {
-        inputError=0;
+        inputError=TextInputErrorChannelName;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"The name of channel can't be empty!"
                                                     delegate:self
@@ -363,7 +410,7 @@
     }
     else if (latitudeTextField.text.length==0)
     {
-        inputError=1;
+        inputError=TextInputErrorLatitude;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Latitude can't be empty!"
                                                     delegate:self
@@ -373,7 +420,7 @@
     }
     else if (longitudeTextField.text.length==0)
     {
-        inputError=2;
+        inputError=TextInputErrorLongitude;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Longitude can't be empty!"
                                                     delegate:self
@@ -383,7 +430,7 @@
     }
     else if (rangeTextField.text.length==0)
     {
-        inputError=3;
+        inputError=TextInputErrorRange;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Range can't be empty!"
                                                     delegate:self
@@ -393,7 +440,7 @@
     }
     else if (descriptionTextView.text.length==0)
     {
-        inputError=4;
+        inputError=TextInputErrorDescription;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Description can't be empty!"
                                                     delegate:self
@@ -403,7 +450,7 @@
     }
     else if (latitudeTextField.text.doubleValue<-90 || latitudeTextField.text.doubleValue>=90)
     {
-        inputError=1;
+        inputError=TextInputErrorLatitude;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Latitude is out of range!"
                                                     delegate:self
@@ -413,7 +460,7 @@
     }
     else if (longitudeTextField.text.doubleValue<-180 || longitudeTextField.text.doubleValue>=180)
     {
-        inputError=2;
+        inputError=TextInputErrorLongitude;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Longitude is out of range!"
                                                     delegate:self
@@ -455,6 +502,7 @@
              {
                  [progressHUD removeFromSuperview];
                  appDelegate.refreshChannelDetail=true;
+                 operation=UIAlertViewOperationChannelUpdated;
                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                               message:@"Channel is updated!"
                                                              delegate:self
@@ -475,7 +523,8 @@
          }];
     }
     else
-    {PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
+    {
+        PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
         [query whereKey:@"channelName" equalTo:newChannel[@"channelName"]];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
          {
@@ -498,6 +547,7 @@
                       {
                           [progressHUD removeFromSuperview];
                           appDelegate.refreshChannelDetail=true;
+                          operation=UIAlertViewOperationChannelUpdated;
                           UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                                        message:@"Channel is updated!"
                                                                       delegate:self
@@ -613,8 +663,25 @@
 
 - (void)passIntDelegate:(int)value
 {
-    categoryButton.titleLabel.text=[categoryList objectAtIndex:value];
+    [categoryButton setTitle:[categoryList objectAtIndex:value] forState:UIControlStateNormal];
     channel.category=value;
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
+    image=[self scaleToSize:image size:CGSizeMake(100, 100)];
+    logoImageView.image=image;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (UIImage *)scaleToSize:(UIImage *)image size:(CGSize)size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *scaledImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
 }
 
 @end

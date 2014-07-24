@@ -8,11 +8,15 @@
 
 #import "RegisterViewController.h"
 #import "MainViewController.h"
+#import "ImagePickerViewController.h"
 #import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import <Parse/Parse.h>
+#import <MobileCoreServices/UTCoreTypes.h>
+#import "UIAlertViewOperation.h"
+#import "TextInputError.h"
 
 @interface RegisterViewController ()
 
@@ -23,14 +27,17 @@
     Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
+    UIAlertViewOperation operation;
     User *user;
-    int inputError;
+    TextInputError inputError;
 }
 
 @synthesize usernameTextField;
 @synthesize passwordTextField;
 @synthesize confirmPwdTextField;
 @synthesize nicknameTextField;
+@synthesize chooseLogoButton;
+@synthesize logoImageView;
 
 - (void)viewDidLoad
 {
@@ -54,36 +61,18 @@
     UIBarButtonItem *doneButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=doneButtonItem;
     
-    [usernameTextField becomeFirstResponder];
-    
-    usernameTextField.textColor=[UIColor whiteColor];
-    usernameTextField.backgroundColor=[UIColor clearColor];
-    usernameTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    usernameTextField.layer.borderWidth=1.5;
-    usernameTextField.layer.cornerRadius=5;
-    
-    passwordTextField.textColor=[UIColor whiteColor];
-    passwordTextField.backgroundColor=[UIColor clearColor];
-    passwordTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    passwordTextField.layer.borderWidth=1.5;
-    passwordTextField.layer.cornerRadius=5;
-    
-    confirmPwdTextField.textColor=[UIColor whiteColor];
-    confirmPwdTextField.backgroundColor=[UIColor clearColor];
-    confirmPwdTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    confirmPwdTextField.layer.borderWidth=1.5;
-    confirmPwdTextField.layer.cornerRadius=5;
-    
-    nicknameTextField.textColor=[UIColor whiteColor];
-    nicknameTextField.backgroundColor=[UIColor clearColor];
-    nicknameTextField.layer.borderColor=[[UIColor whiteColor]CGColor];
-    nicknameTextField.layer.borderWidth=1.5;
-    nicknameTextField.layer.cornerRadius=5;
-    
-    user=nil;
-    
     appDelegate=[[UIApplication sharedApplication]delegate];
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [appDelegate setDefaultViewStyle:usernameTextField];
+    [appDelegate setDefaultViewStyle:passwordTextField];
+    [appDelegate setDefaultViewStyle:confirmPwdTextField];
+    [appDelegate setDefaultViewStyle:nicknameTextField];
+    [appDelegate setDefaultViewStyle:chooseLogoButton];
+    
+    [usernameTextField becomeFirstResponder];
+    
+    user=nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -104,6 +93,18 @@
 - (IBAction)viewTouchDown:(id)sender
 {    
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
+- (IBAction)chooseLogoButtonClicked:(id)sender
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    operation=UIAlertViewOperationChooseImage;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -141,7 +142,7 @@
 {
     if (usernameTextField.text.length==0)
     {
-        inputError=0;
+        inputError=TextInputErrorUserName;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Username can't be empty!"
                                                     delegate:self
@@ -151,7 +152,7 @@
     }
     else if (passwordTextField.text.length==0)
     {
-        inputError=1;
+        inputError=TextInputErrorPassword;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Password can't be empty!"
                                                     delegate:self
@@ -161,7 +162,7 @@
     }
     else if (confirmPwdTextField.text.length==0)
     {
-        inputError=2;
+        inputError=TextInputErrorConfirmPassword;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Please confirm password!"
                                                     delegate:self
@@ -171,7 +172,7 @@
     }
     else if (nicknameTextField.text.length==0)
     {
-        inputError=3;
+        inputError=TextInputErrorNickname;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"Nickname can't be empty!"
                                                     delegate:self
@@ -181,7 +182,7 @@
     }
     else if (![passwordTextField.text isEqual:confirmPwdTextField.text])
     {
-        inputError=2;
+        inputError=TextInputErrorConfirmPassword;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
                                                      message:@"The passwords you typed do not match!"
                                                     delegate:self
@@ -238,6 +239,7 @@
                            if (!error)
                            {                               
                                [progressHUD removeFromSuperview];
+                               operation=UIAlertViewOperationChooseRegister;
                                UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                                             message:@"Register succeed!"
                                                                            delegate:self
@@ -293,34 +295,97 @@
      }];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        appDelegate.user=user;
-        appDelegate.refreshMessageList=false;
-        appDelegate.refreshMyChannelList=false;
-        MainViewController *controller=[[MainViewController alloc]init];
-        controller.selectedIndex=2;
-        [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-        [self presentViewController:controller animated:YES completion:^{nil;}];
+        if (operation==UIAlertViewOperationChooseRegister)
+        {
+            appDelegate.user=user;
+            appDelegate.refreshMessageList=false;
+            appDelegate.refreshMyChannelList=false;
+            MainViewController *controller=[[MainViewController alloc]init];
+            controller.selectedIndex=2;
+            [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+            [self presentViewController:controller animated:YES completion:^{nil;}];
+        }
+        else
+        {
+            if (buttonIndex==1)
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                                 message:@"Image picker is not supported on your phone!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Confirm"
+                                                       otherButtonTitles:nil];
+                    [alert show];
+                }
+            }
+            else
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                                 message:@"Camera is not supported on your phone!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Confirm"
+                                                       otherButtonTitles:nil];
+                    [alert show];
+                }
+            }
+        }
     }
-    else if(inputError==0)
+    else if(inputError==TextInputErrorUserName)
     {
         [usernameTextField becomeFirstResponder];
     }
-    else if(inputError==1)
+    else if(inputError==TextInputErrorPassword)
     {
         [passwordTextField becomeFirstResponder];
     }
-    else if(inputError==2)
+    else if(inputError==TextInputErrorConfirmPassword)
     {
         [confirmPwdTextField becomeFirstResponder];
     }
-    else if(inputError==3)
+    else if(inputError==TextInputErrorNickname)
     {
         [nicknameTextField becomeFirstResponder];
     }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
+    image=[self scaleToSize:image size:CGSizeMake(100, 100)];
+    logoImageView.image=image;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (UIImage *)scaleToSize:(UIImage *)image size:(CGSize)size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *scaledImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
 }
 
 @end

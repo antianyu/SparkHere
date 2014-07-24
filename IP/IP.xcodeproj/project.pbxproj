@@ -34,7 +34,6 @@
 		5538862819487BE7004B74D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5538862619487BE7004B74D8 /* InfoPlist.strings */; };
 		5538862A19487BE7004B74D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5538862919487BE7004B74D8 /* main.m */; };
 		5538862E19487BE7004B74D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5538862D19487BE7004B74D8 /* AppDelegate.m */; };
-		5538863019487BE7004B74D8 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5538862F19487BE7004B74D8 /* images.xcassets */; };
 		5538863719487BE7004B74D8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5538863619487BE7004B74D8 /* XCTest.framework */; };
 		5538863819487BE7004B74D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5538861D19487BE7004B74D8 /* Foundation.framework */; };
 		5538863919487BE7004B74D8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5538862119487BE7004B74D8 /* UIKit.framework */; };
@@ -52,6 +51,7 @@
 		556C63121949D9C70030FEFF /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 556C63101949D9C70030FEFF /* AboutViewController.xib */; };
 		556C63161949D9D70030FEFF /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C63141949D9D70030FEFF /* SettingsViewController.m */; };
 		556C63171949D9D70030FEFF /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 556C63151949D9D70030FEFF /* SettingsViewController.xib */; };
+		559E083019819E8700DF1275 /* ImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 559E082E19819E8700DF1275 /* ImagePickerViewController.m */; };
 		55A2135F196C512900D0EDD9 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A2135E196C512900D0EDD9 /* Parse.framework */; };
 		55A21361196C518B00D0EDD9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A21360196C518B00D0EDD9 /* AudioToolbox.framework */; };
 		55A21363196C519000D0EDD9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A21362196C519000D0EDD9 /* CFNetwork.framework */; };
@@ -71,8 +71,9 @@
 		55C7EA041980314300D68603 /* DiscoverListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA021980314300D68603 /* DiscoverListsViewController.xib */; };
 		55C7EA0819804C1500D68603 /* ChooseCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C7EA0619804C1500D68603 /* ChooseCategoryViewController.m */; };
 		55C7EA0919804C1500D68603 /* ChooseCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA0719804C1500D68603 /* ChooseCategoryViewController.xib */; };
-		55D8153119560FE2002FA253 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D8152F19560FE2002FA253 /* ChangePasswordViewController.m */; };
-		55D8153219560FE2002FA253 /* ChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55D8153019560FE2002FA253 /* ChangePasswordViewController.xib */; };
+		55E3423E1981604D00505317 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E3423C1981604D00505317 /* EditProfileViewController.m */; };
+		55E3423F1981604D00505317 /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55E3423D1981604D00505317 /* EditProfileViewController.xib */; };
+		55E342411981687800505317 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55E342401981687800505317 /* images.xcassets */; };
 		55E9DEE41975AF4200DEB12A /* ManagePrivilegeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E9DEE21975AF4200DEB12A /* ManagePrivilegeViewController.m */; };
 		55E9DEE51975AF4200DEB12A /* ManagePrivilegeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55E9DEE31975AF4200DEB12A /* ManagePrivilegeViewController.xib */; };
 /* End PBXBuildFile section */
@@ -131,7 +132,6 @@
 		5538862B19487BE7004B74D8 /* IP-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IP-Prefix.pch"; sourceTree = "<group>"; };
 		5538862C19487BE7004B74D8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5538862D19487BE7004B74D8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5538862F19487BE7004B74D8 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		5538863519487BE7004B74D8 /* IPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5538863619487BE7004B74D8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5538863E19487BE7004B74D8 /* IPTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IPTests-Info.plist"; sourceTree = "<group>"; };
@@ -157,6 +157,10 @@
 		556C63131949D9D70030FEFF /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		556C63141949D9D70030FEFF /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		556C63151949D9D70030FEFF /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		559E082D19819E8700DF1275 /* ImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerViewController.h; sourceTree = "<group>"; };
+		559E082E19819E8700DF1275 /* ImagePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePickerViewController.m; sourceTree = "<group>"; };
+		559E08321981AE8B00DF1275 /* UIAlertViewOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIAlertViewOperation.h; sourceTree = "<group>"; };
+		559E08331981BF1600DF1275 /* TextInputError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextInputError.h; sourceTree = "<group>"; };
 		55A2135E196C512900D0EDD9 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = IP/Parse.framework; sourceTree = "<group>"; };
 		55A21360196C518B00D0EDD9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		55A21362196C519000D0EDD9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -181,9 +185,10 @@
 		55C7EA0619804C1500D68603 /* ChooseCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseCategoryViewController.m; sourceTree = "<group>"; };
 		55C7EA0719804C1500D68603 /* ChooseCategoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseCategoryViewController.xib; sourceTree = "<group>"; };
 		55C7EA0A19804FA300D68603 /* PassIntDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassIntDelegate.h; sourceTree = "<group>"; };
-		55D8152E19560FE2002FA253 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
-		55D8152F19560FE2002FA253 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
-		55D8153019560FE2002FA253 /* ChangePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangePasswordViewController.xib; sourceTree = "<group>"; };
+		55E3423B1981604D00505317 /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
+		55E3423C1981604D00505317 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		55E3423D1981604D00505317 /* EditProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProfileViewController.xib; sourceTree = "<group>"; };
+		55E342401981687800505317 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = images.xcassets; path = ../../../../../../.Trash/images.xcassets; sourceTree = "<group>"; };
 		55E9DEE11975AF4200DEB12A /* ManagePrivilegeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagePrivilegeViewController.h; sourceTree = "<group>"; };
 		55E9DEE21975AF4200DEB12A /* ManagePrivilegeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManagePrivilegeViewController.m; sourceTree = "<group>"; };
 		55E9DEE31975AF4200DEB12A /* ManagePrivilegeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManagePrivilegeViewController.xib; sourceTree = "<group>"; };
@@ -245,6 +250,8 @@
 				553097301950761C00B4D8F8 /* Settings.m */,
 				551ADBCF19708E8500792132 /* MBProgressHUD.h */,
 				551ADBD019708E8500792132 /* MBProgressHUD.m */,
+				559E08321981AE8B00DF1275 /* UIAlertViewOperation.h */,
+				559E08331981BF1600DF1275 /* TextInputError.h */,
 			);
 			name = "Support Classes";
 			sourceTree = "<group>";
@@ -294,7 +301,7 @@
 			children = (
 				5538862C19487BE7004B74D8 /* AppDelegate.h */,
 				5538862D19487BE7004B74D8 /* AppDelegate.m */,
-				5538862F19487BE7004B74D8 /* images.xcassets */,
+				55E342401981687800505317 /* images.xcassets */,
 				5530972E195075FB00B4D8F8 /* Support Classes */,
 				5514A8471977088A003B6294 /* Delegate */,
 				5538864C19487C37004B74D8 /* ViewControllers */,
@@ -381,9 +388,9 @@
 				5517585D1964B35900AF9C20 /* MyPostsViewController.h */,
 				5517585E1964B35900AF9C20 /* MyPostsViewController.m */,
 				5517585F1964B35900AF9C20 /* MyPostsViewController.xib */,
-				55D8152E19560FE2002FA253 /* ChangePasswordViewController.h */,
-				55D8152F19560FE2002FA253 /* ChangePasswordViewController.m */,
-				55D8153019560FE2002FA253 /* ChangePasswordViewController.xib */,
+				55E3423B1981604D00505317 /* EditProfileViewController.h */,
+				55E3423C1981604D00505317 /* EditProfileViewController.m */,
+				55E3423D1981604D00505317 /* EditProfileViewController.xib */,
 				556C63091949D9BB0030FEFF /* HelpViewController.h */,
 				556C630A1949D9BB0030FEFF /* HelpViewController.m */,
 				556C630B1949D9BB0030FEFF /* HelpViewController.xib */,
@@ -396,6 +403,8 @@
 				5517584219644F8100AF9C20 /* MessageTableViewCell.h */,
 				5517584319644F8100AF9C20 /* MessageTableViewCell.m */,
 				5517584419644F8100AF9C20 /* MessageTableViewCell.xib */,
+				559E082D19819E8700DF1275 /* ImagePickerViewController.h */,
+				559E082E19819E8700DF1275 /* ImagePickerViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -475,6 +484,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55E342411981687800505317 /* images.xcassets in Resources */,
 				5514A8461976BCF3003B6294 /* ChooseNewSuperAdminViewController.xib in Resources */,
 				55054D1B195375C000ACD295 /* MyProfileViewController.xib in Resources */,
 				556C63171949D9D70030FEFF /* SettingsViewController.xib in Resources */,
@@ -484,7 +494,6 @@
 				551FDDEB197492C700FB94AA /* EditChannelViewController.xib in Resources */,
 				5517585C1964A75100AF9C20 /* MessagesViewController.xib in Resources */,
 				556C63121949D9C70030FEFF /* AboutViewController.xib in Resources */,
-				55D8153219560FE2002FA253 /* ChangePasswordViewController.xib in Resources */,
 				5558D3AF1954D32B006BF7FA /* RegisterViewController.xib in Resources */,
 				5517584619644F8100AF9C20 /* MessageTableViewCell.xib in Resources */,
 				556C630D1949D9BB0030FEFF /* HelpViewController.xib in Resources */,
@@ -495,9 +504,9 @@
 				551758611964B35900AF9C20 /* MyPostsViewController.xib in Resources */,
 				551758571964A5D800AF9C20 /* DiscoverChannelsViewController.xib in Resources */,
 				55A2B7F0194A122D003DA300 /* ChannelDetailViewController.xib in Resources */,
+				55E3423F1981604D00505317 /* EditProfileViewController.xib in Resources */,
 				5538862819487BE7004B74D8 /* InfoPlist.strings in Resources */,
 				55A2B7E91949FC2F003DA300 /* MessageDetailViewController.xib in Resources */,
-				5538863019487BE7004B74D8 /* images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +541,7 @@
 				553097311950761C00B4D8F8 /* Settings.m in Sources */,
 				55A2B7EF194A122D003DA300 /* ChannelDetailViewController.m in Sources */,
 				551758561964A5D800AF9C20 /* DiscoverChannelsViewController.m in Sources */,
+				55E3423E1981604D00505317 /* EditProfileViewController.m in Sources */,
 				556C630C1949D9BB0030FEFF /* HelpViewController.m in Sources */,
 				5558D3AE1954D32B006BF7FA /* RegisterViewController.m in Sources */,
 				55C7EA031980314300D68603 /* DiscoverListsViewController.m in Sources */,
@@ -539,9 +549,9 @@
 				551FDDEA197492C700FB94AA /* EditChannelViewController.m in Sources */,
 				551758601964B35900AF9C20 /* MyPostsViewController.m in Sources */,
 				5538866D19488DEA004B74D8 /* MainViewController.m in Sources */,
-				55D8153119560FE2002FA253 /* ChangePasswordViewController.m in Sources */,
 				555263FD194F78C300A9A024 /* Message.m in Sources */,
 				5517584C1964A1AA00AF9C20 /* MyChannelsViewController.m in Sources */,
+				559E083019819E8700DF1275 /* ImagePickerViewController.m in Sources */,
 				5538862A19487BE7004B74D8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

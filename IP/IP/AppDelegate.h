@@ -27,5 +27,6 @@
 
 -(void)constructMessageList;
 -(void)constructMyChannelList;
+-(void)setDefaultViewStyle:(UIView *)view;
 
 @end

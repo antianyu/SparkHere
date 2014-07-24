@@ -79,6 +79,25 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (void)setDefaultViewStyle:(UIView *)view
+{
+    if ([view isKindOfClass:[UITextField class]])
+    {
+        UITextField *textField=(UITextField *)view;
+        textField.textColor=[UIColor whiteColor];
+    }
+    else if ([view isKindOfClass:[UITextView class]])
+    {
+        UITextView *textField=(UITextView *)view;
+        textField.textColor=[UIColor whiteColor];
+    }
+    view.tintColor=[UIColor whiteColor];
+    view.backgroundColor=[UIColor clearColor];
+    view.layer.borderColor=[[UIColor whiteColor]CGColor];
+    view.layer.borderWidth=1.5;
+    view.layer.cornerRadius=5;
+}
+
 - (void)constructMessageList
 {
     [messageList removeAllObjects];
