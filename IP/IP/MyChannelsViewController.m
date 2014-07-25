@@ -95,6 +95,7 @@
 
 - (void) viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     self.hidesBottomBarWhenPushed=NO;
 }
 
@@ -127,7 +128,7 @@
                                      reuseIdentifier:channelCellIdentifier];
     }
     
-    NSInteger row = [indexPath row];
+    NSInteger row=indexPath.row;
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
         Channel *channel=[searchResults objectAtIndex:row];
@@ -150,6 +151,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ChannelDetailViewController *controller=[[ChannelDetailViewController alloc]init];
+    controller.hidesBottomBarWhenPushed=YES;
+
     
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {

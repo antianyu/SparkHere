@@ -93,7 +93,7 @@
     [super viewDidLoad];
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -106,6 +106,7 @@
 
 - (void) viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     self.hidesBottomBarWhenPushed=NO;
 }
 

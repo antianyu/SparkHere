@@ -7,12 +7,15 @@
 //
 
 #import "EditProfileViewController.h"
+#import "ImagePickerViewController.h"
 #import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import <Parse/Parse.h>
+#import "UIAlertViewOperation.h"
 #import "TextInputError.h"
+#import <MobileCoreServices/UTCoreTypes.h>
 
 @interface EditProfileViewController ()
 
@@ -23,6 +26,7 @@
     Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
+    UIAlertViewOperation operation;
     TextInputError inputError;
 }
 
@@ -30,6 +34,8 @@
 @synthesize theOriginalPwdTextField;
 @synthesize theNewPwdTextField;
 @synthesize theConfirmPwdTextField;
+@synthesize chooseLogoButton;
+@synthesize logoImageView;
 
 - (void)viewDidLoad
 {
@@ -60,8 +66,18 @@
     [appDelegate setDefaultViewStyle:theOriginalPwdTextField];
     [appDelegate setDefaultViewStyle:theNewPwdTextField];
     [appDelegate setDefaultViewStyle:theConfirmPwdTextField];
+    [appDelegate setDefaultViewStyle:chooseLogoButton];
     
     nicknameTextField.text=appDelegate.user.nickname;
+    if (appDelegate.user.logo)
+    {
+        logoImageView.image=appDelegate.user.logo;
+    }
+}
+
+- (IBAction)viewTouchDown:(id)sender
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
 - (void)saveButtonClicked
@@ -69,9 +85,16 @@
     [self editProfileRequest];
 }
 
-- (IBAction)viewTouchDown:(id)sender
+- (IBAction)chooseLogoButtonClicked:(id)sender
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    operation=UIAlertViewOperationChooseImage;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -112,15 +135,8 @@
                                            otherButtonTitles:nil];
         [alert show];
     }
-    else if (![appDelegate.user.nickname isEqualToString:nicknameTextField.text] &&
-             theOriginalPwdTextField.text.length==0 && theNewPwdTextField.text.length==0 &&
-             theConfirmPwdTextField.text.length==0)
-    {
-        [self showEditProfileWaitingView];
-    }
-    else if ([appDelegate.user.nickname isEqualToString:nicknameTextField.text] &&
-             theOriginalPwdTextField.text.length==0 && theNewPwdTextField.text.length==0 &&
-             theConfirmPwdTextField.text.length==0)
+    else if ([appDelegate.user.nickname isEqualToString:nicknameTextField.text] && [self isPasswordPartEmpty]
+             && [logoImageView.image isEqual:appDelegate.user.logo])
     {
         inputError=TextInputErrorNickname;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
@@ -130,7 +146,159 @@
                                            otherButtonTitles:nil];
         [alert show];
     }
-    else if (theOriginalPwdTextField.text.length==0)
+    else if ((![appDelegate.user.nickname isEqualToString:nicknameTextField.text] ||
+             ![logoImageView.image isEqual:appDelegate.user.logo])
+             && ([self isPasswordPartEmpty] || [self isPasswordPartValid]))
+    {
+        [self showEditProfileWaitingView];
+    }
+}
+
+- (void)showEditProfileWaitingView
+{
+    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
+    progressHUD.dimBackground = YES;
+    progressHUD.labelText = @"Please wait...";
+    [progressHUD showAnimated:YES whileExecutingBlock:^
+     {
+         PFObject *object=[PFObject objectWithClassName:@"User"];
+         object.objectId=appDelegate.user.userID;
+         object[@"username"]=appDelegate.user.username;
+         object[@"nickname"]=nicknameTextField.text;
+         if (theNewPwdTextField.text.length==0)
+         {
+             object[@"password"]=appDelegate.user.userPassword;
+         }
+         else
+         {
+             object[@"password"]=theNewPwdTextField.text;
+         }
+         NSData *logoData=UIImageJPEGRepresentation(logoImageView.image, 1);
+         PFFile *logo=[PFFile fileWithName:@"logo.jpg" data:logoData];
+         object[@"logo"]=logo;
+         
+         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+          {
+              PFQuery *query=[PFQuery queryWithClassName:@"User"];
+              appDelegate.user=[[User alloc]initWithPFObject:[query getObjectWithId:appDelegate.user.userID]];
+              [progressHUD removeFromSuperview];
+              operation=UIAlertViewOperationDone;
+              UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
+                                                           message:@"Profile is updated!"
+                                                          delegate:self
+                                                 cancelButtonTitle:nil
+                                                 otherButtonTitles:@"Confirm", nil];
+              [alert show];
+          }];
+     }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex!=alertView.cancelButtonIndex)
+    {
+        if (operation==UIAlertViewOperationDone)
+        {
+            appDelegate.refreshMessageList=true;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else
+        {
+            if (buttonIndex==1)
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                                 message:@"Image picker is not supported on your phone!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Confirm"
+                                                       otherButtonTitles:nil];
+                    [alert show];
+                }
+            }
+            else
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                                 message:@"Camera is not supported on your phone!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Confirm"
+                                                       otherButtonTitles:nil];
+                    [alert show];
+                }
+            }
+        }
+    }
+    else if(inputError==TextInputErrorNickname)
+    {
+        [nicknameTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorOriginalPassword)
+    {
+        [theOriginalPwdTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorNewPassword)
+    {
+        [theNewPwdTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorConfirmPassword)
+    {
+        [theConfirmPwdTextField becomeFirstResponder];
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
+    image=[self scaleToSize:image size:CGSizeMake(100, 100)];
+    logoImageView.image=image;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (UIImage *)scaleToSize:(UIImage *)image size:(CGSize)size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *scaledImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
+}
+
+- (BOOL)isPasswordPartEmpty
+{
+    if (theOriginalPwdTextField.text.length==0 && theNewPwdTextField.text.length==0 &&
+        theConfirmPwdTextField.text.length==0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+- (BOOL)isPasswordPartValid
+{
+    BOOL result=false;
+    
+    if (theOriginalPwdTextField.text.length==0)
     {
         inputError=TextInputErrorOriginalPassword;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
@@ -180,66 +348,11 @@
                                            otherButtonTitles:nil];
         [alert show];
     }
-}
-
-- (void)showEditProfileWaitingView
-{
-    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
-    [progressHUD showAnimated:YES whileExecutingBlock:^
-     {
-         PFObject *object=[PFObject objectWithClassName:@"User"];
-         object.objectId=appDelegate.user.userID;
-         object[@"username"]=appDelegate.user.username;
-         object[@"nickname"]=nicknameTextField.text;
-         if (theNewPwdTextField.text.length==0)
-         {
-             object[@"password"]=appDelegate.user.userPassword;
-         }
-         else
-         {
-             object[@"password"]=theNewPwdTextField.text;
-         }
-//         object[@"logoURL"]=user.logoURL;
-         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-          {
-              PFQuery *query=[PFQuery queryWithClassName:@"User"];
-              appDelegate.user=[[User alloc]initWithPFObject:[query getObjectWithId:appDelegate.user.userID]];
-              [progressHUD removeFromSuperview];
-              UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
-                                                           message:@"Profile is updated!"
-                                                          delegate:self
-                                                 cancelButtonTitle:nil
-                                                 otherButtonTitles:@"Confirm", nil];
-              [alert show];
-          }];
-     }];
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex!=alertView.cancelButtonIndex)
+    else
     {
-        appDelegate.refreshMessageList=true;
-        [self.navigationController popViewControllerAnimated:YES];
+        result=true;
     }
-    else if(inputError==TextInputErrorNickname)
-    {
-        [nicknameTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorOriginalPassword)
-    {
-        [theOriginalPwdTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorNewPassword)
-    {
-        [theNewPwdTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorConfirmPassword)
-    {
-        [theConfirmPwdTextField becomeFirstResponder];
-    }
+    return result;
 }
 
 @end

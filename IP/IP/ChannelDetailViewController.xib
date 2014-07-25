@@ -42,7 +42,7 @@
                                 <action selector="followButtonClicked:" destination="-1" eventType="touchUpInside" id="fSn-Bd-Pu9"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Imperial" id="uFH-fb-SML">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Default_Logo" id="uFH-fb-SML">
                             <rect key="frame" x="20" y="20" width="100" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -75,6 +75,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Imperial" width="100" height="100"/>
+        <image name="Default_Logo" width="100" height="100"/>
     </resources>
 </document>

@@ -83,6 +83,7 @@
 
 - (void) viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     self.hidesBottomBarWhenPushed=NO;
 }
 
@@ -118,7 +119,7 @@
         }
         
         Channel *channel=[[Channel alloc]init];
-        NSInteger row = [indexPath row];
+        NSInteger row=indexPath.row;
         channel=[searchResults objectAtIndex:row];
         
         cell.textLabel.text = channel.channelName;
@@ -160,6 +161,7 @@
     {
         ChannelDetailViewController *controller=[[ChannelDetailViewController alloc]init];
         controller.channel=[searchResults objectAtIndex:indexPath.row];
+        controller.hidesBottomBarWhenPushed=YES;
         
         appDelegate.refreshChannelDetail=true;
         

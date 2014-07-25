@@ -16,7 +16,7 @@
 
 @synthesize is4Inch;
 
--(id)init
+- (id)init
 {
     if(self=[super init])
     {
@@ -50,7 +50,7 @@
     return self;
 }
 
--(void)saveSettings
+- (void)saveSettings
 {
     NSArray *paths=NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *settingsFilePath=[[paths objectAtIndex:0] stringByAppendingPathComponent:@"AppSettings.plist"];

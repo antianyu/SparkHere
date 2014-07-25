@@ -25,8 +25,8 @@
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
--(void)constructMessageList;
--(void)constructMyChannelList;
--(void)setDefaultViewStyle:(UIView *)view;
+- (void)constructMessageList;
+- (void)constructMyChannelList;
+- (void)setDefaultViewStyle:(UIView *)view;
 
 @end

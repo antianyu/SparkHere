@@ -154,6 +154,7 @@
                   if (!error && objects.count>0)
                   {
                       appDelegate.refreshMessageList=true;
+                      appDelegate.refreshMyChannelList=true;
                       [progressHUD removeFromSuperview];
                       MainViewController *controller=[[MainViewController alloc]init];
                       [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];

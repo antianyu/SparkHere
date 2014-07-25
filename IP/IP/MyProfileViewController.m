@@ -103,8 +103,18 @@
     appDelegate=[[UIApplication sharedApplication]delegate];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tabBarItem setTitle:@"My Profile"];
+    [self.tabBarItem setImage:[[UIImage imageNamed:@"MyProfile_unselected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"MyProfile_selected.png"]];
+}
+
 - (void) viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     self.hidesBottomBarWhenPushed=NO;
 }
 

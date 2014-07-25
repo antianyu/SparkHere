@@ -10,6 +10,6 @@
 
 @protocol PassIntDelegate <NSObject>
 
--(void)passIntDelegate:(int)value;
+- (void)passIntDelegate:(int)value;
 
 @end

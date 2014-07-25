@@ -95,7 +95,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *messageCellIdentifier = @"MessageCellIdentifier";
-    
     static BOOL nibsRegistered=NO;
     if (!nibsRegistered)
     {
@@ -104,19 +103,28 @@
         nibsRegistered=YES;
     }
     
-    MessageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCellIdentifier];
-    if (cell==nil)
+    Message *message=[appDelegate.messageList objectAtIndex:indexPath.row];
+    MessageTableViewCell *cell;
+    if (message.image==nil)
     {
-        cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+        static NSString *messageWithoutImageCellIdentifier = @"MessageWithoutImageCellIdentifier";
+        cell = [tableView dequeueReusableCellWithIdentifier:messageWithoutImageCellIdentifier];
+        if (cell==nil)
+        {
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+        }
+    }
+    else
+    {
+        static NSString *messageWithImageCellIdentifier = @"MessageWithImageCellIdentifier";
+        cell = [tableView dequeueReusableCellWithIdentifier:messageWithImageCellIdentifier];
+        if (cell==nil)
+        {
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+        }
     }
     
-    [cell setFontSize:settings.fontSize];
-    NSInteger row = [indexPath row];
-    Message *message=[appDelegate.messageList objectAtIndex:row];
-    cell.senderLabel.text = message.sender.nickname;
-    [cell setContent:message.content];
-    cell.channelLabel.text = message.channel.channelName;
-    
+    [cell setMessage:message fontSize:settings.fontSize];
     return cell;
 }
 

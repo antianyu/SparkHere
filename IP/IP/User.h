@@ -11,19 +11,16 @@
 
 @interface User : NSObject
 
+@property (strong, nonatomic) NSString *userID;
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *userPassword;
 @property (strong, nonatomic) NSString *nickname;
-@property (strong, nonatomic) NSString *userID;
-@property (strong, nonatomic) NSString *logoURL;
+@property (strong, nonatomic) UIImage *logo;
 
--(id)init;
--(id)init:(NSString *)userName userPassword:(NSString *)userPassword;
--(id)init:(NSString *)userName userPassword:(NSString *)userPassword nickname:(NSString *)nickName;
--(id)init:(NSString *)userName userPassword:(NSString *)userPassword nickname:(NSString *)nickName
-   userID:(NSString *)userID;
--(id)init:(NSString *)userName userPassword:(NSString *)userPassword  nickname:(NSString *)nickName
-   userID:(NSString *)userID logoURL:(NSString *)url;
--(id)initWithPFObject:(PFObject *)object;
+- (id)init;
+- (id)init:(NSString *)userName userPassword:(NSString *)userPassword;
+- (id)init:(NSString *)userName userPassword:(NSString *)userPassword nickname:(NSString *)nickName
+      logo:(UIImage *)image;
+- (id)initWithPFObject:(PFObject *)object;
 
 @end

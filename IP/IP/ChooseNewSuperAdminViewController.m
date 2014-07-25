@@ -92,7 +92,7 @@
 {
     UITableViewCell *cell;
     User *user;
-    NSInteger row=[indexPath row];
+    NSInteger row=indexPath.row;
     int userPrivilege;
     
     if (tableView==self.searchDisplayController.searchResultsTableView)

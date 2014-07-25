@@ -13,10 +13,9 @@ typedef enum
 {
     UIAlertViewOperationGoBack,
     UIAlertViewOperationDeleteChannel,
-    UIAlertViewOperationPublishMessage,
     UIAlertViewOperationChooseNewSuperAdmin,
     UIAlertViewOperationChooseRegister,
-    UIAlertViewOperationChannelUpdated,
+    UIAlertViewOperationDone,
     UIAlertViewOperationChooseImage
     
 } UIAlertViewOperation;

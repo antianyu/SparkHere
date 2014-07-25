@@ -99,6 +99,10 @@
         rangeTextField.text=[NSString stringWithFormat:@"%f", channel.range];
         [categoryButton setTitle:[categoryList objectAtIndex:channel.category] forState:UIControlStateNormal];
         descriptionTextView.text=channel.description;
+        if (channel.logo)
+        {
+            logoImageView.image=channel.logo;
+        }
     }
 }
 
@@ -313,11 +317,11 @@
     [UIView commitAnimations];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        if (operation==UIAlertViewOperationChannelUpdated)
+        if (operation==UIAlertViewOperationDone)
         {
             if (!editChannel)
             {
@@ -488,6 +492,9 @@
         }
         newChannel[@"defaultPrivilege"]=[NSNumber numberWithInt:privilegeSegmentedControl.selectedSegmentIndex+1];
         newChannel[@"category"]=[NSNumber numberWithInt:channel.category];
+        NSData *logoData=UIImageJPEGRepresentation(logoImageView.image, 1);
+        PFFile *logo=[PFFile fileWithName:@"logo.jpg" data:logoData];
+        newChannel[@"logo"]=logo;
     }
 }
 
@@ -502,7 +509,7 @@
              {
                  [progressHUD removeFromSuperview];
                  appDelegate.refreshChannelDetail=true;
-                 operation=UIAlertViewOperationChannelUpdated;
+                 operation=UIAlertViewOperationDone;
                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                               message:@"Channel is updated!"
                                                              delegate:self
@@ -547,7 +554,7 @@
                       {
                           [progressHUD removeFromSuperview];
                           appDelegate.refreshChannelDetail=true;
-                          operation=UIAlertViewOperationChannelUpdated;
+                          operation=UIAlertViewOperationDone;
                           UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                                        message:@"Channel is updated!"
                                                                       delegate:self

@@ -10,6 +10,6 @@
 
 @protocol PassBoolDelegate <NSObject>
 
--(void)passBoolDelegate:(BOOL)value;
+- (void)passBoolDelegate:(BOOL)value;
 
 @end

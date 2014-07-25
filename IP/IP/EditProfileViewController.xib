@@ -6,6 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditProfileViewController">
             <connections>
+                <outlet property="chooseLogoButton" destination="BB7-8R-oqP" id="xAR-jV-gD0"/>
+                <outlet property="logoImageView" destination="IpV-Ty-L3f" id="lyU-9X-t2i"/>
                 <outlet property="nicknameTextField" destination="6iQ-mR-aVF" id="V2Y-rb-6CR"/>
                 <outlet property="theConfirmPwdTextField" destination="OyT-eq-eb9" id="zVh-iw-sQb"/>
                 <outlet property="theNewPwdTextField" destination="dCo-Ln-rXu" id="w8Q-xD-m7M"/>
@@ -46,6 +48,17 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BB7-8R-oqP">
+                    <rect key="frame" x="49" y="256" width="115" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Choose Logo">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="chooseLogoButtonClicked:" destination="-1" eventType="touchUpInside" id="W8g-V7-JPy"/>
+                    </connections>
+                </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="6iQ-mR-aVF">
                     <rect key="frame" x="172" y="36" width="128" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -86,8 +99,12 @@
                         <outlet property="delegate" destination="-1" id="g42-48-hwy"/>
                     </connections>
                 </textField>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Default_Logo" translatesAutoresizingMaskIntoConstraints="NO" id="IpV-Ty-L3f">
+                    <rect key="frame" x="186" y="256" width="100" height="100"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <connections>
@@ -95,4 +112,7 @@
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="Default_Logo" width="100" height="100"/>
+    </resources>
 </document>

@@ -10,70 +10,52 @@
 
 @implementation User
 
+@synthesize userID;
 @synthesize username;
 @synthesize userPassword;
 @synthesize nickname;
-@synthesize userID;
-@synthesize logoURL;
+@synthesize logo;
 
--(id)init
+- (id)init
 {
     if(self=[super init])
     {
         username=[[NSString alloc]init];
         userPassword=[[NSString alloc]init];
+        nickname=[[NSString alloc]init];
         userID=[[NSString alloc]init];
+        logo=nil;
     }
     return self;
 }
 
--(id)init:(NSString *)name userPassword:(NSString *)password;
+- (id)init:(NSString *)name userPassword:(NSString *)password
 {
     if(self=[super init])
     {
         username=name;
         userPassword=password;
+        nickname=[[NSString alloc]init];
+        userID=[[NSString alloc]init];
+        logo=nil;
     }
     return self;
 }
 
--(id)init:(NSString *)name userPassword:(NSString *)password nickname:(NSString *)nickName;
+- (id)init:(NSString *)name userPassword:(NSString *)password nickname:(NSString *)nickName logo:(UIImage *)image
 {
     if(self=[super init])
     {
+        userID=[[NSString alloc]init];
         username=name;
         userPassword=password;
         nickname=nickName;
+        logo=image;
     }
     return self;
 }
 
--(id)init:(NSString *)name userPassword:(NSString *)password nickname:(NSString *)nickName userID:(NSString *)userid;
-{
-    if(self=[super init])
-    {
-        username=name;
-        userPassword=password;
-        nickname=nickName;
-        userID=userid;
-    }
-    return self;
-}
-
--(id)init:(NSString *)name userPassword:(NSString *)password nickname:(NSString *)nickName userID:(NSString *)userid logoURL:(NSString *)url;
-{
-    if(self=[super init])
-    {        
-        username=name;
-        userPassword=password;
-        nickname=nickName;
-        userID=userid;
-        logoURL=url;
-    }
-    return self;
-}
-
--(id)initWithPFObject:(PFObject *)object
+- (id)initWithPFObject:(PFObject *)object
 {
     if(self=[super init])
     {
@@ -81,7 +63,8 @@
         userPassword=object[@"password"];
         nickname=object[@"nickname"];
         userID=object.objectId;
-        logoURL=object[@"logoURL"];
+        PFFile *imageFile=object[@"logo"];
+        logo=[UIImage imageWithData:[imageFile getData]];
     }
     return self;
 }

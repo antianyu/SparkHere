@@ -16,8 +16,8 @@
 
 @property (nonatomic) BOOL is4Inch;
 
--(id)init;
+- (id)init;
 
--(void)saveSettings;
+- (void)saveSettings;
 
 @end

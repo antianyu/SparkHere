@@ -45,6 +45,7 @@
 		55526403194F941D00A9A024 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 55526402194F941D00A9A024 /* User.m */; };
 		5558D3AE1954D32B006BF7FA /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5558D3AC1954D32B006BF7FA /* RegisterViewController.m */; };
 		5558D3AF1954D32B006BF7FA /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5558D3AD1954D32B006BF7FA /* RegisterViewController.xib */; };
+		5561FF191982A35700EB1D2D /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5561FF181982A35700EB1D2D /* images.xcassets */; };
 		556C630C1949D9BB0030FEFF /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C630A1949D9BB0030FEFF /* HelpViewController.m */; };
 		556C630D1949D9BB0030FEFF /* HelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 556C630B1949D9BB0030FEFF /* HelpViewController.xib */; };
 		556C63111949D9C70030FEFF /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C630F1949D9C70030FEFF /* AboutViewController.m */; };
@@ -66,6 +67,8 @@
 		55A2B7E91949FC2F003DA300 /* MessageDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55A2B7E81949FC2F003DA300 /* MessageDetailViewController.xib */; };
 		55A2B7EF194A122D003DA300 /* ChannelDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A2B7ED194A122D003DA300 /* ChannelDetailViewController.m */; };
 		55A2B7F0194A122D003DA300 /* ChannelDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */; };
+		55B12CD01982E5E40062774B /* PublishMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B12CCE1982E5E40062774B /* PublishMessageViewController.m */; };
+		55B12CD11982E5E40062774B /* PublishMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55B12CCF1982E5E40062774B /* PublishMessageViewController.xib */; };
 		55C7E9FF19802E1F00D68603 /* Category.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55C7E9FE19802E1F00D68603 /* Category.plist */; };
 		55C7EA031980314300D68603 /* DiscoverListsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C7EA011980314300D68603 /* DiscoverListsViewController.m */; };
 		55C7EA041980314300D68603 /* DiscoverListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA021980314300D68603 /* DiscoverListsViewController.xib */; };
@@ -73,7 +76,6 @@
 		55C7EA0919804C1500D68603 /* ChooseCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA0719804C1500D68603 /* ChooseCategoryViewController.xib */; };
 		55E3423E1981604D00505317 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E3423C1981604D00505317 /* EditProfileViewController.m */; };
 		55E3423F1981604D00505317 /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55E3423D1981604D00505317 /* EditProfileViewController.xib */; };
-		55E342411981687800505317 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55E342401981687800505317 /* images.xcassets */; };
 		55E9DEE41975AF4200DEB12A /* ManagePrivilegeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E9DEE21975AF4200DEB12A /* ManagePrivilegeViewController.m */; };
 		55E9DEE51975AF4200DEB12A /* ManagePrivilegeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55E9DEE31975AF4200DEB12A /* ManagePrivilegeViewController.xib */; };
 /* End PBXBuildFile section */
@@ -148,6 +150,7 @@
 		5558D3AB1954D32B006BF7FA /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		5558D3AC1954D32B006BF7FA /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		5558D3AD1954D32B006BF7FA /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
+		5561FF181982A35700EB1D2D /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		556C63091949D9BB0030FEFF /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
 		556C630A1949D9BB0030FEFF /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
 		556C630B1949D9BB0030FEFF /* HelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpViewController.xib; sourceTree = "<group>"; };
@@ -177,6 +180,9 @@
 		55A2B7EC194A122D003DA300 /* ChannelDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelDetailViewController.h; sourceTree = "<group>"; };
 		55A2B7ED194A122D003DA300 /* ChannelDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelDetailViewController.m; sourceTree = "<group>"; };
 		55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChannelDetailViewController.xib; sourceTree = "<group>"; };
+		55B12CCD1982E5E40062774B /* PublishMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishMessageViewController.h; sourceTree = "<group>"; };
+		55B12CCE1982E5E40062774B /* PublishMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishMessageViewController.m; sourceTree = "<group>"; };
+		55B12CCF1982E5E40062774B /* PublishMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublishMessageViewController.xib; sourceTree = "<group>"; };
 		55C7E9FE19802E1F00D68603 /* Category.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Category.plist; sourceTree = "<group>"; };
 		55C7EA001980314300D68603 /* DiscoverListsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverListsViewController.h; sourceTree = "<group>"; };
 		55C7EA011980314300D68603 /* DiscoverListsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverListsViewController.m; sourceTree = "<group>"; };
@@ -188,7 +194,6 @@
 		55E3423B1981604D00505317 /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
 		55E3423C1981604D00505317 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
 		55E3423D1981604D00505317 /* EditProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProfileViewController.xib; sourceTree = "<group>"; };
-		55E342401981687800505317 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = images.xcassets; path = ../../../../../../.Trash/images.xcassets; sourceTree = "<group>"; };
 		55E9DEE11975AF4200DEB12A /* ManagePrivilegeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagePrivilegeViewController.h; sourceTree = "<group>"; };
 		55E9DEE21975AF4200DEB12A /* ManagePrivilegeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManagePrivilegeViewController.m; sourceTree = "<group>"; };
 		55E9DEE31975AF4200DEB12A /* ManagePrivilegeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManagePrivilegeViewController.xib; sourceTree = "<group>"; };
@@ -301,7 +306,7 @@
 			children = (
 				5538862C19487BE7004B74D8 /* AppDelegate.h */,
 				5538862D19487BE7004B74D8 /* AppDelegate.m */,
-				55E342401981687800505317 /* images.xcassets */,
+				5561FF181982A35700EB1D2D /* images.xcassets */,
 				5530972E195075FB00B4D8F8 /* Support Classes */,
 				5514A8471977088A003B6294 /* Delegate */,
 				5538864C19487C37004B74D8 /* ViewControllers */,
@@ -376,6 +381,9 @@
 				55A2B7EC194A122D003DA300 /* ChannelDetailViewController.h */,
 				55A2B7ED194A122D003DA300 /* ChannelDetailViewController.m */,
 				55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */,
+				55B12CCD1982E5E40062774B /* PublishMessageViewController.h */,
+				55B12CCE1982E5E40062774B /* PublishMessageViewController.m */,
+				55B12CCF1982E5E40062774B /* PublishMessageViewController.xib */,
 				55E9DEE11975AF4200DEB12A /* ManagePrivilegeViewController.h */,
 				55E9DEE21975AF4200DEB12A /* ManagePrivilegeViewController.m */,
 				55E9DEE31975AF4200DEB12A /* ManagePrivilegeViewController.xib */,
@@ -484,7 +492,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55E342411981687800505317 /* images.xcassets in Resources */,
 				5514A8461976BCF3003B6294 /* ChooseNewSuperAdminViewController.xib in Resources */,
 				55054D1B195375C000ACD295 /* MyProfileViewController.xib in Resources */,
 				556C63171949D9D70030FEFF /* SettingsViewController.xib in Resources */,
@@ -493,6 +500,8 @@
 				5517584D1964A1AA00AF9C20 /* MyChannelsViewController.xib in Resources */,
 				551FDDEB197492C700FB94AA /* EditChannelViewController.xib in Resources */,
 				5517585C1964A75100AF9C20 /* MessagesViewController.xib in Resources */,
+				55B12CD11982E5E40062774B /* PublishMessageViewController.xib in Resources */,
+				5561FF191982A35700EB1D2D /* images.xcassets in Resources */,
 				556C63121949D9C70030FEFF /* AboutViewController.xib in Resources */,
 				5558D3AF1954D32B006BF7FA /* RegisterViewController.xib in Resources */,
 				5517584619644F8100AF9C20 /* MessageTableViewCell.xib in Resources */,
@@ -535,6 +544,7 @@
 				55526403194F941D00A9A024 /* User.m in Sources */,
 				55C7EA0819804C1500D68603 /* ChooseCategoryViewController.m in Sources */,
 				556C63111949D9C70030FEFF /* AboutViewController.m in Sources */,
+				55B12CD01982E5E40062774B /* PublishMessageViewController.m in Sources */,
 				551ADBD119708E8500792132 /* MBProgressHUD.m in Sources */,
 				55A2B7E41949F80F003DA300 /* MessageDetailViewController.m in Sources */,
 				556C63161949D9D70030FEFF /* SettingsViewController.m in Sources */,

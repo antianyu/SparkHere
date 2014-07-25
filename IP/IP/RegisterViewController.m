@@ -75,11 +75,6 @@
     user=nil;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
 - (void)doneButtonClicked
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
@@ -192,8 +187,10 @@
     }
     else
     {
-        user=[[User alloc]init:usernameTextField.text userPassword:passwordTextField.text
-                            nickname:nicknameTextField.text];
+        user=[[User alloc]init:usernameTextField.text
+                  userPassword:passwordTextField.text
+                      nickname:nicknameTextField.text
+                          logo:logoImageView.image];
     }
 }
 
@@ -234,6 +231,9 @@
                       newUser[@"username"]=user.username;
                       newUser[@"password"]=user.userPassword;
                       newUser[@"nickname"]=user.nickname;
+                      NSData *logoData=UIImageJPEGRepresentation(user.logo, 1);
+                      PFFile *logo=[PFFile fileWithName:@"logo.jpg" data:logoData];
+                      newUser[@"logo"]=logo;
                       [newUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
                        {
                            if (!error)

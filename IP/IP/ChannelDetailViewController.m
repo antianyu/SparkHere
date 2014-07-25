@@ -10,6 +10,7 @@
 #import "EditChannelViewController.h"
 #import "ManagePrivilegeViewController.h"
 #import "ChooseNewSuperAdminViewController.h"
+#import "PublishMessageViewController.h"
 #import "Settings.h"
 #import "User.h"
 #import "UIAlertViewOperation.h"
@@ -79,7 +80,6 @@
     descriptionLabel.font=[UIFont systemFontOfSize:17];
     descriptionLabel.lineBreakMode=NSLineBreakByWordWrapping;
     descriptionLabel.textColor=[UIColor whiteColor];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -169,6 +169,11 @@
              [followButton setTitle:@"Follow" forState:UIControlStateNormal];
          }
          
+         if (channel.logo)
+         {
+             logoImageView.image=channel.logo;
+         }
+         
          buttonClickTimes=0;
          unfollowWithCancel=false;
      }];
@@ -205,16 +210,10 @@
 
 - (void)composeButtonClicked
 {
-    operation=UIAlertViewOperationPublishMessage;
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Publish Message"
-                                                 message:@"Please input content"
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:@"Confirm",nil];
-    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    UITextField *textField=[alert textFieldAtIndex:0];
-    textField.tintColor=[UIColor colorWithRed:0 green:0.5 blue:1 alpha:1];
-    [alert show];
+    PublishMessageViewController *controller=[[PublishMessageViewController alloc]init];
+    controller.channel=channel;
+    controller.hidesBottomBarWhenPushed=YES;
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)editButtonClicked
@@ -323,62 +322,7 @@
                 appDelegate.refreshMyChannelList=true;
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
-            }
-                
-            case UIAlertViewOperationPublishMessage:
-            {
-                UITextField *textField=[alertView textFieldAtIndex:0];
-                NSString *messageContent=textField.text;
-                
-                if (messageContent.length>0)
-                {
-                    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-                    progressHUD.dimBackground = YES;
-                    progressHUD.labelText = @"Please wait...";
-                    [progressHUD showAnimated:YES whileExecutingBlock:^
-                     {
-                         PFObject *newMessage=[PFObject objectWithClassName:@"Message"];
-                         newMessage[@"channelID"]=channel.channelID;
-                         newMessage[@"senderID"]=appDelegate.user.userID;
-                         newMessage[@"content"]=messageContent;
-                         [newMessage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-                          {
-                              if (!error)
-                              {
-                                  [progressHUD removeFromSuperview];
-                                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
-                                                                               message:@"Publish message succeed!"
-                                                                              delegate:self
-                                                                     cancelButtonTitle:@"Confirm"
-                                                                     otherButtonTitles:nil];
-                                  [alert show];
-                                  appDelegate.refreshMessageList=true;
-                              }
-                              else
-                              {
-                                  [progressHUD removeFromSuperview];
-                                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                               message:@"Publish message failed! Something wrong with server!"
-                                                                              delegate:self
-                                                                     cancelButtonTitle:@"Confirm"
-                                                                     otherButtonTitles:nil];
-                                  [alert show];
-                              }
-                          }];
-                     }];
-                }
-                else
-                {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Publish error"
-                                                                 message:@"Content can't be empty!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
-                }
-                break;
-            }
-                
+            }                
             case UIAlertViewOperationDeleteChannel:
             {
                 [self showDeleteChannelWaitingView];

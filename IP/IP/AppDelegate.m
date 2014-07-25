@@ -130,10 +130,14 @@
             query=[PFQuery queryWithClassName:@"User"];
             User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
             
+            PFFile *imageFile=object[@"image"];
+            UIImage *image=[UIImage imageWithData:[imageFile getData]];
+            
             Message *message=[[Message alloc]initWithContent:object[@"content"]
                                                    messageID:object.objectId
                                                       sender:sender
-                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
+                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]
+                                                       image:image];
             [messageList addObject:message];
         }
     }

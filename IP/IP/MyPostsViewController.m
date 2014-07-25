@@ -99,29 +99,37 @@
         nibsRegistered=YES;
     }
     
-    MessageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCellIdentifier];
-    if (cell==nil)
-    {
-        cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
-    }
-    
-    [cell setFontSize:settings.fontSize];
-    NSInteger row = [indexPath row];
     Message *message;
-    
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
-        message=[searchResults objectAtIndex:row];
+        message=[searchResults objectAtIndex:indexPath.row];
     }
     else
     {
-        message=[postsList objectAtIndex:row];
+        message=[postsList objectAtIndex:indexPath.row];
     }
     
-    cell.senderLabel.text = message.sender.nickname;
-    cell.contentLabel.text = message.content;
-    cell.channelLabel.text = message.channel.channelName;
+    MessageTableViewCell *cell;
+    if (message.image==nil)
+    {
+        static NSString *messageWithoutImageCellIdentifier = @"MessageWithoutImageCellIdentifier";
+        cell = [tableView dequeueReusableCellWithIdentifier:messageWithoutImageCellIdentifier];
+        if (cell==nil)
+        {
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+        }
+    }
+    else
+    {
+        static NSString *messageWithImageCellIdentifier = @"MessageWithImageCellIdentifier";
+        cell = [tableView dequeueReusableCellWithIdentifier:messageWithImageCellIdentifier];
+        if (cell==nil)
+        {
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+        }
+    }
     
+    [cell setMessage:message fontSize:settings.fontSize];
     return cell;
 }
 
@@ -209,8 +217,14 @@
              query=[PFQuery queryWithClassName:@"User"];
              User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
              
-             Message *message=[[Message alloc]initWithContent:object[@"content"] messageID:object.objectId
-                                                       sender:sender channel:channel];
+             PFFile *imageFile=object[@"image"];
+             UIImage *image=[UIImage imageWithData:[imageFile getData]];
+             
+             Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                    messageID:object.objectId
+                                                       sender:sender
+                                                      channel:channel
+                                                        image:image];
              [postsList addObject:message];
          }
      }
@@ -255,10 +269,14 @@
              query=[PFQuery queryWithClassName:@"Channel"];
              Channel *channel=[[Channel alloc]initWithPFObject:[query getObjectWithId:object[@"channelID"]]];
              
+             PFFile *imageFile=object[@"image"];
+             UIImage *image=[UIImage imageWithData:[imageFile getData]];
+             
              Message *message=[[Message alloc]initWithContent:object[@"content"]
                                                     messageID:object.objectId
                                                        sender:sender
-                                                      channel:channel];
+                                                      channel:channel
+                                                        image:image];
              [searchResults addObject:message];
          }
      }

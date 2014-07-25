@@ -22,6 +22,7 @@ typedef enum
     TextInputErrorLongitude,
     TextInputErrorRange,
     TextInputErrorDescription,
+    TextInputErrorMessageContent,
     TextInputErrorNone,
     
 } TextInputError;
