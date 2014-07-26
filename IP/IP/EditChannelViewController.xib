@@ -144,7 +144,7 @@
                         <outlet property="delegate" destination="-1" id="n3E-BC-acV"/>
                     </connections>
                 </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Default_Logo" id="Mzy-Zz-Q0L">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Mzy-Zz-Q0L">
                     <rect key="frame" x="200" y="247" width="100" height="100"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -168,7 +168,4 @@
             </connections>
         </view>
     </objects>
-    <resources>
-        <image name="Default_Logo" width="100" height="100"/>
-    </resources>
 </document>

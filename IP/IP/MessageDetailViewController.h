@@ -13,10 +13,10 @@
 @interface MessageDetailViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (strong, nonatomic) IBOutlet UILabel *senderLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *senderLogoImageView;
 @property (strong, nonatomic) IBOutlet UILabel *channelLabel;
-@property (strong, nonatomic) IBOutlet UILabel *contentLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *channelLogoImageView;
 
 @property (nonatomic) NSObject<PassBoolDelegate> *delegate;
 

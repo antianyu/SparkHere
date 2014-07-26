@@ -133,7 +133,7 @@
          
          titleLabel.text=channel.channelName;
          
-         followersLabel.text=[NSString stringWithFormat:@"%d", channel.followersNumber];
+         followersLabel.text=[NSString stringWithFormat:@"Followers: %d", channel.followersNumber];
          
          [buttons removeAllObjects];
          if (privilege>=3)
@@ -169,9 +169,13 @@
              [followButton setTitle:@"Follow" forState:UIControlStateNormal];
          }
          
-         if (channel.logo)
+         if (channel.logo!=nil)
          {
              logoImageView.image=channel.logo;
+         }
+         else
+         {
+             logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];
          }
          
          buttonClickTimes=0;

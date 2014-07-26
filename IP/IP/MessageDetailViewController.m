@@ -21,10 +21,10 @@
 }
 
 @synthesize scrollView;
-@synthesize logoImageView;
 @synthesize senderLabel;
+@synthesize senderLogoImageView;
 @synthesize channelLabel;
-@synthesize contentLabel;
+@synthesize channelLogoImageView;
 
 @synthesize message;
 
@@ -45,25 +45,50 @@
         [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
     }
     
-    self.senderLabel.text=message.sender.nickname;
-    self.channelLabel.text=message.channel.channelName;
+    senderLabel.text=message.sender.nickname;
+    channelLabel.text=message.channel.channelName;
     
-    NSString *detailString=message.content;
+    senderLogoImageView.image=message.sender.logo;
+    channelLogoImageView.image=message.channel.logo;
     
-    [contentLabel setNumberOfLines:0];
-    contentLabel.font=[UIFont systemFontOfSize:17];
-    contentLabel.lineBreakMode=NSLineBreakByWordWrapping;
-    contentLabel.text=detailString;
+    UILabel *contentLabel=[[UILabel alloc]init];
+    if (message.content.length>0)
+    {
+        contentLabel.font=[UIFont systemFontOfSize:18];
+        contentLabel.textColor=[UIColor whiteColor];
+        contentLabel.numberOfLines=0;
+        contentLabel.lineBreakMode=NSLineBreakByWordWrapping;
+        contentLabel.text=message.content;
+        
+        CGSize constraint=CGSizeMake(self.view.frame.size.width-40, 10000);
+        NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:contentLabel.font, NSFontAttributeName, nil];
+        
+        CGSize actualSize=[message.content boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        
+        contentLabel.frame=CGRectMake(20, 108, self.view.frame.size.width-40, actualSize.height);
+        
+        scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+20);
+        [scrollView addSubview:contentLabel];
+    }
     
-    CGSize constraint=CGSizeMake(self.view.frame.size.width-40, 20000);
-    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:contentLabel.font, NSFontAttributeName, nil];
-    
-    CGSize actualSize=[detailString boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    
-    contentLabel.frame=CGRectMake(20, 150, self.view.frame.size.width-40, actualSize.height);
-    
-    scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+170);
-    [scrollView addSubview:contentLabel];
+    if(message.image!=nil)
+    {
+        CGRect frame;
+        double imageHeight=240*message.image.size.height/message.image.size.width;
+        if(message.content.length==0)
+        {
+            frame=CGRectMake(40, 116, self.view.frame.size.width-80, imageHeight);
+        }
+        else
+        {
+            frame=CGRectMake(40, 116+contentLabel.frame.size.height, self.view.frame.size.width-80, imageHeight);
+        }
+        UIImageView *imageView=[[UIImageView alloc]initWithFrame:frame];
+        imageView.image=message.image;
+        
+        scrollView.contentSize=CGSizeMake(self.view.frame.size.width, scrollView.contentSize.height+imageHeight+8);
+        [scrollView addSubview:imageView];
+    }
     
     appDelegate=[[UIApplication sharedApplication]delegate];
 }

@@ -90,6 +90,8 @@
     categoryButton.titleLabel.textAlignment=NSTextAlignmentCenter;
     [categoryButton setTitle:[categoryList objectAtIndex:0] forState:UIControlStateNormal];
     
+    logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];
+    
     if (editChannel)
     {
         channelNameTextField.text=channel.channelName;
@@ -99,7 +101,7 @@
         rangeTextField.text=[NSString stringWithFormat:@"%f", channel.range];
         [categoryButton setTitle:[categoryList objectAtIndex:channel.category] forState:UIControlStateNormal];
         descriptionTextView.text=channel.description;
-        if (channel.logo)
+        if (channel.logo!=nil)
         {
             logoImageView.image=channel.logo;
         }
@@ -509,6 +511,8 @@
              {
                  [progressHUD removeFromSuperview];
                  appDelegate.refreshChannelDetail=true;
+                 appDelegate.refreshMyChannelList=true;
+                 appDelegate.refreshMessageList=true;
                  operation=UIAlertViewOperationDone;
                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                               message:@"Channel is updated!"

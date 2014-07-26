@@ -69,9 +69,13 @@
     [appDelegate setDefaultViewStyle:chooseLogoButton];
     
     nicknameTextField.text=appDelegate.user.nickname;
-    if (appDelegate.user.logo)
+    if (appDelegate.user.logo!=nil)
     {
         logoImageView.image=appDelegate.user.logo;
+    }
+    else
+    {
+        logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];        
     }
 }
 
