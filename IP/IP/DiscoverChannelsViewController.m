@@ -147,7 +147,6 @@
         cell.textLabel.text=[categoryList objectAtIndex:indexPath.row];
         cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
         [cell.textLabel setTextColor:[UIColor whiteColor]];
-//        [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"ChannelCell.png"]]];
         [cell setBackgroundColor:[UIColor clearColor]];
         return cell;
     }

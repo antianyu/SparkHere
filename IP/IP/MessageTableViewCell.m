@@ -26,10 +26,6 @@
     [channelLabel setTextColor:[UIColor lightGrayColor]];
 }
 
-- (void)setFontSize:(int)fontSize
-{
-}
-
 - (void)setMessage:(Message *)message fontSize:(int)fontSize
 {
     senderLabel.font=[UIFont systemFontOfSize:fontSize-6];

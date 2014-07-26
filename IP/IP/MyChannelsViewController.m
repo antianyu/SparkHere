@@ -12,6 +12,7 @@
 #import "Settings.h"
 #import "User.h"
 #import "Channel.h"
+#import "ChannelTableViewCell.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 
@@ -119,32 +120,38 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *channelCellIdentifier = @"ChannelCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
-    
-    if (cell == nil)
+    static BOOL nibsRegistered=NO;
+    if (!nibsRegistered)
     {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-                                     reuseIdentifier:channelCellIdentifier];
+        UINib *nib=[UINib nibWithNibName:@"ChannelTableViewCell" bundle:nil];
+        [tableView registerNib:nib forCellReuseIdentifier:channelCellIdentifier];
+        nibsRegistered=YES;
     }
     
-    NSInteger row=indexPath.row;
+    ChannelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
+    if (cell == nil)
+    {
+        cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil]lastObject];
+    }
+    
+    Channel *channel;
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
-        Channel *channel=[searchResults objectAtIndex:row];
-        cell.textLabel.text = channel.channelName;
+        channel=[searchResults objectAtIndex:indexPath.row];
     }
     else
     {
-        Channel *channel=[appDelegate.myChannelList objectAtIndex:row];
-        cell.textLabel.text = channel.channelName;
+        channel=[appDelegate.myChannelList objectAtIndex:indexPath.row];
     }
-    cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
-//    [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"ChannelCell.png"]]];
-    [cell setBackgroundColor:[UIColor clearColor]];
+    [cell setChannel:channel fontSize:settings.fontSize];
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ChannelTableViewCell *cell=(ChannelTableViewCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    return cell.frame.size.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

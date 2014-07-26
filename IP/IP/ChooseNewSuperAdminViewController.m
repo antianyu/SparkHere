@@ -142,7 +142,6 @@
     cell.detailTextLabel.text = privilegeString;
     cell.detailTextLabel.font=[UIFont systemFontOfSize:settings.fontSize-6];
     [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
-    //    [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"ChannelCell.png"]]];
     [cell setBackgroundColor:[UIColor clearColor]];
     
     return  cell;

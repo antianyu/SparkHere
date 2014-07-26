@@ -8,6 +8,7 @@
 
 #import "DiscoverListsViewController.h"
 #import "ChannelDetailViewController.h"
+#import "ChannelTableViewCell.h"
 #import "Settings.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -106,34 +107,38 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *channelCellIdentifier = @"ChannelCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
-    
-    if (cell == nil)
+    static BOOL nibsRegistered=NO;
+    if (!nibsRegistered)
     {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle
-                                     reuseIdentifier:channelCellIdentifier];
+        UINib *nib=[UINib nibWithNibName:@"ChannelTableViewCell" bundle:nil];
+        [tableView registerNib:nib forCellReuseIdentifier:channelCellIdentifier];
+        nibsRegistered=YES;
     }
     
-    Channel *channel=[[Channel alloc]init];
-    NSInteger row=indexPath.row;
+    ChannelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
+    if (cell == nil)
+    {
+        cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil]lastObject];
+    }
+    
+    Channel *channel;
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
-        channel=[searchResults objectAtIndex:row];
+        channel=[searchResults objectAtIndex:indexPath.row];
     }
     else
     {
-        channel=[hotChannelList objectAtIndex:row];
+        channel=[hotChannelList objectAtIndex:indexPath.row];
     }
-    cell.textLabel.text = channel.channelName;
-    cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Number of followers: %d", channel.followersNumber];
-    cell.detailTextLabel.font=[UIFont systemFontOfSize:settings.fontSize-6];
-    [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
-    [cell setBackgroundColor:[UIColor clearColor]];
+    [cell setChannel:channel fontSize:settings.fontSize];
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ChannelTableViewCell *cell=(ChannelTableViewCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    return cell.frame.size.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		55054D1A195375C000ACD295 /* MyProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55054D18195375C000ACD295 /* MyProfileViewController.m */; };
 		55054D1B195375C000ACD295 /* MyProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55054D19195375C000ACD295 /* MyProfileViewController.xib */; };
+		5507502B1983D87D00C0F17F /* ChannelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 550750291983D87D00C0F17F /* ChannelTableViewCell.m */; };
+		5507502C1983D87D00C0F17F /* ChannelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5507502A1983D87D00C0F17F /* ChannelTableViewCell.xib */; };
 		5514A8451976BCF3003B6294 /* ChooseNewSuperAdminViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5514A8431976BCF3003B6294 /* ChooseNewSuperAdminViewController.m */; };
 		5514A8461976BCF3003B6294 /* ChooseNewSuperAdminViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5514A8441976BCF3003B6294 /* ChooseNewSuperAdminViewController.xib */; };
 		5517584519644F8100AF9C20 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5517584319644F8100AF9C20 /* MessageTableViewCell.m */; };
@@ -94,6 +96,9 @@
 		55054D17195375C000ACD295 /* MyProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProfileViewController.h; sourceTree = "<group>"; };
 		55054D18195375C000ACD295 /* MyProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyProfileViewController.m; sourceTree = "<group>"; };
 		55054D19195375C000ACD295 /* MyProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyProfileViewController.xib; sourceTree = "<group>"; };
+		550750281983D87D00C0F17F /* ChannelTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelTableViewCell.h; sourceTree = "<group>"; };
+		550750291983D87D00C0F17F /* ChannelTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelTableViewCell.m; sourceTree = "<group>"; };
+		5507502A1983D87D00C0F17F /* ChannelTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChannelTableViewCell.xib; sourceTree = "<group>"; };
 		5514A8421976BCF3003B6294 /* ChooseNewSuperAdminViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseNewSuperAdminViewController.h; sourceTree = "<group>"; };
 		5514A8431976BCF3003B6294 /* ChooseNewSuperAdminViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseNewSuperAdminViewController.m; sourceTree = "<group>"; };
 		5514A8441976BCF3003B6294 /* ChooseNewSuperAdminViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseNewSuperAdminViewController.xib; sourceTree = "<group>"; };
@@ -411,6 +416,9 @@
 				5517584219644F8100AF9C20 /* MessageTableViewCell.h */,
 				5517584319644F8100AF9C20 /* MessageTableViewCell.m */,
 				5517584419644F8100AF9C20 /* MessageTableViewCell.xib */,
+				550750281983D87D00C0F17F /* ChannelTableViewCell.h */,
+				550750291983D87D00C0F17F /* ChannelTableViewCell.m */,
+				5507502A1983D87D00C0F17F /* ChannelTableViewCell.xib */,
 				559E082D19819E8700DF1275 /* ImagePickerViewController.h */,
 				559E082E19819E8700DF1275 /* ImagePickerViewController.m */,
 			);
@@ -497,6 +505,7 @@
 				556C63171949D9D70030FEFF /* SettingsViewController.xib in Resources */,
 				55C7EA041980314300D68603 /* DiscoverListsViewController.xib in Resources */,
 				551CA5E2195323B500D3A0EB /* LoginViewController.xib in Resources */,
+				5507502C1983D87D00C0F17F /* ChannelTableViewCell.xib in Resources */,
 				5517584D1964A1AA00AF9C20 /* MyChannelsViewController.xib in Resources */,
 				551FDDEB197492C700FB94AA /* EditChannelViewController.xib in Resources */,
 				5517585C1964A75100AF9C20 /* MessagesViewController.xib in Resources */,
@@ -553,6 +562,7 @@
 				551758561964A5D800AF9C20 /* DiscoverChannelsViewController.m in Sources */,
 				55E3423E1981604D00505317 /* EditProfileViewController.m in Sources */,
 				556C630C1949D9BB0030FEFF /* HelpViewController.m in Sources */,
+				5507502B1983D87D00C0F17F /* ChannelTableViewCell.m in Sources */,
 				5558D3AE1954D32B006BF7FA /* RegisterViewController.m in Sources */,
 				55C7EA031980314300D68603 /* DiscoverListsViewController.m in Sources */,
 				551CA5E1195323B500D3A0EB /* LoginViewController.m in Sources */,

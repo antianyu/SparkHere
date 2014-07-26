@@ -16,6 +16,5 @@
 @property (strong, nonatomic) IBOutlet UIImageView *senderLogoImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *channelLogoImageView;
 
-- (void)setFontSize:(int)fontSize;
 - (void)setMessage:(Message *)message fontSize:(int)fontSize;
 @end
