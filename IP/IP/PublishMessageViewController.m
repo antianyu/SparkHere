@@ -95,9 +95,12 @@
              newMessage[@"channelID"]=channel.channelID;
              newMessage[@"senderID"]=appDelegate.user.userID;
              newMessage[@"content"]=contentTextView.text;
-             NSData *imageData=UIImageJPEGRepresentation(contentImageView.image, 1);
-             PFFile *image=[PFFile fileWithName:@"image.jpg" data:imageData];
-             newMessage[@"image"]=image;
+             if (contentImageView.image!=nil)
+             {                 
+                 NSData *imageData=UIImageJPEGRepresentation(contentImageView.image, 1);
+                 PFFile *image=[PFFile fileWithName:@"image.jpg" data:imageData];
+                 newMessage[@"image"]=image;
+             }
 
              [newMessage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
               {
@@ -110,7 +113,6 @@
                                                          cancelButtonTitle:nil
                                                          otherButtonTitles:@"Confirm", nil];
                       [alert show];
-                      appDelegate.refreshMessageList=true;
                   }
                   else
                   {
@@ -193,6 +195,8 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
+        NSLog(@"%@",appDelegate.lastUpdateTime);
+        appDelegate.loadMessages=true;
         [self.navigationController popViewControllerAnimated:YES];
     }
     else if(inputError==TextInputErrorMessageContent)

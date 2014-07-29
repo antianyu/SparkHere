@@ -428,8 +428,6 @@
           {
               [progressHUD removeFromSuperview];
               operation=UIAlertViewOperationGoBack;
-              appDelegate.refreshMessageList=true;
-              appDelegate.refreshMyChannelList=true;
               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Wow!"
                                                            message:@"Channel is deleted!"
                                                           delegate:self

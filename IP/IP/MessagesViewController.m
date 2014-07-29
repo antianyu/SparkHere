@@ -16,6 +16,9 @@
 #import "MBProgressHUD.h"
 #import "PassBoolDelegate.h"
 #import <Parse/Parse.h>
+#import "MJRefresh/MJRefresh.h"
+#import "MJRefresh/MJRefreshHeaderView.h"
+
 
 @interface MessagesViewController ()
 
@@ -59,11 +62,11 @@
     
     appDelegate=[[UIApplication sharedApplication]delegate];
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+    
+    [self.messagesTableView addHeaderWithTarget:self action:@selector(headerRefreshing)];
+    
+//    [self.messagesTableView addFooterWithTarget:self action:@selector(footerRefreshing)];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,9 +74,11 @@
     [super viewWillAppear:animated];
     settings=[[Settings alloc]init];
     
-    if (appDelegate.refreshMessageList)
+    if (appDelegate.refreshMessageList||appDelegate.loadMessages)
     {
-        [self showRefreshMessageListWaitingView];
+        [self.messagesTableView headerBeginRefreshing];
+        appDelegate.refreshMessageList=false;
+        appDelegate.loadMessages=false;
     }
     else
     {
@@ -143,27 +148,40 @@
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (void)showRefreshMessageListWaitingView
+- (void)headerRefreshing
 {
-    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Loading...";
-    [progressHUD showAnimated:YES whileExecutingBlock:^
-     {
-         if (appDelegate.refreshMyChannelList)
-         {
-             [appDelegate constructMyChannelList];
-             appDelegate.refreshMyChannelList=false;
-         }
-         [appDelegate constructMessageList];
-         appDelegate.refreshMessageList=false;
-     }
-    completionBlock:^
-     {
-         [progressHUD removeFromSuperview];
-         self.tabBarItem.badgeValue=[NSString stringWithFormat:@"%d", appDelegate.messageList.count];
-         [self.messagesTableView reloadData];
-     }];
+    // refresh tableView UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if (appDelegate.messageList.count==0)
+        {
+            if (appDelegate.refreshMyChannelList)
+            {
+                [appDelegate constructMyChannelList];
+                appDelegate.refreshMyChannelList=false;
+            }
+            [appDelegate constructMessageList];
+        }
+        else
+        {
+            [appDelegate loadMoreMessages];
+        }
+        
+        [self.messagesTableView reloadData];
+        
+        [self.messagesTableView headerEndRefreshing];
+    });
+}
+
+- (void)footerRefreshing
+{
+    // refresh tableView UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self.messagesTableView reloadData];
+        
+        [self.messagesTableView footerEndRefreshing];
+    });
 }
 
 @end

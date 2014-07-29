@@ -334,6 +334,7 @@
                 appDelegate.refreshMessageList=true;
                 appDelegate.refreshMyChannelList=true;
             }
+            appDelegate.refreshChannelDetail=true;
             [self.navigationController popViewControllerAnimated:YES];
         }
         else
@@ -510,9 +511,6 @@
              if (!error)
              {
                  [progressHUD removeFromSuperview];
-                 appDelegate.refreshChannelDetail=true;
-                 appDelegate.refreshMyChannelList=true;
-                 appDelegate.refreshMessageList=true;
                  operation=UIAlertViewOperationDone;
                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                               message:@"Channel is updated!"

@@ -18,7 +18,9 @@
 @synthesize user;
 @synthesize messageList;
 @synthesize myChannelList;
+@synthesize lastUpdateTime;
 @synthesize refreshMessageList;
+@synthesize loadMessages;
 @synthesize refreshMyChannelList;
 @synthesize refreshChannelDetail;
 @synthesize refreshPostsList;
@@ -42,6 +44,7 @@
     messageList=[[NSMutableArray alloc]init];
     myChannelList=[[NSMutableArray alloc]init];
     refreshMessageList=true;
+    loadMessages=false;
     refreshMyChannelList=true;
     refreshChannelDetail=false;
     refreshPostsList=false;
@@ -102,6 +105,7 @@
 {
     [messageList removeAllObjects];
     PFGeoPoint *currentLocation=[self getCurrentLocation];
+    lastUpdateTime=[NSDate date];
     
     NSMutableArray *subQueries=[[NSMutableArray alloc]init];
     
@@ -158,6 +162,52 @@
         PFQuery *channelQuery=[PFQuery queryWithClassName:@"Channel"];
         Channel *channel=[[Channel alloc]initWithPFObject:[channelQuery getObjectWithId:object[@"channelID"]]];
         [myChannelList addObject:channel];
+    }
+}
+
+- (void)loadMoreMessages
+{
+    PFGeoPoint *currentLocation=[self getCurrentLocation];
+    
+    NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+    
+    // if the user is in the range of channel, add query constraint of the channel
+    for (Channel *channel in myChannelList)
+    {
+        if (pow(currentLocation.latitude-channel.location.latitude, 2)+
+            pow(currentLocation.longitude-channel.location.longitude, 2)<=
+            pow(channel.range, 2))
+        {
+            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+            [query whereKey:@"channelID" equalTo:channel.channelID];
+            [subQueries addObject:query];
+        }
+    }
+    
+    if (subQueries.count>0)
+    {
+        PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+        [query whereKey:@"updatedAt" greaterThan:lastUpdateTime];
+        [query orderByAscending:@"updatedAt"];
+        lastUpdateTime=[NSDate date];
+        
+        NSArray *messages=[query findObjects];
+        
+        for (PFObject *object in messages)
+        {
+            query=[PFQuery queryWithClassName:@"User"];
+            User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
+            
+            PFFile *imageFile=object[@"image"];
+            UIImage *image=[UIImage imageWithData:[imageFile getData]];
+            
+            Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                   messageID:object.objectId
+                                                      sender:sender
+                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]
+                                                       image:image];
+            [messageList insertObject:message atIndex:0];
+        }
     }
 }
 

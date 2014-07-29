@@ -20,13 +20,17 @@
 @property (strong, nonatomic) NSMutableArray *messageList;
 @property (strong, nonatomic) NSMutableArray *myChannelList;
 
+@property (strong, nonatomic) NSDate *lastUpdateTime;
+
 @property (nonatomic) BOOL refreshMessageList;
+@property (nonatomic) BOOL loadMessages;
 @property (nonatomic) BOOL refreshMyChannelList;
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
 - (void)constructMessageList;
 - (void)constructMyChannelList;
+- (void)loadMoreMessages;
 - (void)setDefaultViewStyle:(UIView *)view;
 
 @end
