@@ -9,7 +9,6 @@
 #import "MyChannelsViewController.h"
 #import "ChannelDetailViewController.h"
 #import "EditChannelViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "Channel.h"
 #import "ChannelTableViewCell.h"
@@ -22,7 +21,6 @@
 
 @implementation MyChannelsViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     NSMutableArray *searchResults;
@@ -36,25 +34,17 @@
     
     self.title=@"My Channels";
     
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     UIBarButtonItem *establishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(establishButtonClicked)];
     self.navigationItem.rightBarButtonItem=establishButtonItem;
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
-    else
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
     
     NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
@@ -68,16 +58,12 @@
 //    [self.channelTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 //    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    
     searchResults=[[NSMutableArray alloc]init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    settings=[[Settings alloc]init];
     
     [self.tabBarItem setTitle:@"My Channels"];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Channel_unselected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
@@ -143,7 +129,7 @@
     {
         channel=[appDelegate.myChannelList objectAtIndex:indexPath.row];
     }
-    [cell setChannel:channel fontSize:settings.fontSize];
+    [cell setChannel:channel fontSize:appDelegate.settings.fontSize];
 
     return cell;
 }

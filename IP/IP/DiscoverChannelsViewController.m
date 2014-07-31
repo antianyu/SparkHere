@@ -9,10 +9,10 @@
 #import "DiscoverChannelsViewController.h"
 #import "DiscoverListsViewController.h"
 #import "ChannelDetailViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
+#import "ChannelTableViewCell.h"
 
 @interface DiscoverChannelsViewController ()
 
@@ -20,7 +20,6 @@
 
 @implementation DiscoverChannelsViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     NSArray *categoryList;
@@ -33,26 +32,18 @@
 {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.translucent=NO;
-    
     self.title=@"Discover Channels";
+    
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     self.tabBarItem.title=@"Discover";
     
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
-    else
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
+    self.navigationController.navigationBar.translucent=NO;
     
     NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
@@ -66,9 +57,6 @@
 //    [self.channelTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 //    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];
     
@@ -78,7 +66,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    settings=[[Settings alloc]init];
+    
+    [self.categoryTableView reloadData];
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -109,28 +98,24 @@
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
         static NSString *channelCellIdentifier = @"ChannelCellIdentifier";
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
-        
-        if (cell == nil)
+        static BOOL nibsRegistered=NO;
+        if (!nibsRegistered)
         {
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle
-                                         reuseIdentifier:channelCellIdentifier];
+            UINib *nib=[UINib nibWithNibName:@"ChannelTableViewCell" bundle:nil];
+            [tableView registerNib:nib forCellReuseIdentifier:channelCellIdentifier];
+            nibsRegistered=YES;
         }
         
-        Channel *channel=[[Channel alloc]init];
-        NSInteger row=indexPath.row;
-        channel=[searchResults objectAtIndex:row];
+        ChannelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
+        if (cell == nil)
+        {
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil]lastObject];
+        }
         
-        cell.textLabel.text = channel.channelName;
-        cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
-        [cell.textLabel setTextColor:[UIColor whiteColor]];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Number of followers: %d", channel.followersNumber];
-        cell.detailTextLabel.font=[UIFont systemFontOfSize:settings.fontSize-6];
-        [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
-        [cell setBackgroundColor:[UIColor clearColor]];
-        
+        Channel *channel=[searchResults objectAtIndex:indexPath.row];
+        [cell setChannel:channel fontSize:appDelegate.settings.fontSize];
         return cell;
+
     }
     else
     {
@@ -145,11 +130,17 @@
         }
         
         cell.textLabel.text=[categoryList objectAtIndex:indexPath.row];
-        cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
+        cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
         [cell.textLabel setTextColor:[UIColor whiteColor]];
         [cell setBackgroundColor:[UIColor clearColor]];
         return cell;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell=[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    return cell.frame.size.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

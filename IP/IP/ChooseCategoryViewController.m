@@ -8,7 +8,7 @@
 
 #import "ChooseCategoryViewController.h"
 #import "ChannelDetailViewController.h"
-#import "Settings.h"
+#import "AppDelegate.h"
 
 @interface ChooseCategoryViewController ()
 
@@ -16,7 +16,7 @@
 
 @implementation ChooseCategoryViewController
 {
-    Settings *settings;
+    AppDelegate *appDelegate;
     NSArray *categoryList;    
 }
 
@@ -29,22 +29,13 @@
     
     self.title=@"Category";
     
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
-    else
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
     
     NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
@@ -78,7 +69,7 @@
     }
     
     cell.textLabel.text=[categoryList objectAtIndex:indexPath.row];
-    cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
+    cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
     [cell.textLabel setTextColor:[UIColor whiteColor]];
     [cell setBackgroundColor:[UIColor clearColor]];
     [cell setTintColor:[UIColor whiteColor]];

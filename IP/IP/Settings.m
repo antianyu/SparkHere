@@ -11,40 +11,16 @@
 @implementation Settings
 
 @synthesize fontSize;
-
 @synthesize receiveMessage;
-
-@synthesize is4Inch;
+@synthesize autoLogin;
+@synthesize defaultUsername;
+@synthesize defaultPassword;
 
 - (id)init
 {
     if(self=[super init])
     {
-        NSFileManager *fileManager=[NSFileManager defaultManager];
-        NSArray *paths=NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-        NSString *settingsFilePath=[[paths objectAtIndex:0] stringByAppendingPathComponent:@"AppSettings.plist"];
-        
-        if(![fileManager fileExistsAtPath:settingsFilePath])
-        {
-            NSString *resourceFolderPath=[[NSBundle mainBundle]pathForResource:@"AppSettings" ofType:@"plist"];
-            NSData *mainBundleFile=[NSData dataWithContentsOfFile:resourceFolderPath];
-            [fileManager createFileAtPath:settingsFilePath contents:mainBundleFile attributes:nil];
-        }
-        
-        NSMutableDictionary *dict=[[NSMutableDictionary alloc]initWithContentsOfFile:settingsFilePath];
-        fontSize=[[dict objectForKey:@"fontSize"]intValue];
-        receiveMessage=[[dict objectForKey:@"receiveMessage"]boolValue];
-        
-        float width=[UIScreen mainScreen].currentMode.size.width;
-        float height=[UIScreen mainScreen].currentMode.size.height;
-        if (height/width==1.5)
-        {
-            is4Inch=false;
-        }
-        else
-        {
-            is4Inch=true;
-        }
+        [self readSettings];
     }
     
     return self;
@@ -52,13 +28,22 @@
 
 - (void)saveSettings
 {
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-    NSString *settingsFilePath=[[paths objectAtIndex:0] stringByAppendingPathComponent:@"AppSettings.plist"];
-    
-    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
-    [dict setValue:[NSNumber numberWithInt:fontSize] forKey:@"fontSize"];
-    [dict setValue:[NSNumber numberWithBool:receiveMessage] forKey:@"receiveMessage"];
-    [dict writeToFile:settingsFilePath atomically:NO];
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    [defaults setInteger:fontSize forKey:@"fontSize"];
+    [defaults setBool:receiveMessage forKey:@"receiveMessage"];
+    [defaults setBool:autoLogin forKey:@"autoLogin"];
+    [defaults setObject:defaultUsername forKey:@"defaultUsername"];
+    [defaults setObject:defaultPassword forKey:@"defaultPassword"];
+}
+
+- (void)readSettings
+{
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    fontSize=[[defaults objectForKey:@"fontSize"] intValue];
+    receiveMessage=[[defaults objectForKey:@"receiveMessage"] boolValue];
+    autoLogin=[[defaults objectForKey:@"autoLogin"] boolValue];
+    defaultUsername=[defaults objectForKey:@"defaultUsername"];
+    defaultPassword=[defaults objectForKey:@"defaultPassword"];
 }
 
 @end

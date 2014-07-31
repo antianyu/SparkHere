@@ -7,7 +7,6 @@
 //
 
 #import "MessageDetailViewController.h"
-#import "Settings.h"
 #import "AppDelegate.h"
 
 @interface MessageDetailViewController ()
@@ -16,7 +15,6 @@
 
 @implementation MessageDetailViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
 }
 
@@ -32,18 +30,11 @@
 {
     [super viewDidLoad];
     
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
     
     senderLabel.text=message.sender.nickname;
     channelLabel.text=message.channel.channelName;
@@ -89,8 +80,6 @@
         scrollView.contentSize=CGSizeMake(self.view.frame.size.width, scrollView.contentSize.height+imageHeight+8);
         [scrollView addSubview:imageView];
     }
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

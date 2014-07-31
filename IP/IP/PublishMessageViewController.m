@@ -8,7 +8,6 @@
 
 #import "PublishMessageViewController.h"
 #import "ImagePickerViewController.h"
-#import "Settings.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import <Parse/Parse.h>
@@ -21,7 +20,6 @@
 
 @implementation PublishMessageViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     TextInputError inputError;
@@ -39,26 +37,16 @@
     
     self.title=@"Edit Profile";
     
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     UIBarButtonItem *pubishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(pubishButtonClicked)];
     self.navigationItem.rightBarButtonItem=pubishButtonItem;
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
     
     [toolbar setBackgroundImage:[UIImage imageNamed:@"Toolbar.png"]
              forToolbarPosition:UIBarPositionAny
                      barMetrics:UIBarMetricsDefault];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [contentTextView becomeFirstResponder];
     
@@ -196,7 +184,7 @@
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
         NSLog(@"%@",appDelegate.lastUpdateTime);
-        appDelegate.loadMessages=true;
+        appDelegate.loadMoreMessages=true;
         [self.navigationController popViewControllerAnimated:YES];
     }
     else if(inputError==TextInputErrorMessageContent)

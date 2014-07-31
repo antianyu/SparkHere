@@ -8,7 +8,6 @@
 
 #import "MessagesViewController.h"
 #import "MessageDetailViewController.h"
-#import "Settings.h"
 #import "Message.h"
 #import "User.h"
 #import "MessageTableViewCell.h"
@@ -26,9 +25,9 @@
 
 @implementation MessagesViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
+    NSMutableArray *messageList;
 }
 
 @synthesize messagesTableView;
@@ -39,16 +38,10 @@
     
     self.title=@"Messages";
     
-    settings=[[Settings alloc]init];
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
@@ -60,8 +53,7 @@
     [self.messagesTableView setSeparatorInset:UIEdgeInsetsZero];
 //    [self.messagesTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    messageList=[[NSMutableArray alloc]init];
     
     [self.messagesTableView addHeaderWithTarget:self action:@selector(headerRefreshing)];
     
@@ -72,13 +64,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    settings=[[Settings alloc]init];
     
-    if (appDelegate.refreshMessageList||appDelegate.loadMessages)
+    if (appDelegate.refreshMessageList||appDelegate.loadMoreMessages)
     {
         [self.messagesTableView headerBeginRefreshing];
         appDelegate.refreshMessageList=false;
-        appDelegate.loadMessages=false;
+        appDelegate.loadMoreMessages=false;
     }
     else
     {
@@ -94,7 +85,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return appDelegate.messageList.count;
+    return messageList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -108,7 +99,7 @@
         nibsRegistered=YES;
     }
     
-    Message *message=[appDelegate.messageList objectAtIndex:indexPath.row];
+    Message *message=[messageList objectAtIndex:indexPath.row];
     MessageTableViewCell *cell;
     if (message.image==nil)
     {
@@ -129,7 +120,7 @@
         }
     }
     
-    [cell setMessage:message fontSize:settings.fontSize];
+    [cell setMessage:message fontSize:appDelegate.settings.fontSize];
     return cell;
 }
 
@@ -142,7 +133,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageDetailViewController *controller=[[MessageDetailViewController alloc]init];
-    controller.message=[appDelegate.messageList objectAtIndex:indexPath.row];
+    controller.message=[messageList objectAtIndex:indexPath.row];
     self.hidesBottomBarWhenPushed=YES;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController pushViewController:controller animated:YES];
@@ -153,18 +144,18 @@
     // refresh tableView UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        if (appDelegate.messageList.count==0)
+        if (messageList.count==0)
         {
             if (appDelegate.refreshMyChannelList)
             {
                 [appDelegate constructMyChannelList];
                 appDelegate.refreshMyChannelList=false;
             }
-            [appDelegate constructMessageList];
+            [self constructMessageList];
         }
         else
         {
-            [appDelegate loadMoreMessages];
+            [self loadMoreMessages];
         }
         
         [self.messagesTableView reloadData];
@@ -182,6 +173,115 @@
         
         [self.messagesTableView footerEndRefreshing];
     });
+}
+
+- (void)constructMessageList
+{
+    PFGeoPoint *currentLocation=[self getCurrentLocation];
+    appDelegate.lastUpdateTime=[NSDate date];
+    
+    NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+    
+    // if the user is in the range of channel, add query constraint of the channel
+    for (Channel *channel in appDelegate.myChannelList)
+    {
+        if (pow(currentLocation.latitude-channel.location.latitude, 2)+
+            pow(currentLocation.longitude-channel.location.longitude, 2)<=
+            pow(channel.range, 2))
+        {
+            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+            [query whereKey:@"channelID" equalTo:channel.channelID];
+            [subQueries addObject:query];
+        }
+    }
+    
+    if (subQueries.count>0)
+    {
+        PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+        [query orderByDescending:@"updatedAt"];
+        query.limit=20;
+        NSArray *messages=[query findObjects];
+        
+        for (PFObject *object in messages)
+        {
+            query=[PFQuery queryWithClassName:@"User"];
+            User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
+            
+            PFFile *imageFile=object[@"image"];
+            UIImage *image=[UIImage imageWithData:[imageFile getData]];
+            
+            Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                   messageID:object.objectId
+                                                      sender:sender
+                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]
+                                                       image:image];
+            [messageList addObject:message];
+        }
+    }
+}
+
+- (void)loadMoreMessages
+{
+    PFGeoPoint *currentLocation=[self getCurrentLocation];
+    
+    NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+    
+    // if the user is in the range of channel, add query constraint of the channel
+    for (Channel *channel in appDelegate.myChannelList)
+    {
+        if (pow(currentLocation.latitude-channel.location.latitude, 2)+
+            pow(currentLocation.longitude-channel.location.longitude, 2)<=
+            pow(channel.range, 2))
+        {
+            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+            [query whereKey:@"channelID" equalTo:channel.channelID];
+            [subQueries addObject:query];
+        }
+    }
+    
+    if (subQueries.count>0)
+    {
+        PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+        [query whereKey:@"updatedAt" greaterThan:appDelegate.lastUpdateTime];
+        [query orderByAscending:@"updatedAt"];
+        appDelegate.lastUpdateTime=[NSDate date];
+        
+        NSArray *messages=[query findObjects];
+        
+        for (PFObject *object in messages)
+        {
+            query=[PFQuery queryWithClassName:@"User"];
+            User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
+            
+            PFFile *imageFile=object[@"image"];
+            UIImage *image=[UIImage imageWithData:[imageFile getData]];
+            
+            Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                   messageID:object.objectId
+                                                      sender:sender
+                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]
+                                                       image:image];
+            [messageList insertObject:message atIndex:0];
+        }
+    }
+}
+
+- (PFGeoPoint *)getCurrentLocation
+{
+    PFGeoPoint *currentLocation=[PFGeoPoint geoPointWithLatitude:4 longitude:4];
+    return currentLocation;
+}
+
+- (Channel *)findChannelFromMyChannelList:(NSString *)channelID
+{
+    for (Channel *channel in appDelegate.myChannelList)
+    {
+        if ([channel.channelID isEqualToString:channelID])
+        {
+            return channel;
+        }
+    }
+    return nil;
 }
 
 @end

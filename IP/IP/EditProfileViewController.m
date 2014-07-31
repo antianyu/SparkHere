@@ -8,7 +8,6 @@
 
 #import "EditProfileViewController.h"
 #import "ImagePickerViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -23,7 +22,6 @@
 
 @implementation EditProfileViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     UIAlertViewOperation operation;
@@ -43,22 +41,13 @@
     
     self.title=@"Edit Profile";
     
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
     UIBarButtonItem *saveButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonClicked)];
     self.navigationItem.rightBarButtonItem=saveButtonItem;
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [nicknameTextField becomeFirstResponder];
     

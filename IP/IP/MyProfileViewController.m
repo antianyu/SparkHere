@@ -13,7 +13,6 @@
 #import "SettingsViewController.h"
 #import "HelpViewController.h"
 #import "AboutViewController.h"
-#import "Settings.h"
 #import "AppDelegate.h"
 
 @interface MyProfileViewController ()
@@ -22,7 +21,6 @@
 
 @implementation MyProfileViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
 }
 
@@ -33,26 +31,19 @@
 @synthesize helpButton;
 @synthesize aboutButton;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.title=@"My Profile";
+    
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
     self.navigationController.navigationBar.translucent=NO;
     
     self.tabBarController.tabBar.translucent=NO;
-    
-    self.title=@"My Profile";
-    
-    settings=[[Settings alloc]init];
     
     [logoutButton setBackgroundColor:[UIColor colorWithRed:156/255.0 green:222/255.0 blue:0/255.0 alpha:1]];
     [logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -76,21 +67,15 @@
     [aboutButton setBackgroundColor:[UIColor colorWithRed:239/255.0 green:68/255.0 blue:158/255.0 alpha:1]];
     [aboutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-    if (settings.is4Inch)
+    if (!appDelegate.is4Inch)
     {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
         logoutButton.frame=CGRectMake(40, 17, 100, 100);
         myPostsButton.frame=CGRectMake(180, 17, 100, 100);
         editProfileButton.frame=CGRectMake(40, 134, 100, 100);
         settingsButton.frame=CGRectMake(180, 134, 100, 100);
         helpButton.frame=CGRectMake(40, 251, 100, 100);
         aboutButton.frame=CGRectMake(180, 251, 100, 100);
-    }
-    
+    }    
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
@@ -99,8 +84,6 @@
     [self.navigationController.navigationBar setTitleTextAttributes:attributes];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -121,6 +104,7 @@
 - (IBAction)logoutButtonClicked:(id)sender
 {
     appDelegate.user=nil;
+    [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"autoLogin"];
     LoginViewController *controller=[[LoginViewController alloc]init];
     UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
     [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];

@@ -11,7 +11,6 @@
 #import "ManagePrivilegeViewController.h"
 #import "ChooseNewSuperAdminViewController.h"
 #import "PublishMessageViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "UIAlertViewOperation.h"
 #import "AppDelegate.h"
@@ -23,7 +22,6 @@
 
 @implementation ChannelDetailViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     UIAlertViewOperation operation;
@@ -50,16 +48,10 @@
     
     self.title=@"Channel Detail";
     
-    settings=[[Settings alloc]init];
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
@@ -70,9 +62,6 @@
     editButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonClicked)];
     
     buttons=[[NSMutableArray alloc]init];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [appDelegate setDefaultViewStyle:followButton];
     

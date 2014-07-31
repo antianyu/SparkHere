@@ -7,7 +7,7 @@
 //
 
 #import "AboutViewController.h"
-#import "Settings.h"
+#import "AppDelegate.h"
 
 @interface AboutViewController ()
 
@@ -15,7 +15,7 @@
 
 @implementation AboutViewController
 {
-    Settings *settings;
+     AppDelegate *appDelegate;
 }
 
 @synthesize scrollView;
@@ -24,6 +24,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.title=@"About";
+    
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     NSString *aboutString=@"About\n\n"
     
@@ -84,19 +90,6 @@
     
     scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+20);
     [scrollView addSubview:aboutLabel];
-    
-    self.title=@"About";
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
 }
 
 @end

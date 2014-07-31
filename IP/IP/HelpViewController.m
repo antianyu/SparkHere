@@ -7,7 +7,7 @@
 //
 
 #import "HelpViewController.h"
-#import "Settings.h"
+#import "AppDelegate.h"
 
 @interface HelpViewController ()
 
@@ -15,26 +15,21 @@
 
 @implementation HelpViewController
 {
-    Settings *settings;
+    AppDelegate *appDelegate;
 }
 
 @synthesize scrollView;
 @synthesize helpLabel;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.title=@"Help";
+    
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     NSString *helpString=@"Help\n\n"
     
@@ -94,17 +89,6 @@
     
     scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+20);
     [scrollView addSubview:helpLabel];
-    
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
 }
 
 @end

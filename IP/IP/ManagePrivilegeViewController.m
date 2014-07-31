@@ -7,7 +7,6 @@
 //
 
 #import "ManagePrivilegeViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -19,7 +18,6 @@
 
 @implementation ManagePrivilegeViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     User *tempUser;
@@ -45,20 +43,11 @@
     
     self.title=@"Manage Privilege";
     
-    settings=[[Settings alloc]init];
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
-    if (settings.is4Inch)
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
-    else
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.memberTableView setBackgroundColor:[UIColor clearColor]];
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
@@ -68,9 +57,6 @@
     privilegeList=[[NSMutableArray alloc]init];
     searchResults=[[NSMutableArray alloc]init];
     searchPrivilegeList=[[NSMutableArray alloc]init];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     deleteSucceed=false;
     modificationInSearchTableView=false;
@@ -125,7 +111,7 @@
     }
     
     cell.textLabel.text=user.nickname;
-    cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
+    cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
     [cell.textLabel setTextColor:[UIColor whiteColor]];
     
     NSString *privilegeString;
@@ -146,7 +132,7 @@
         privilegeString=@"Privilege:4--Super Admin";
     }
     cell.detailTextLabel.text = privilegeString;
-    cell.detailTextLabel.font=[UIFont systemFontOfSize:settings.fontSize-6];
+    cell.detailTextLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize-6];
     [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
     [cell setBackgroundColor:[UIColor clearColor]];
     

@@ -8,6 +8,7 @@
 
 #import "SettingsViewController.h"
 #import "Settings.h"
+#import "AppDelegate.h"
 
 
 @interface SettingsViewController ()
@@ -17,6 +18,7 @@
 @implementation SettingsViewController
 {
     Settings *settings;
+    AppDelegate *appDelegate;
 }
 
 @synthesize receiveMessagesLabel;
@@ -27,14 +29,18 @@
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *saveButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonClicked)];
-    self.navigationItem.rightBarButtonItem=saveButtonItem;
-    
     self.title=@"Settings";
     
     settings=[[Settings alloc]init];
     
-    switch (settings.fontSize)
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    UIBarButtonItem *saveButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonClicked)];
+    self.navigationItem.rightBarButtonItem=saveButtonItem;
+    
+    switch (appDelegate.settings.fontSize)
     {
         case 14:
             fontSizeSegmentedControl.selectedSegmentIndex=0;
@@ -49,7 +55,7 @@
             break;
     }
     
-    [receiveMessageSwitch setOn:settings.receiveMessage];
+    [receiveMessageSwitch setOn:appDelegate.settings.receiveMessage];
     if (settings.receiveMessage)
     {
         receiveMessagesLabel.text=@"YES";
@@ -58,20 +64,12 @@
     {
         receiveMessagesLabel.text=@"NO";
     }
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
 }
 
 - (void)saveButtonClicked
 {
-    [settings saveSettings];
+    appDelegate.settings=settings;
+    [appDelegate.settings saveSettings];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

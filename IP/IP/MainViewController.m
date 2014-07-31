@@ -97,7 +97,7 @@
 {
     [super viewWillAppear:animated];
     
-    AppDelegate *appDelegate=[[UIApplication sharedApplication]delegate];
+    AppDelegate *appDelegate=[[UIApplication sharedApplication] delegate];
     PFQuery *query=[PFQuery queryWithClassName:@"User"];
     [query whereKey:@"username" equalTo:appDelegate.user.username];
     PFObject *object=[query getFirstObject];

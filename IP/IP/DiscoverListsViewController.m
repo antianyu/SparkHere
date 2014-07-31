@@ -9,7 +9,6 @@
 #import "DiscoverListsViewController.h"
 #import "ChannelDetailViewController.h"
 #import "ChannelTableViewCell.h"
-#import "Settings.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 
@@ -19,7 +18,6 @@
 
 @implementation DiscoverListsViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     NSMutableArray *hotChannelList;
@@ -33,27 +31,19 @@
 {
     [super viewDidLoad];
     
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    self.navigationController.navigationBar.translucent=NO;
-    
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     self.title=[[[NSArray alloc]initWithContentsOfFile:plistPath] objectAtIndex:category];
     
-    settings=[[Settings alloc]init];
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
-    if (settings.is4Inch)
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
-    else
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    self.navigationController.navigationBar.translucent=NO;
     
     NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
@@ -67,9 +57,6 @@
 //    [self.channelTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 //    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    
     hotChannelList=[[NSMutableArray alloc]init];
     searchResults=[[NSMutableArray alloc]init];
 }
@@ -77,7 +64,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    settings=[[Settings alloc]init];
+
     [self showRefreshHotListWaitingView];
 }
 
@@ -130,7 +117,7 @@
     {
         channel=[hotChannelList objectAtIndex:indexPath.row];
     }
-    [cell setChannel:channel fontSize:settings.fontSize];
+    [cell setChannel:channel fontSize:appDelegate.settings.fontSize];
     
     return cell;
 }

@@ -16,11 +16,14 @@
 
 @synthesize navController;
 @synthesize user;
-@synthesize messageList;
 @synthesize myChannelList;
 @synthesize lastUpdateTime;
+@synthesize backgroundImage;
+@synthesize settings;
+
+@synthesize is4Inch;
 @synthesize refreshMessageList;
-@synthesize loadMessages;
+@synthesize loadMoreMessages;
 @synthesize refreshMyChannelList;
 @synthesize refreshChannelDetail;
 @synthesize refreshPostsList;
@@ -32,6 +35,8 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    [self initData];
+    
     LoginViewController *loginViewController=[[LoginViewController alloc]init];
     self.navController=[[UINavigationController alloc]initWithRootViewController:loginViewController];
     self.window.rootViewController=navController;
@@ -39,18 +44,6 @@
     [self.window makeKeyAndVisible];
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    
-    user=nil;
-    messageList=[[NSMutableArray alloc]init];
-    myChannelList=[[NSMutableArray alloc]init];
-    refreshMessageList=true;
-    loadMessages=false;
-    refreshMyChannelList=true;
-    refreshChannelDetail=false;
-    refreshPostsList=false;
-    
-    [[UITextField appearance] setTintColor:[UIColor whiteColor]];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
     
     return YES;
 }
@@ -82,6 +75,36 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (void)initData
+{
+    user=nil;
+    myChannelList=[[NSMutableArray alloc]init];
+    
+    settings=[[Settings alloc]init];
+    
+    refreshMessageList=true;
+    loadMoreMessages=false;
+    refreshMyChannelList=true;
+    refreshChannelDetail=false;
+    refreshPostsList=false;
+    
+    float width=[UIScreen mainScreen].currentMode.size.width;
+    float height=[UIScreen mainScreen].currentMode.size.height;
+    if (height/width==1.5)
+    {
+        is4Inch=false;
+        backgroundImage=[UIImage imageNamed:@"Background_3.5.png"];
+    }
+    else
+    {
+        is4Inch=true;
+        backgroundImage=[UIImage imageNamed:@"Background_4.png"];
+    }
+    
+    [[UITextField appearance] setTintColor:[UIColor whiteColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+}
+
 - (void)setDefaultViewStyle:(UIView *)view
 {
     if ([view isKindOfClass:[UITextField class]])
@@ -91,60 +114,15 @@
     }
     else if ([view isKindOfClass:[UITextView class]])
     {
-        UITextView *textField=(UITextView *)view;
-        textField.textColor=[UIColor whiteColor];
+        UITextView *textView=(UITextView *)view;
+        textView.textColor=[UIColor whiteColor];
     }
+    
     view.tintColor=[UIColor whiteColor];
     view.backgroundColor=[UIColor clearColor];
     view.layer.borderColor=[[UIColor whiteColor]CGColor];
     view.layer.borderWidth=1.5;
     view.layer.cornerRadius=5;
-}
-
-- (void)constructMessageList
-{
-    [messageList removeAllObjects];
-    PFGeoPoint *currentLocation=[self getCurrentLocation];
-    lastUpdateTime=[NSDate date];
-    
-    NSMutableArray *subQueries=[[NSMutableArray alloc]init];
-    
-    // if the user is in the range of channel, add query constraint of the channel
-    for (Channel *channel in myChannelList)
-    {
-        if (pow(currentLocation.latitude-channel.location.latitude, 2)+
-            pow(currentLocation.longitude-channel.location.longitude, 2)<=
-            pow(channel.range, 2))
-        {
-            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
-            [query whereKey:@"channelID" equalTo:channel.channelID];
-            [subQueries addObject:query];
-        }
-    }
-    
-    if (subQueries.count>0)
-    {
-        PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
-        [query orderByDescending:@"updatedAt"];
-        query.limit=20;
-        NSArray *messages=[query findObjects];
-        
-        for (PFObject *object in messages)
-        {
-            query=[PFQuery queryWithClassName:@"User"];
-            User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
-            
-            PFFile *imageFile=object[@"image"];
-            UIImage *image=[UIImage imageWithData:[imageFile getData]];
-            
-            Message *message=[[Message alloc]initWithContent:object[@"content"]
-                                                   messageID:object.objectId
-                                                      sender:sender
-                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]
-                                                       image:image];
-            [messageList addObject:message];
-        }
-    }
 }
 
 - (void)constructMyChannelList
@@ -163,70 +141,6 @@
         Channel *channel=[[Channel alloc]initWithPFObject:[channelQuery getObjectWithId:object[@"channelID"]]];
         [myChannelList addObject:channel];
     }
-}
-
-- (void)loadMoreMessages
-{
-    PFGeoPoint *currentLocation=[self getCurrentLocation];
-    
-    NSMutableArray *subQueries=[[NSMutableArray alloc]init];
-    
-    // if the user is in the range of channel, add query constraint of the channel
-    for (Channel *channel in myChannelList)
-    {
-        if (pow(currentLocation.latitude-channel.location.latitude, 2)+
-            pow(currentLocation.longitude-channel.location.longitude, 2)<=
-            pow(channel.range, 2))
-        {
-            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
-            [query whereKey:@"channelID" equalTo:channel.channelID];
-            [subQueries addObject:query];
-        }
-    }
-    
-    if (subQueries.count>0)
-    {
-        PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
-        [query whereKey:@"updatedAt" greaterThan:lastUpdateTime];
-        [query orderByAscending:@"updatedAt"];
-        lastUpdateTime=[NSDate date];
-        
-        NSArray *messages=[query findObjects];
-        
-        for (PFObject *object in messages)
-        {
-            query=[PFQuery queryWithClassName:@"User"];
-            User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
-            
-            PFFile *imageFile=object[@"image"];
-            UIImage *image=[UIImage imageWithData:[imageFile getData]];
-            
-            Message *message=[[Message alloc]initWithContent:object[@"content"]
-                                                   messageID:object.objectId
-                                                      sender:sender
-                                                     channel:[self findChannelFromMyChannelList:object[@"channelID"]]
-                                                       image:image];
-            [messageList insertObject:message atIndex:0];
-        }
-    }
-}
-
-- (PFGeoPoint *)getCurrentLocation
-{
-    PFGeoPoint *currentLocation=[PFGeoPoint geoPointWithLatitude:4 longitude:4];
-    return currentLocation;
-}
-
-- (Channel *)findChannelFromMyChannelList:(NSString *)channelID
-{
-    for (Channel *channel in myChannelList)
-    {
-        if ([channel.channelID isEqualToString:channelID])
-        {
-            return channel;
-        }
-    }
-    return nil;
 }
 
 @end

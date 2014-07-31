@@ -9,7 +9,6 @@
 #import "EditChannelViewController.h"
 #import "ChooseCategoryViewController.h"
 #import "ImagePickerViewController.h"
-#import "Settings.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import <Parse/Parse.h>
@@ -23,7 +22,6 @@
 
 @implementation EditChannelViewController
 {
-    Settings *settings;
     PFObject *newChannel;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
@@ -48,21 +46,14 @@
 {
     [super viewDidLoad];
     
-    settings=[[Settings alloc]init];
+    self.title=@"Establish new channel";
     
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    self.title=@"Establish new channel";
-    self.navigationController.navigationBar.translucent=NO;
     
     UIBarButtonItem *establishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=establishButtonItem;
@@ -70,9 +61,6 @@
     NSString *detailString=@"Lorem ipsum dolor sit er elit lametm";
     
     descriptionTextView.text=detailString;
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];

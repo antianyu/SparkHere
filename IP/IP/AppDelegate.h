@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "User.h"
+#import "Settings.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -17,20 +18,22 @@
 
 @property (strong, nonatomic) User *user;
 
-@property (strong, nonatomic) NSMutableArray *messageList;
 @property (strong, nonatomic) NSMutableArray *myChannelList;
 
 @property (strong, nonatomic) NSDate *lastUpdateTime;
 
+@property (strong, nonatomic) UIImage *backgroundImage;
+
+@property (strong, nonatomic) Settings *settings;
+
+@property (nonatomic) BOOL is4Inch;
 @property (nonatomic) BOOL refreshMessageList;
-@property (nonatomic) BOOL loadMessages;
+@property (nonatomic) BOOL loadMoreMessages;
 @property (nonatomic) BOOL refreshMyChannelList;
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
-- (void)constructMessageList;
 - (void)constructMyChannelList;
-- (void)loadMoreMessages;
 - (void)setDefaultViewStyle:(UIView *)view;
 
 @end

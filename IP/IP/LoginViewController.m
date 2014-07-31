@@ -9,7 +9,6 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 #import "MainViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -21,7 +20,6 @@
 
 @implementation LoginViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
 }
@@ -30,32 +28,24 @@
 @synthesize passwordTextField;
 @synthesize loginButton;
 @synthesize registerButton;
+@synthesize autoLoginSegmentedControl;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    settings=[[Settings alloc]init];
-    
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
-    
     self.title=@"SparkHere";
+    
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
                                [UIColor whiteColor], NSForegroundColorAttributeName, nil];
     [self.navigationController.navigationBar setTitleTextAttributes:attributes];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [usernameTextField becomeFirstResponder];
     
@@ -64,18 +54,22 @@
     [appDelegate setDefaultViewStyle:loginButton];
     [appDelegate setDefaultViewStyle:registerButton];
     
-    usernameTextField.text=@"user2";
-    passwordTextField.text=@"222";
+    if (appDelegate.settings.autoLogin)
+    {
+        autoLoginSegmentedControl.on=true;
+        usernameTextField.text=appDelegate.settings.defaultUsername;
+        passwordTextField.text=appDelegate.settings.defaultPassword;
+        [self login];
+    }
+    else
+    {
+        autoLoginSegmentedControl.on=false;
+    }
 }
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-    [self constructUser];
-    if (appDelegate.user!=nil)
-    {
-        [self showLoginWaitingView];
-    }
+    [self login];
 }
 
 - (IBAction)registerButtonClicked:(id)sender
@@ -97,11 +91,7 @@
 {
     if (usernameTextField.text.length>0 && passwordTextField.text.length>0)
     {
-        [self constructUser];
-        if (appDelegate.user!=nil)
-        {
-            [self showLoginWaitingView];
-        }
+        [self login];
     }
     else if(textField==usernameTextField)
     {
@@ -155,6 +145,18 @@
                   {
                       appDelegate.refreshMessageList=true;
                       appDelegate.refreshMyChannelList=true;
+                      if (autoLoginSegmentedControl.on)
+                      {
+                          appDelegate.settings.autoLogin=true;
+                          appDelegate.settings.defaultUsername=appDelegate.user.username;
+                          appDelegate.settings.defaultPassword=appDelegate.user.userPassword;
+                          [appDelegate.settings saveSettings];
+                      }
+                      else
+                      {
+                          appDelegate.settings.autoLogin=false;
+                          [appDelegate.settings saveSettings];
+                      }
                       [progressHUD removeFromSuperview];
                       MainViewController *controller=[[MainViewController alloc]init];
                       [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
@@ -205,15 +207,20 @@
      }];
 }
 
-- (void)showLoginWaitingView
+- (void)login
 {
-    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Loading...";
-    [progressHUD showAnimated:YES whileExecutingBlock:^
-     {
-         [self loginRequest];
-     }];
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    [self constructUser];
+    if (appDelegate.user!=nil)
+    {
+        [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
+        progressHUD.dimBackground = YES;
+        progressHUD.labelText = @"Loading...";
+        [progressHUD showAnimated:YES whileExecutingBlock:^
+         {
+             [self loginRequest];
+         }];
+    }
 }
 
 @end

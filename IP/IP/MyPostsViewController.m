@@ -8,7 +8,6 @@
 
 #import "MyPostsViewController.h"
 #import "MessageDetailViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -21,7 +20,6 @@
 
 @implementation MyPostsViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     Message *tempMessage;
@@ -40,26 +38,16 @@
     
     self.title=@"My Posts";
     
-    settings=[[Settings alloc]init];
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
-    UIColor *background;
-    if (settings.is4Inch)
-    {
-        background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-    }
-    else
-    {
-        background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-    }
-    [self.view setBackgroundColor:background];
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.postsTableView setBackgroundColor:[UIColor clearColor]];
     [self.postsTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     searchResults=[[NSMutableArray alloc]init];
 }
@@ -67,7 +55,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    settings=[[Settings alloc]init];
     
     if (appDelegate.refreshPostsList)
     {
@@ -129,7 +116,7 @@
         }
     }
     
-    [cell setMessage:message fontSize:settings.fontSize];
+    [cell setMessage:message fontSize:appDelegate.settings.fontSize];
     return cell;
 }
 

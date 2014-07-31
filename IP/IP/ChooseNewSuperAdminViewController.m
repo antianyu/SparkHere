@@ -7,11 +7,11 @@
 //
 
 #import "ChooseNewSuperAdminViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import <Parse/Parse.h>
+#import "UIAlertViewOperation.h"
 
 @interface ChooseNewSuperAdminViewController ()
 
@@ -19,12 +19,11 @@
 
 @implementation ChooseNewSuperAdminViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
+    UIAlertViewOperation operation;
     User *tempUser;
     int index;
-    BOOL goBack;
     NSMutableArray *memberList;
     NSMutableArray *privilegeList;
     NSMutableArray *searchResults;
@@ -40,20 +39,12 @@
     
     self.title=@"Choose New Admin";
     
-    settings=[[Settings alloc]init];
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
-    if (settings.is4Inch)
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
-    else
-    {
-        UIColor *background=[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]];
-        [self.view setBackgroundColor:background];
-        [self.searchDisplayController.searchResultsTableView setBackgroundColor:background];
-    }
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.memberTableView setBackgroundColor:[UIColor clearColor]];
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
@@ -63,11 +54,6 @@
     privilegeList=[[NSMutableArray alloc]init];
     searchResults=[[NSMutableArray alloc]init];
     searchPrivilegeList=[[NSMutableArray alloc]init];
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    
-    goBack=false;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,7 +105,7 @@
     }
     
     cell.textLabel.text=user.nickname;
-    cell.textLabel.font=[UIFont systemFontOfSize:settings.fontSize];
+    cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
     [cell.textLabel setTextColor:[UIColor whiteColor]];
     
     NSString *privilegeString;
@@ -140,7 +126,7 @@
         privilegeString=@"Privilege:4--Super Admin";
     }
     cell.detailTextLabel.text = privilegeString;
-    cell.detailTextLabel.font=[UIFont systemFontOfSize:settings.fontSize-6];
+    cell.detailTextLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize-6];
     [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
     [cell setBackgroundColor:[UIColor clearColor]];
     
@@ -170,6 +156,7 @@
     }
     else
     {
+        operation=UIAlertViewOperationChooseNewSuperAdmin;
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey!"
                                                      message:@"You really want this guy to be new super administrator? This operation can't be undone."
                                                     delegate:self
@@ -207,12 +194,20 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        [self changeSuperAdministrator];
-    }
-    if (goBack)
-    {
-        appDelegate.refreshChannelDetail=true;
-        [self.navigationController popViewControllerAnimated:YES];
+        switch (operation)
+        {
+            case UIAlertViewOperationChooseNewSuperAdmin:
+                [self changeSuperAdministrator];
+                break;
+                
+            case UIAlertViewOperationGoBack:
+                appDelegate.refreshChannelDetail=true;
+                [self.navigationController popViewControllerAnimated:YES];
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
@@ -307,13 +302,13 @@
                if (!error)
                {
                    [progressHUD removeFromSuperview];
-                   goBack=true;
+                   operation=UIAlertViewOperationGoBack;
                    NSString *prompt=[NSString stringWithFormat:@"You have choose %@ to be new super adminstrator!", tempUser.nickname];
                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
                                                                 message:prompt
                                                                delegate:self
-                                                      cancelButtonTitle:@"Confirm"
-                                                      otherButtonTitles:nil];
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Confirm", nil];
                    [alert show];
                }
                else

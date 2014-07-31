@@ -11,13 +11,15 @@
 @interface Settings : NSObject
 
 @property (nonatomic) int fontSize;
-
 @property (nonatomic) BOOL receiveMessage;
-
-@property (nonatomic) BOOL is4Inch;
+@property (nonatomic) BOOL autoLogin;
+@property (strong, nonatomic) NSString *defaultUsername;
+@property (strong, nonatomic) NSString *defaultPassword;
 
 - (id)init;
 
 - (void)saveSettings;
+
+- (void)readSettings;
 
 @end

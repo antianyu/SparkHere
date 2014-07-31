@@ -9,7 +9,6 @@
 #import "RegisterViewController.h"
 #import "MainViewController.h"
 #import "ImagePickerViewController.h"
-#import "Settings.h"
 #import "User.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -24,7 +23,6 @@
 
 @implementation RegisterViewController
 {
-    Settings *settings;
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     UIAlertViewOperation operation;
@@ -43,26 +41,17 @@
 {
     [super viewDidLoad];
     
-    settings=[[Settings alloc]init];
+    self.title=@"Register";
     
-    if (settings.is4Inch)
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_4.png"]]];
-    }
-    else
-    {
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Background_3.5.png"]]];
-    }
+    appDelegate=[[UIApplication sharedApplication] delegate];
+    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
-    self.title=@"Register";
-    
     UIBarButtonItem *doneButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=doneButtonItem;
-    
-    appDelegate=[[UIApplication sharedApplication]delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [appDelegate setDefaultViewStyle:usernameTextField];
     [appDelegate setDefaultViewStyle:passwordTextField];

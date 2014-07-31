@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (strong, nonatomic) IBOutlet UIButton *loginButton;
 @property (strong, nonatomic) IBOutlet UIButton *registerButton;
+@property (strong, nonatomic) IBOutlet UISwitch *autoLoginSegmentedControl;
 
 - (IBAction)loginButtonClicked:(id)sender;
 - (IBAction)registerButtonClicked:(id)sender;
