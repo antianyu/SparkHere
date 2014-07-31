@@ -47,9 +47,6 @@
                         <segment title="Large"/>
                     </segments>
                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <connections>
-                        <action selector="segmentControlValueChanged:" destination="-1" eventType="valueChanged" id="Wcb-hA-nG5"/>
-                    </connections>
                 </segmentedControl>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnU-CA-dzn">
                     <rect key="frame" x="258" y="93" width="42" height="21"/>

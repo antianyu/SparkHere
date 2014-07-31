@@ -16,10 +16,8 @@
 @property (strong, nonatomic) NSString *defaultUsername;
 @property (strong, nonatomic) NSString *defaultPassword;
 
-- (id)init;
++ (Settings *)sharedInstance;
 
 - (void)saveSettings;
-
-- (void)readSettings;
 
 @end

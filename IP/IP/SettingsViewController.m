@@ -68,7 +68,22 @@
 
 - (void)saveButtonClicked
 {
-    appDelegate.settings=settings;
+    
+    switch (fontSizeSegmentedControl.selectedSegmentIndex)
+    {
+        case 0:
+            appDelegate.settings.fontSize=14;
+            break;
+        case 1:
+            appDelegate.settings.fontSize=18;
+            break;
+        case 2:
+            appDelegate.settings.fontSize=22;
+            break;
+        default:
+            break;
+    }
+    appDelegate.settings.receiveMessage=receiveMessageSwitch.on;
     [appDelegate.settings saveSettings];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -78,29 +93,11 @@
     UISwitch *senderSwitch=(UISwitch *)sender;
     if(senderSwitch.on)
     {
-        settings.receiveMessage=YES;
         receiveMessagesLabel.text=@"YES";
     }
     else
     {
-        settings.receiveMessage=NO;
         receiveMessagesLabel.text=@"NO";
-    }
-}
-
-- (IBAction)segmentControlValueChanged:(id)sender
-{
-    if([sender selectedSegmentIndex]==0)
-    {
-        settings.fontSize=14;
-    }
-    else if([sender selectedSegmentIndex]==1)
-    {
-        settings.fontSize=18;
-    }
-    else
-    {
-        settings.fontSize=22;
     }
 }
 

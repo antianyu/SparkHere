@@ -18,12 +18,33 @@
 
 - (id)init
 {
+    return [Settings sharedInstance];
+}
+
+- (id)initSharedInstance
+{
     if(self=[super init])
     {
-        [self readSettings];
+        NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+        fontSize=[[defaults objectForKey:@"fontSize"] intValue];
+        receiveMessage=[[defaults objectForKey:@"receiveMessage"] boolValue];
+        autoLogin=[[defaults objectForKey:@"autoLogin"] boolValue];
+        defaultUsername=[defaults objectForKey:@"defaultUsername"];
+        defaultPassword=[defaults objectForKey:@"defaultPassword"];
     }
     
     return self;
+}
+
++ (Settings *)sharedInstance
+{
+    static Settings *settings;
+    static dispatch_once_t token;
+    dispatch_once(&token, ^
+    {
+        settings=[[Settings alloc]initSharedInstance];
+    });
+    return settings;
 }
 
 - (void)saveSettings
@@ -34,16 +55,6 @@
     [defaults setBool:autoLogin forKey:@"autoLogin"];
     [defaults setObject:defaultUsername forKey:@"defaultUsername"];
     [defaults setObject:defaultPassword forKey:@"defaultPassword"];
-}
-
-- (void)readSettings
-{
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    fontSize=[[defaults objectForKey:@"fontSize"] intValue];
-    receiveMessage=[[defaults objectForKey:@"receiveMessage"] boolValue];
-    autoLogin=[[defaults objectForKey:@"autoLogin"] boolValue];
-    defaultUsername=[defaults objectForKey:@"defaultUsername"];
-    defaultPassword=[defaults objectForKey:@"defaultPassword"];
 }
 
 @end

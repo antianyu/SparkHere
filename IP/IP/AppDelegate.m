@@ -80,7 +80,7 @@
     user=nil;
     myChannelList=[[NSMutableArray alloc]init];
     
-    settings=[[Settings alloc]init];
+    settings=[Settings sharedInstance];
     
     refreshMessageList=true;
     loadMoreMessages=false;
