@@ -31,6 +31,12 @@
         autoLogin=[[defaults objectForKey:@"autoLogin"] boolValue];
         defaultUsername=[defaults objectForKey:@"defaultUsername"];
         defaultPassword=[defaults objectForKey:@"defaultPassword"];
+        
+        if (fontSize==0)
+        {
+            fontSize=18;
+            receiveMessage=true;
+        }
     }
     
     return self;

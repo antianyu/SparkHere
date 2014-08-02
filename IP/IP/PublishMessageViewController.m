@@ -23,6 +23,7 @@
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     TextInputError inputError;
+    CAShapeLayer *shapeLayer;
 }
 
 @synthesize contentTextView;
@@ -35,7 +36,7 @@
 {
     [super viewDidLoad];
     
-    self.title=@"Edit Profile";
+    self.title=@"New Message";
     
     appDelegate=[[UIApplication sharedApplication] delegate];
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -52,7 +53,11 @@
     
     [appDelegate setDefaultViewStyle:contentTextView];
     
-    [scrollView setHidden:YES];
+    contentImageView.userInteractionEnabled=YES;
+    UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                             action:@selector(imageViewTapped)];
+    [contentImageView addGestureRecognizer:singleTap];
+    [self drawBorderOfScrollView];
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -172,6 +177,7 @@
     
     scrollView.contentSize=CGSizeMake(contentImageView.frame.size.width, contentImageView.frame.size.height);
     scrollView.hidden=NO;
+    [shapeLayer removeFromSuperlayer];
     if (contentImageView.frame.size.height<=scrollView.frame.size.height)
     {
         [scrollView setScrollEnabled:NO];
@@ -191,6 +197,48 @@
     {
         [contentTextView becomeFirstResponder];
     }
+}
+
+- (void)imageViewTapped
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
+- (void)drawBorderOfScrollView
+{
+    CGRect frame=scrollView.bounds;
+    if (appDelegate.is4Inch)
+    {
+        frame.size.height=275;
+    }
+    else
+    {
+        frame.size.height=187;
+    }
+    
+    shapeLayer=[CAShapeLayer layer];
+    
+    CGMutablePathRef path=CGPathCreateMutable();
+    
+    CGPathMoveToPoint(path, nil, CGRectGetMinX(frame), CGRectGetMaxY(frame));
+    CGPathAddLineToPoint(path, nil, CGRectGetMaxX(frame), CGRectGetMaxY(frame));
+    CGPathAddLineToPoint(path, nil, CGRectGetMaxX(frame), CGRectGetMinY(frame));
+    CGPathAddLineToPoint(path, nil, CGRectGetMinX(frame), CGRectGetMinY(frame));
+    CGPathAddLineToPoint(path, nil, CGRectGetMinX(frame), CGRectGetMaxY(frame));
+    
+    shapeLayer.path=path;
+    CGPathRelease(path);
+    
+    shapeLayer.frame=frame;
+    shapeLayer.masksToBounds=NO;
+    shapeLayer.backgroundColor=[UIColor clearColor].CGColor;
+    shapeLayer.fillColor=[UIColor clearColor].CGColor;
+    shapeLayer.strokeColor=[UIColor whiteColor].CGColor;
+    shapeLayer.lineWidth=2;
+    shapeLayer.lineCap=kCALineCapSquare;
+    shapeLayer.lineDashPattern=[NSArray arrayWithObjects:[NSNumber numberWithInt:5], [NSNumber numberWithInt:5],nil];
+    
+    [scrollView.layer addSublayer:shapeLayer];
 }
 
 @end
