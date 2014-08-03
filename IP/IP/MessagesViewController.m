@@ -59,22 +59,11 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:attributes];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     [self.messagesTableView setBackgroundColor:[UIColor clearColor]];
     [self.messagesTableView setSeparatorInset:UIEdgeInsetsZero];
-//    [self.messagesTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
-    messageList=[[NSMutableArray alloc]init];
-    
     [self.messagesTableView addHeaderWithTarget:self action:@selector(headerRefreshing)];
     
-//    [self.messagesTableView addFooterWithTarget:self action:@selector(footerRefreshing)];
-    
+    messageList=[[NSMutableArray alloc]init];
 }
 
 - (void)viewWillAppear:(BOOL)animated

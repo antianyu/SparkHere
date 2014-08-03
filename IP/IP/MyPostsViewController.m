@@ -43,10 +43,10 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
-    
     [self.postsTableView setBackgroundColor:[UIColor clearColor]];
     [self.postsTableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
     
     searchResults=[[NSMutableArray alloc]init];

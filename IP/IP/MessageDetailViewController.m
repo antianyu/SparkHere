@@ -34,8 +34,6 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
     senderLabel.text=message.sender.nickname;
     channelLabel.text=message.channel.channelName;
     

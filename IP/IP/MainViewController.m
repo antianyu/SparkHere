@@ -32,12 +32,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         
-        UIColor *colorSelected=[UIColor colorWithRed:228/255.0 green:0/255.0 blue:127/255.0 alpha:1];
-        UIColor *colorUnselected=[UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1];
-        
-        [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:colorUnselected, NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
-        [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:colorSelected, NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
-        
         UITabBarItem *msgItem=[[UITabBarItem alloc]init];
         msgItem.title=@"Messages";
         msgItem.image=[[UIImage imageNamed:@"Messages_unselected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -81,8 +75,6 @@
         [items addObject:moreNavController];
         [self setViewControllers:items animated:YES];
         
-        [self.tabBar setBackgroundImage:[UIImage imageNamed:@"TabBar.png"]];
-        [self.tabBar setSelectedImageTintColor:colorSelected];
         self.selectedIndex=0;
     }
     return self;

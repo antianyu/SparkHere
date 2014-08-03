@@ -53,8 +53,6 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
     // add composeButton
     composeButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonClicked)];
     

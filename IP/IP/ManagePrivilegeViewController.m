@@ -47,10 +47,11 @@
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     [self.memberTableView setBackgroundColor:[UIColor clearColor]];
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
     
     memberList=[[NSMutableArray alloc]init];

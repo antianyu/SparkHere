@@ -42,12 +42,9 @@
     progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
     UIBarButtonItem *pubishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(pubishButtonClicked)];
     self.navigationItem.rightBarButtonItem=pubishButtonItem;
-    
-    [toolbar setBackgroundImage:[UIImage imageNamed:@"Toolbar.png"]
-             forToolbarPosition:UIBarPositionAny
-                     barMetrics:UIBarMetricsDefault];
     
     [contentTextView becomeFirstResponder];
     

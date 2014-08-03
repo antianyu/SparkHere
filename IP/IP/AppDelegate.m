@@ -36,6 +36,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     [self initData];
+    [self initView];
     
     LoginViewController *loginViewController=[[LoginViewController alloc]init];
     self.navController=[[UINavigationController alloc]initWithRootViewController:loginViewController];
@@ -100,7 +101,37 @@
         is4Inch=true;
         backgroundImage=[UIImage imageNamed:@"Background_4.png"];
     }
+}
+
+- (void)initView
+{
+    // Status Bar
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    // Navigation Bar
+    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
+                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    
+    // Tab Bar
+    UIColor *colorSelected=[UIColor colorWithRed:228/255.0 green:0/255.0 blue:127/255.0 alpha:1];
+    UIColor *colorUnselected=[UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1];
+    
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:colorUnselected, NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:colorSelected, NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    
+    [[UITabBar appearance] setBackgroundImage:[UIImage imageNamed:@"TabBar.png"]];
+    [[UITabBar appearance] setSelectedImageTintColor:colorSelected];
+    
+    // Tool Bar
+    [[UIToolbar appearance] setBackgroundImage:[UIImage imageNamed:@"Toolbar.png"]
+                            forToolbarPosition:UIBarPositionAny
+                                    barMetrics:UIBarMetricsDefault];
+    [[UIToolbar appearance] setTintColor:[UIColor whiteColor]];
+    
+    // UITextField
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
 }

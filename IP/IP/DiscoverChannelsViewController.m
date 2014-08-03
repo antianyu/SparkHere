@@ -39,23 +39,13 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
-    
     self.tabBarItem.title=@"Discover";
-    
-    self.navigationController.navigationBar.translucent=NO;
-    
-    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:attributes];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [self.categoryTableView setBackgroundColor:[UIColor clearColor]];
     [self.categoryTableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
-//    [self.channelTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-//    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];

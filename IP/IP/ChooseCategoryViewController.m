@@ -33,18 +33,10 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
-    
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:attributes];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     [self.categoryTableView setBackgroundColor:[UIColor clearColor]];
     [self.categoryTableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
     
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];

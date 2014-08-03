@@ -39,23 +39,11 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
-    
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    self.navigationController.navigationBar.translucent=NO;
-    
-    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:attributes];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     [self.channelTableView setBackgroundColor:[UIColor clearColor]];
     [self.channelTableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
-//    [self.channelTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-//    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     hotChannelList=[[NSMutableArray alloc]init];
     searchResults=[[NSMutableArray alloc]init];

@@ -39,24 +39,14 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
-    
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
     UIBarButtonItem *establishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(establishButtonClicked)];
     self.navigationItem.rightBarButtonItem=establishButtonItem;
     
-    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:attributes];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     [self.channelTableView setBackgroundColor:[UIColor clearColor]];
     [self.channelTableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
-//    [self.channelTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-//    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     searchResults=[[NSMutableArray alloc]init];
 }

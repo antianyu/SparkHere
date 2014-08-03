@@ -48,8 +48,6 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
     UIBarButtonItem *doneButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=doneButtonItem;
     

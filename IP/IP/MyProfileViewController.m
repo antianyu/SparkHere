@@ -41,10 +41,6 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    self.navigationController.navigationBar.translucent=NO;
-    
-    self.tabBarController.tabBar.translucent=NO;
-    
     [logoutButton setBackgroundColor:[UIColor colorWithRed:156/255.0 green:222/255.0 blue:0/255.0 alpha:1]];
     [logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
@@ -75,15 +71,7 @@
         settingsButton.frame=CGRectMake(180, 134, 100, 100);
         helpButton.frame=CGRectMake(40, 251, 100, 100);
         aboutButton.frame=CGRectMake(180, 251, 100, 100);
-    }    
-    
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:attributes];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -104,7 +92,8 @@
 - (IBAction)logoutButtonClicked:(id)sender
 {
     appDelegate.user=nil;
-    [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"autoLogin"];
+    appDelegate.settings.autoLogin=false;
+    [appDelegate.settings saveSettings];
     LoginViewController *controller=[[LoginViewController alloc]init];
     UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
     [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
