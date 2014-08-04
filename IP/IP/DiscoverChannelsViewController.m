@@ -99,13 +99,12 @@
         ChannelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
         if (cell == nil)
         {
-            cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil]lastObject];
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil] lastObject];
         }
         
         Channel *channel=[searchResults objectAtIndex:indexPath.row];
         [cell setChannel:channel fontSize:appDelegate.settings.fontSize];
         return cell;
-
     }
     else
     {

@@ -16,7 +16,6 @@
 
 - (void)awakeFromNib
 {
-//    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"MessageCell.png"]]];
     [self setBackgroundColor:[UIColor clearColor]];
     [channelNameLabel setTextColor:[UIColor whiteColor]];
     [followersLabel setTextColor:[UIColor lightGrayColor]];

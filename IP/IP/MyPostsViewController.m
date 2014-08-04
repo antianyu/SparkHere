@@ -103,7 +103,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:messageWithoutImageCellIdentifier];
         if (cell==nil)
         {
-            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil] lastObject];
         }
     }
     else
@@ -112,7 +112,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:messageWithImageCellIdentifier];
         if (cell==nil)
         {
-            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil]lastObject];
+            cell=[[[NSBundle mainBundle]loadNibNamed:@"MessageTableViewCell" owner:nil options:nil] lastObject];
         }
     }
     
@@ -122,7 +122,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MessageTableViewCell *cell=(MessageTableViewCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    MessageTableViewCell *cell=(MessageTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     return cell.frame.size.height;
 }
 

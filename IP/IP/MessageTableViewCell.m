@@ -8,6 +8,15 @@
 
 #import "MessageTableViewCell.h"
 
+const int MAXIMUM_HEIGHT=1000;
+const int LABEL_WIDTH=280;
+const int IMAGE_WIDTH=240;
+const int LABEL_ORIGIN_X=20;
+const int LABEL_ORIGIN_Y=32;
+const int IMAGE_ORIGIN_X=40;
+const int IMAGE_ORIGIN_Y=36;
+const int INTERVAL=8;
+
 @implementation MessageTableViewCell
 {
     UILabel *contentLabel;
@@ -20,7 +29,6 @@
 
 - (void)awakeFromNib
 {
-//    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"MessageCell.png"]]];
     [self setBackgroundColor:[UIColor clearColor]];
     [senderLabel setTextColor:[UIColor lightGrayColor]];
     [channelLabel setTextColor:[UIColor lightGrayColor]];
@@ -45,12 +53,12 @@
         contentLabel.numberOfLines=0;
         contentLabel.lineBreakMode=NSLineBreakByWordWrapping;
         
-        CGSize constraint=CGSizeMake(280, 1000);
+        CGSize constraint=CGSizeMake(LABEL_WIDTH, MAXIMUM_HEIGHT);
         NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:contentLabel.font, NSFontAttributeName, nil];
         
         CGSize actualSize=[message.content boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         
-        contentLabel.frame=CGRectMake(20, 32, 280, actualSize.height);
+        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, LABEL_ORIGIN_Y, LABEL_WIDTH, actualSize.height);
         [self addSubview:contentLabel];
        
         CGRect frame=self.frame;
@@ -61,20 +69,20 @@
     if(message.image!=nil)
     {
         CGRect frame;
-        double imageHeight=240*message.image.size.height/message.image.size.width;
+        double imageHeight=IMAGE_WIDTH*message.image.size.height/message.image.size.width;
         if(message.content.length==0)
         {
-            frame=CGRectMake(40, 36, 240, imageHeight);
+            frame=CGRectMake(IMAGE_ORIGIN_X, IMAGE_ORIGIN_Y, IMAGE_WIDTH, imageHeight);
         }
         else
         {
-            frame=CGRectMake(40, 40+contentLabel.frame.size.height, 240, imageHeight);
+            frame=CGRectMake(IMAGE_ORIGIN_X, LABEL_ORIGIN_Y+contentLabel.frame.size.height+INTERVAL, IMAGE_WIDTH, imageHeight);
         }
         UIImageView *imageView=[[UIImageView alloc]initWithFrame:frame];
         imageView.image=message.image;
         [self addSubview:imageView];
         frame=self.frame;
-        frame.size.height+=imageHeight+8;
+        frame.size.height+=imageHeight+INTERVAL;
         self.frame=frame;
     }
 }

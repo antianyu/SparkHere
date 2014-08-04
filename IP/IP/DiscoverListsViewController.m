@@ -93,7 +93,7 @@
     ChannelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:channelCellIdentifier];
     if (cell == nil)
     {
-        cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil]lastObject];
+        cell=[[[NSBundle mainBundle]loadNibNamed:@"ChannelTableViewCell" owner:nil options:nil] lastObject];
     }
     
     Channel *channel;
@@ -112,7 +112,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChannelTableViewCell *cell=(ChannelTableViewCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    ChannelTableViewCell *cell=(ChannelTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     return cell.frame.size.height;
 }
 

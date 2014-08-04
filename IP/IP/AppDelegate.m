@@ -132,23 +132,15 @@
     [[UIToolbar appearance] setTintColor:[UIColor whiteColor]];
     
     // UITextField
-    [[UITextField appearance] setTintColor:[UIColor whiteColor]];
+    [[UITextField appearance] setTextColor:[UIColor whiteColor]];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+    
+    // UITextView
+    [[UITextView appearance] setTextColor:[UIColor whiteColor]];
 }
 
 - (void)setDefaultViewStyle:(UIView *)view
-{
-    if ([view isKindOfClass:[UITextField class]])
-    {
-        UITextField *textField=(UITextField *)view;
-        textField.textColor=[UIColor whiteColor];
-    }
-    else if ([view isKindOfClass:[UITextView class]])
-    {
-        UITextView *textView=(UITextView *)view;
-        textView.textColor=[UIColor whiteColor];
-    }
-    
+{    
     view.tintColor=[UIColor whiteColor];
     view.backgroundColor=[UIColor clearColor];
     view.layer.borderColor=[[UIColor whiteColor]CGColor];
