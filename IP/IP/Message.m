@@ -12,6 +12,7 @@
 
 @synthesize sender;
 @synthesize channel;
+@synthesize location;
 @synthesize messageID;
 @synthesize updateAt;
 @synthesize content;
@@ -25,20 +26,23 @@
         channel=[[Channel alloc]init];
         messageID=[[NSString alloc]init];
         content=[[NSString alloc]init];
+        location=[[PFGeoPoint alloc]init];
     }    
     return self;
 }
 
-- (id)initWithContent:(NSString *)msgContent image:(UIImage *)contentImage updateAt:(NSDate *)msgUpdateAt messageID:(NSString *)msgID sender:(User *)msgSender channel:(Channel *)msgChannel;
+- (id)initWithPFObject:(PFObject *)object sender:(User *)msgSender channel:(Channel *)msgChannel
 {
     if(self=[super init])
     {
         sender=msgSender;
         channel=msgChannel;
-        messageID=msgID;
-        content=msgContent;
-        image=contentImage;
-        updateAt=msgUpdateAt;
+        messageID=object.objectId;
+        updateAt=object.updatedAt;
+        content=object[@"content"];
+        PFFile *imageFile=object[@"image"];
+        image=[UIImage imageWithData:[imageFile getData]];
+        location=object[@"location"];
     }
     return self;
 }

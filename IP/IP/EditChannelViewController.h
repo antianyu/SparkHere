@@ -14,9 +14,6 @@
 
 @property (strong, nonatomic) IBOutlet UITextField *channelNameTextField;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *privilegeSegmentedControl;
-@property (strong, nonatomic) IBOutlet UITextField *latitudeTextField;
-@property (strong, nonatomic) IBOutlet UITextField *longitudeTextField;
-@property (strong, nonatomic) IBOutlet UITextField *rangeTextField;
 @property (strong, nonatomic) IBOutlet UIButton *categoryButton;
 @property (strong, nonatomic) IBOutlet UIButton *chooseLogoButton;
 @property (strong, nonatomic) IBOutlet UIImageView *logoImageView;

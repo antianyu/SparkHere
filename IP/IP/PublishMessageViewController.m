@@ -14,6 +14,21 @@
 #import "TextInputError.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
+@implementation CLLocationManager (TemporaryHack)
+
+- (void)hackLocationFix
+{
+    CLLocation *location=[[CLLocation alloc]initWithLatitude:51.47431 longitude:-0.184063];
+    [[self delegate] locationManager:self didUpdateLocations:[NSArray arrayWithObject:location]];
+}
+
+- (void)startUpdatingLocation
+{
+    [self performSelector:@selector(hackLocationFix) withObject:nil afterDelay:0.1];
+}
+
+@end
+
 @interface PublishMessageViewController ()
 
 @end
@@ -24,6 +39,7 @@
     MBProgressHUD *progressHUD;
     TextInputError inputError;
     CAShapeLayer *shapeLayer;
+    CLLocationManager *locationManager;
 }
 
 @synthesize contentTextView;
@@ -54,7 +70,7 @@
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
                                                                              action:@selector(imageViewTapped)];
     [contentImageView addGestureRecognizer:singleTap];
-    [self drawBorderOfScrollView];
+    [self drawBorderOfImageView];
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -76,47 +92,26 @@
     }
     else
     {
-        [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-        progressHUD.dimBackground = YES;
-        progressHUD.labelText = @"Please wait...";
-        [progressHUD showAnimated:YES whileExecutingBlock:^
-         {
-             PFObject *newMessage=[PFObject objectWithClassName:@"Message"];
-             newMessage[@"channelID"]=channel.channelID;
-             newMessage[@"senderID"]=appDelegate.user.userID;
-             newMessage[@"content"]=contentTextView.text;
-             if (contentImageView.image!=nil)
-             {                 
-                 NSData *imageData=UIImageJPEGRepresentation(contentImageView.image, 1);
-                 PFFile *image=[PFFile fileWithName:@"image.jpg" data:imageData];
-                 newMessage[@"image"]=image;
-             }
-
-             [newMessage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-              {
-                  if (!error)
-                  {
-                      [progressHUD removeFromSuperview];
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
-                                                                   message:@"Publish message succeed!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:nil
-                                                         otherButtonTitles:@"Confirm", nil];
-                      [alert show];
-                  }
-                  else
-                  {
-                      [progressHUD removeFromSuperview];
-                      inputError=TextInputErrorNone;
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                   message:@"Publish message failed! Something wrong with server!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Confirm"
-                                                         otherButtonTitles:nil];
-                      [alert show];
-                  }
-              }];
-         }];
+        if ([CLLocationManager locationServicesEnabled])
+        {
+            if (locationManager==nil)
+            {
+                locationManager=[[CLLocationManager alloc]init];
+                locationManager.delegate=self;
+                locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
+            }
+            [locationManager startUpdatingLocation];
+        }
+        else
+        {
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                         message:@"Location service is not available. Please turn it on."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Confirm"
+                                               otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
     }
 }
 
@@ -172,13 +167,8 @@
     contentImageView.frame=rect;
     contentImageView.image=image;
     
-    scrollView.contentSize=CGSizeMake(contentImageView.frame.size.width, contentImageView.frame.size.height);
-    scrollView.hidden=NO;
+    scrollView.contentSize=CGSizeMake(contentImageView.frame.size.width, contentImageView.frame.size.height+145);
     [shapeLayer removeFromSuperlayer];
-    if (contentImageView.frame.size.height<=scrollView.frame.size.height)
-    {
-        [scrollView setScrollEnabled:NO];
-    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -186,7 +176,6 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        NSLog(@"%@",appDelegate.lastUpdateTime);
         appDelegate.loadMoreMessages=true;
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -201,9 +190,10 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
-- (void)drawBorderOfScrollView
+- (void)drawBorderOfImageView
 {
-    CGRect frame=scrollView.bounds;
+    CGRect frame=contentImageView.frame;
+    frame.origin.y=72.5;
     if (appDelegate.is4Inch)
     {
         frame.size.height=275;
@@ -236,6 +226,67 @@
     shapeLayer.lineDashPattern=[NSArray arrayWithObjects:[NSNumber numberWithInt:5], [NSNumber numberWithInt:5],nil];
     
     [scrollView.layer addSublayer:shapeLayer];
+}
+
+- (void)publishMessageWithLocation:(PFGeoPoint *)currentLocation
+{
+    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
+    progressHUD.dimBackground = YES;
+    progressHUD.labelText = @"Please wait...";
+    [progressHUD showAnimated:YES whileExecutingBlock:^
+     {
+         PFObject *newMessage=[PFObject objectWithClassName:@"Message"];
+         newMessage[@"channelID"]=channel.channelID;
+         newMessage[@"senderID"]=appDelegate.user.userID;
+         newMessage[@"content"]=contentTextView.text;
+         newMessage[@"location"]=currentLocation;
+         if (contentImageView.image!=nil)
+         {
+             NSData *imageData=UIImageJPEGRepresentation(contentImageView.image, 1);
+             PFFile *image=[PFFile fileWithName:@"image.jpg" data:imageData];
+             newMessage[@"image"]=image;
+         }
+         
+         [newMessage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+          {
+              if (!error)
+              {
+                  [progressHUD removeFromSuperview];
+                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
+                                                               message:@"Publish message succeed!"
+                                                              delegate:self
+                                                     cancelButtonTitle:nil
+                                                     otherButtonTitles:@"Confirm", nil];
+                  [alert show];
+              }
+              else
+              {
+                  [progressHUD removeFromSuperview];
+                  inputError=TextInputErrorNone;
+                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
+                                                               message:@"Publish message failed! Something wrong with server!"
+                                                              delegate:self
+                                                     cancelButtonTitle:@"Confirm"
+                                                     otherButtonTitles:nil];
+                  [alert show];
+              }
+          }];
+     }];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
+                                                 message:@"Location failed. Please try again."
+                                                delegate:self
+                                       cancelButtonTitle:@"Confirm"
+                                       otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    [self publishMessageWithLocation:[PFGeoPoint geoPointWithLocation:[locations lastObject]]];
 }
 
 @end

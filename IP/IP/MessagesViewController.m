@@ -8,8 +8,9 @@
 
 #import "MessagesViewController.h"
 #import "MessageDetailViewController.h"
-#import "Message.h"
 #import "User.h"
+#import "Message.h"
+#import "Constants.h"
 #import "MessageTableViewCell.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
@@ -21,7 +22,7 @@
 
 - (void)hackLocationFix
 {
-    CLLocation *location=[[CLLocation alloc]initWithLatitude:4.9999 longitude:4.9999];
+    CLLocation *location=[[CLLocation alloc]initWithLatitude:51.47435 longitude:-0.184062];
     [[self delegate] locationManager:self didUpdateLocations:[NSArray arrayWithObject:location]];
 }
 
@@ -201,12 +202,10 @@
     }
 }
 
-- (void)constructMessageListWithLocation:(CLLocation *)currentLocation
+- (void)constructMessageListWithLocation:(PFGeoPoint *)currentLocation
 {
     if (initMessageList)
     {
-        appDelegate.lastUpdateTime=[NSDate date];
-        
         [messageList removeAllObjects];
         
         NSMutableArray *subQueries=[[NSMutableArray alloc]init];
@@ -214,20 +213,15 @@
         // if the user is in the range of channel, add query constraint of the channel
         for (Channel *channel in appDelegate.myChannelList)
         {
-            CLLocation *channelLocation=[[CLLocation alloc]initWithLatitude:channel.location.latitude
-                                                                  longitude:channel.location.longitude];
-            
-            if ([currentLocation distanceFromLocation:channelLocation]<channel.range)
-            {
-                PFQuery *query=[PFQuery queryWithClassName:@"Message"];
-                [query whereKey:@"channelID" equalTo:channel.channelID];
-                [subQueries addObject:query];
-            }
+            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+            [query whereKey:@"channelID" equalTo:channel.channelID];
+            [subQueries addObject:query];
         }
         
         if (subQueries.count>0)
         {
             PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+            [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:messageRange];
             [query orderByDescending:@"updatedAt"];
             query.limit=20;
             NSArray *messages=[query findObjects];
@@ -237,13 +231,7 @@
                 query=[PFQuery queryWithClassName:@"User"];
                 User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
                 
-                PFFile *imageFile=object[@"image"];
-                UIImage *image=[UIImage imageWithData:[imageFile getData]];
-                
-                Message *message=[[Message alloc]initWithContent:object[@"content"]
-                                                           image:image
-                                                        updateAt:object.updatedAt
-                                                       messageID:object.objectId
+                Message *message=[[Message alloc]initWithPFObject:object
                                                           sender:sender
                                                          channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
                 [messageList addObject:message];
@@ -257,22 +245,17 @@
         // if the user is in the range of channel, add query constraint of the channel
         for (Channel *channel in appDelegate.myChannelList)
         {
-            CLLocation *channelLocation=[[CLLocation alloc]initWithLatitude:channel.location.latitude
-                                                                  longitude:channel.location.longitude];
-            if ([currentLocation distanceFromLocation:channelLocation]<channel.range)
-            {
-                PFQuery *query=[PFQuery queryWithClassName:@"Message"];
-                [query whereKey:@"channelID" equalTo:channel.channelID];
-                [subQueries addObject:query];
-            }
-        }
+            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+            [query whereKey:@"channelID" equalTo:channel.channelID];
+            [subQueries addObject:query];
+        }   
         
         if (subQueries.count>0)
         {
             PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
             [query whereKey:@"updatedAt" greaterThan:appDelegate.lastUpdateTime];
+            [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:messageRange];
             [query orderByAscending:@"updatedAt"];
-            appDelegate.lastUpdateTime=[NSDate date];
             
             NSArray *messages=[query findObjects];
             
@@ -281,19 +264,14 @@
                 query=[PFQuery queryWithClassName:@"User"];
                 User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
                 
-                PFFile *imageFile=object[@"image"];
-                UIImage *image=[UIImage imageWithData:[imageFile getData]];
-                
-                Message *message=[[Message alloc]initWithContent:object[@"content"]
-                                                           image:image
-                                                        updateAt:object.updatedAt
-                                                       messageID:object.objectId
-                                                          sender:sender
-                                                         channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
+                Message *message=[[Message alloc]initWithPFObject:object
+                                                           sender:sender
+                                                          channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
                 [messageList insertObject:message atIndex:0];
             }
         }
     }
+    appDelegate.lastUpdateTime=[NSDate date];
     
     [self.messagesTableView reloadData];
     
@@ -314,7 +292,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    [self constructMessageListWithLocation:[locations lastObject]];
+    [self constructMessageListWithLocation:[PFGeoPoint geoPointWithLocation:[locations lastObject]]];
 }
 
 - (Channel *)findChannelFromMyChannelList:(NSString *)channelID

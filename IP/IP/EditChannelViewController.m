@@ -32,9 +32,6 @@
 
 @synthesize channelNameTextField;
 @synthesize privilegeSegmentedControl;
-@synthesize longitudeTextField;
-@synthesize latitudeTextField;
-@synthesize rangeTextField;
 @synthesize categoryButton;
 @synthesize chooseLogoButton;
 @synthesize logoImageView;
@@ -66,9 +63,6 @@
     [channelNameTextField becomeFirstResponder];
     
     [appDelegate setDefaultViewStyle:channelNameTextField];
-    [appDelegate setDefaultViewStyle:latitudeTextField];
-    [appDelegate setDefaultViewStyle:longitudeTextField];
-    [appDelegate setDefaultViewStyle:rangeTextField];
     [appDelegate setDefaultViewStyle:descriptionTextView];
     [appDelegate setDefaultViewStyle:categoryButton];
     [appDelegate setDefaultViewStyle:chooseLogoButton];
@@ -82,9 +76,6 @@
     {
         channelNameTextField.text=channel.channelName;
         privilegeSegmentedControl.selectedSegmentIndex=channel.defaultPrivilege-1;
-        latitudeTextField.text=[NSString stringWithFormat:@"%f", channel.location.latitude];
-        longitudeTextField.text=[NSString stringWithFormat:@"%f", channel.location.longitude];
-        rangeTextField.text=[NSString stringWithFormat:@"%f", channel.range];
         [categoryButton setTitle:[categoryList objectAtIndex:channel.category] forState:UIControlStateNormal];
         descriptionTextView.text=channel.description;
         if (channel.logo!=nil)
@@ -177,60 +168,11 @@
     [alert show];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    if (textField==longitudeTextField || textField==latitudeTextField || textField==rangeTextField)
-    {
-        NSCharacterSet *characterSet=[[NSCharacterSet characterSetWithCharactersInString:@"-.1234567890"]invertedSet];
-        NSString *filteredResult=[[string componentsSeparatedByCharactersInSet:characterSet] componentsJoinedByString:@""];
-        if (![string isEqualToString:filteredResult])
-        {
-            return NO;
-        }
-        
-        static BOOL containsDecPoint;
-        if ([textField.text rangeOfString:@"."].location==NSNotFound)
-        {
-            containsDecPoint=NO;
-        }
-        if (string.length>0)
-        {
-            unichar single=[string characterAtIndex:0];
-            if(textField.text.length==0)
-            {
-                if (single=='.')
-                {
-                    return NO;
-                }
-            }
-            else
-            {
-                if(single=='.')
-                {
-                    if (!containsDecPoint)
-                    {
-                        containsDecPoint=YES;
-                    }
-                    else
-                    {
-                        return NO;
-                    }
-                }
-                if(single=='-')
-                {
-                    return NO;
-                }
-            }
-        }
-    }
-    
-    return YES;
-}
+
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (channelNameTextField.text.length>0 && longitudeTextField.text.length>0 &&
-        latitudeTextField.text.length>0 && rangeTextField.text.length>0 && descriptionTextView.text.length>0)
+    if (channelNameTextField.text.length>0 && descriptionTextView.text.length>0)
     {
         [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
         [self constructChannel];
@@ -247,18 +189,6 @@
         }
     }
     else if (textField==channelNameTextField)
-    {
-        [latitudeTextField becomeFirstResponder];
-    }
-    else if (textField==latitudeTextField)
-    {
-        [longitudeTextField becomeFirstResponder];
-    }
-    else if (textField==longitudeTextField)
-    {
-        [rangeTextField becomeFirstResponder];
-    }
-    else if (textField==rangeTextField)
     {
         [descriptionTextView becomeFirstResponder];
     }
@@ -371,18 +301,6 @@
     {
         [channelNameTextField becomeFirstResponder];
     }
-    else if(inputError==TextInputErrorLatitude)
-    {
-        [latitudeTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorLongitude)
-    {
-        [longitudeTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorRange)
-    {
-        [rangeTextField becomeFirstResponder];
-    }
     else if(inputError==TextInputErrorDescription)
     {
         [descriptionTextView becomeFirstResponder];
@@ -401,36 +319,6 @@
                                            otherButtonTitles:nil];
         [alert show];
     }
-    else if (latitudeTextField.text.length==0)
-    {
-        inputError=TextInputErrorLatitude;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Latitude can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
-    }
-    else if (longitudeTextField.text.length==0)
-    {
-        inputError=TextInputErrorLongitude;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Longitude can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
-    }
-    else if (rangeTextField.text.length==0)
-    {
-        inputError=TextInputErrorRange;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Range can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
-    }
     else if (descriptionTextView.text.length==0)
     {
         inputError=TextInputErrorDescription;
@@ -441,36 +329,11 @@
                                            otherButtonTitles:nil];
         [alert show];
     }
-    else if (latitudeTextField.text.doubleValue<-90 || latitudeTextField.text.doubleValue>=90)
-    {
-        inputError=TextInputErrorLatitude;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Latitude is out of range!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
-    }
-    else if (longitudeTextField.text.doubleValue<-180 || longitudeTextField.text.doubleValue>=180)
-    {
-        inputError=TextInputErrorLongitude;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Longitude is out of range!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
-    }
     else
     {
         newChannel=[PFObject objectWithClassName:@"Channel"];
         newChannel[@"channelName"]=channelNameTextField.text;
         newChannel[@"description"]=descriptionTextView.text;
-        double latitude=latitudeTextField.text.doubleValue;
-        double longitude=longitudeTextField.text.doubleValue;
-        PFGeoPoint *location=[PFGeoPoint geoPointWithLatitude:latitude longitude:longitude];
-        newChannel[@"location"]=location;
-        newChannel[@"range"]=[NSNumber numberWithDouble:rangeTextField.text.doubleValue];
         if (!editChannel)
         {
             newChannel[@"followersNumber"]=[NSNumber numberWithInt:1];

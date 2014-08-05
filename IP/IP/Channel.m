@@ -14,8 +14,6 @@
 @synthesize channelName;
 @synthesize description;
 @synthesize logo;
-@synthesize location;
-@synthesize range;
 @synthesize followersNumber;
 @synthesize defaultPrivilege;
 @synthesize category;
@@ -27,8 +25,6 @@
         channelID=[[NSString alloc]init];
         channelName=[[NSString alloc]init];
         description=[[NSString alloc]init];
-        location=[[PFGeoPoint alloc]init];
-        range=0;
         followersNumber=0;
         defaultPrivilege=0;
         category=0;
@@ -44,8 +40,6 @@
         channelID=object.objectId;
         channelName=object[@"channelName"];
         description=object[@"description"];
-        location=object[@"location"];
-        range=[object[@"range"] doubleValue];
         followersNumber=[object[@"followersNumber"] intValue];
         defaultPrivilege=[object[@"defaultPrivilege"] intValue];
         category=[object[@"category"] intValue];

@@ -204,13 +204,7 @@
              query=[PFQuery queryWithClassName:@"User"];
              User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
              
-             PFFile *imageFile=object[@"image"];
-             UIImage *image=[UIImage imageWithData:[imageFile getData]];
-             
-             Message *message=[[Message alloc]initWithContent:object[@"content"]
-                                                        image:image
-                                                     updateAt:object.updatedAt
-                                                    messageID:object.objectId
+             Message *message=[[Message alloc]initWithPFObject:object
                                                        sender:sender
                                                       channel:channel];
              [postsList addObject:message];
@@ -257,15 +251,9 @@
              query=[PFQuery queryWithClassName:@"Channel"];
              Channel *channel=[[Channel alloc]initWithPFObject:[query getObjectWithId:object[@"channelID"]]];
              
-             PFFile *imageFile=object[@"image"];
-             UIImage *image=[UIImage imageWithData:[imageFile getData]];
-             
-             Message *message=[[Message alloc]initWithContent:object[@"content"]
-                                                        image:image
-                                                     updateAt:object.updatedAt
-                                                    messageID:object.objectId
-                                                       sender:sender
-                                                      channel:channel];
+             Message *message=[[Message alloc]initWithPFObject:object
+                                                        sender:sender
+                                                       channel:channel];
              [searchResults addObject:message];
          }
      }

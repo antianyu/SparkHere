@@ -144,9 +144,6 @@
                                     barMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance] setTintColor:[UIColor whiteColor]];
     
-    // UILabel
-    [[UILabel appearance] setTextColor:[UIColor whiteColor]];
-    
     // UITextField
     [[UITextField appearance] setTextColor:[UIColor whiteColor]];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];

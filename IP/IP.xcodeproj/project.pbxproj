@@ -63,6 +63,7 @@
 		556C63121949D9C70030FEFF /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 556C63101949D9C70030FEFF /* AboutViewController.xib */; };
 		556C63161949D9D70030FEFF /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C63141949D9D70030FEFF /* SettingsViewController.m */; };
 		556C63171949D9D70030FEFF /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 556C63151949D9D70030FEFF /* SettingsViewController.xib */; };
+		5587E6F11991457E0007B6D2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5587E6F01991457E0007B6D2 /* MapKit.framework */; };
 		559E083019819E8700DF1275 /* ImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 559E082E19819E8700DF1275 /* ImagePickerViewController.m */; };
 		55A2135F196C512900D0EDD9 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A2135E196C512900D0EDD9 /* Parse.framework */; };
 		55A21361196C518B00D0EDD9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A21360196C518B00D0EDD9 /* AudioToolbox.framework */; };
@@ -80,6 +81,8 @@
 		55A2B7F0194A122D003DA300 /* ChannelDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55A2B7EE194A122D003DA300 /* ChannelDetailViewController.xib */; };
 		55B12CD01982E5E40062774B /* PublishMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B12CCE1982E5E40062774B /* PublishMessageViewController.m */; };
 		55B12CD11982E5E40062774B /* PublishMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55B12CCF1982E5E40062774B /* PublishMessageViewController.xib */; };
+		55C6B5F119911B84003BA257 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C6B5F019911B84003BA257 /* Constants.m */; };
+		55C6B5F419912D80003BA257 /* MapViewAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C6B5F319912D80003BA257 /* MapViewAnnotation.m */; };
 		55C7E9FF19802E1F00D68603 /* Category.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55C7E9FE19802E1F00D68603 /* Category.plist */; };
 		55C7EA031980314300D68603 /* DiscoverListsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C7EA011980314300D68603 /* DiscoverListsViewController.m */; };
 		55C7EA041980314300D68603 /* DiscoverListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C7EA021980314300D68603 /* DiscoverListsViewController.xib */; };
@@ -192,6 +195,7 @@
 		556C63131949D9D70030FEFF /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		556C63141949D9D70030FEFF /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		556C63151949D9D70030FEFF /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		5587E6F01991457E0007B6D2 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		559E082D19819E8700DF1275 /* ImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerViewController.h; sourceTree = "<group>"; };
 		559E082E19819E8700DF1275 /* ImagePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePickerViewController.m; sourceTree = "<group>"; };
 		559E08321981AE8B00DF1275 /* UIAlertViewOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIAlertViewOperation.h; sourceTree = "<group>"; };
@@ -215,6 +219,10 @@
 		55B12CCD1982E5E40062774B /* PublishMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishMessageViewController.h; sourceTree = "<group>"; };
 		55B12CCE1982E5E40062774B /* PublishMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishMessageViewController.m; sourceTree = "<group>"; };
 		55B12CCF1982E5E40062774B /* PublishMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublishMessageViewController.xib; sourceTree = "<group>"; };
+		55C6B5EF19911B84003BA257 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		55C6B5F019911B84003BA257 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		55C6B5F219912D80003BA257 /* MapViewAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewAnnotation.h; sourceTree = "<group>"; };
+		55C6B5F319912D80003BA257 /* MapViewAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewAnnotation.m; sourceTree = "<group>"; };
 		55C7E9FE19802E1F00D68603 /* Category.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Category.plist; sourceTree = "<group>"; };
 		55C7EA001980314300D68603 /* DiscoverListsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverListsViewController.h; sourceTree = "<group>"; };
 		55C7EA011980314300D68603 /* DiscoverListsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverListsViewController.m; sourceTree = "<group>"; };
@@ -236,6 +244,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5587E6F11991457E0007B6D2 /* MapKit.framework in Frameworks */,
 				55A21371196C51D800D0EDD9 /* SystemConfiguration.framework in Frameworks */,
 				55A2136F196C51D100D0EDD9 /* StoreKit.framework in Frameworks */,
 				55A2136D196C51C900D0EDD9 /* Security.framework in Frameworks */,
@@ -286,6 +295,10 @@
 				555263FF194F78E300A9A024 /* Channel.m */,
 				5530972F1950761C00B4D8F8 /* Settings.h */,
 				553097301950761C00B4D8F8 /* Settings.m */,
+				55C6B5F219912D80003BA257 /* MapViewAnnotation.h */,
+				55C6B5F319912D80003BA257 /* MapViewAnnotation.m */,
+				55C6B5EF19911B84003BA257 /* Constants.h */,
+				55C6B5F019911B84003BA257 /* Constants.m */,
 				551ADBCF19708E8500792132 /* MBProgressHUD.h */,
 				551ADBD019708E8500792132 /* MBProgressHUD.m */,
 				559E08321981AE8B00DF1275 /* UIAlertViewOperation.h */,
@@ -345,6 +358,7 @@
 		5538861C19487BE7004B74D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5587E6F01991457E0007B6D2 /* MapKit.framework */,
 				55A21370196C51D800D0EDD9 /* SystemConfiguration.framework */,
 				55A2136E196C51D100D0EDD9 /* StoreKit.framework */,
 				55A2136C196C51C900D0EDD9 /* Security.framework */,
@@ -617,6 +631,7 @@
 				551D97541990EEBF0082530A /* AutoLoginViewController.m in Sources */,
 				556C63161949D9D70030FEFF /* SettingsViewController.m in Sources */,
 				553097311950761C00B4D8F8 /* Settings.m in Sources */,
+				55C6B5F119911B84003BA257 /* Constants.m in Sources */,
 				55A2B7EF194A122D003DA300 /* ChannelDetailViewController.m in Sources */,
 				551758561964A5D800AF9C20 /* DiscoverChannelsViewController.m in Sources */,
 				55E3423E1981604D00505317 /* EditProfileViewController.m in Sources */,
@@ -630,6 +645,7 @@
 				551FDDEA197492C700FB94AA /* EditChannelViewController.m in Sources */,
 				551758601964B35900AF9C20 /* MyPostsViewController.m in Sources */,
 				5538866D19488DEA004B74D8 /* MainViewController.m in Sources */,
+				55C6B5F419912D80003BA257 /* MapViewAnnotation.m in Sources */,
 				555263FD194F78C300A9A024 /* Message.m in Sources */,
 				55373D6D1988390D00A2D699 /* UIScrollView+MJRefresh.m in Sources */,
 				5517584C1964A1AA00AF9C20 /* MyChannelsViewController.m in Sources */,

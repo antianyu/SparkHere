@@ -7,15 +7,7 @@
 //
 
 #import "MessageTableViewCell.h"
-
-const int MAXIMUM_HEIGHT=1000;
-const int LABEL_WIDTH=280;
-const int IMAGE_WIDTH=240;
-const int LABEL_ORIGIN_X=20;
-const int LABEL_ORIGIN_Y=49;
-const int IMAGE_ORIGIN_X=40;
-const int IMAGE_ORIGIN_Y=53;
-const int INTERVAL=8;
+#import "Constants.h"
 
 @implementation MessageTableViewCell
 {
@@ -31,22 +23,24 @@ const int INTERVAL=8;
 - (void)awakeFromNib
 {
     [self setBackgroundColor:[UIColor clearColor]];
+    [senderLabel setTextColor:[UIColor whiteColor]];
+    [channelLabel setTextColor:[UIColor lightGrayColor]];
+    [updateLabel setTextColor:[UIColor lightGrayColor]];
 }
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize
 {
+    int positionY=49;
+    
     senderLabel.font=[UIFont systemFontOfSize:fontSize-6];
     senderLogoImageView.image=message.sender.logo;
     senderLabel.text=message.sender.nickname;
-    [senderLabel setTextColor:[UIColor whiteColor]];
     
     channelLabel.font=[UIFont systemFontOfSize:fontSize-6];
     channelLogoImageView.image=message.channel.logo;
     channelLabel.text=message.channel.channelName;
-    [channelLabel setTextColor:[UIColor lightGrayColor]];
     
     updateLabel.font=[UIFont systemFontOfSize:fontSize-8];
-    [updateLabel setTextColor:[UIColor lightGrayColor]];
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSUInteger unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit |NSMinuteCalendarUnit;
@@ -81,7 +75,8 @@ const int INTERVAL=8;
         
         CGSize actualSize=[message.content boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         
-        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, LABEL_ORIGIN_Y, LABEL_WIDTH, actualSize.height);
+        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, positionY, LABEL_WIDTH, actualSize.height);
+        positionY+=actualSize.height;
         [self addSubview:contentLabel];
        
         CGRect frame=self.frame;
@@ -93,17 +88,12 @@ const int INTERVAL=8;
     {
         CGRect frame;
         double imageHeight=IMAGE_WIDTH*message.image.size.height/message.image.size.width;
-        if(message.content.length==0)
-        {
-            frame=CGRectMake(IMAGE_ORIGIN_X, IMAGE_ORIGIN_Y, IMAGE_WIDTH, imageHeight);
-        }
-        else
-        {
-            frame=CGRectMake(IMAGE_ORIGIN_X, LABEL_ORIGIN_Y+contentLabel.frame.size.height+INTERVAL, IMAGE_WIDTH, imageHeight);
-        }
+        frame=CGRectMake(IMAGE_ORIGIN_X, positionY+INTERVAL, IMAGE_WIDTH, imageHeight);
+        
         UIImageView *imageView=[[UIImageView alloc]initWithFrame:frame];
         imageView.image=message.image;
         [self addSubview:imageView];
+        
         frame=self.frame;
         frame.size.height+=imageHeight+INTERVAL;
         self.frame=frame;
