@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D5D512A0-0D1C-40A9-ABC5-B357564B26ED</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SparkHere</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>60DB28D2-BE0C-44D3-9B0C-D41E419F65EE</key>
+		<string>https://github.com/antianyu/SparkHere.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SparkHere.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>60DB28D2-BE0C-44D3-9B0C-D41E419F65EE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/antianyu/SparkHere.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>60DB28D2-BE0C-44D3-9B0C-D41E419F65EE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>60DB28D2-BE0C-44D3-9B0C-D41E419F65EE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SparkHere</string>
+		</dict>
+	</array>
+</dict>
+</plist>
