@@ -241,10 +241,11 @@
                 UIImage *image=[UIImage imageWithData:[imageFile getData]];
                 
                 Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                           image:image
+                                                        updateAt:object.updatedAt
                                                        messageID:object.objectId
                                                           sender:sender
-                                                         channel:[self findChannelFromMyChannelList:object[@"channelID"]]
-                                                           image:image];
+                                                         channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
                 [messageList addObject:message];
             }
         }
@@ -284,10 +285,11 @@
                 UIImage *image=[UIImage imageWithData:[imageFile getData]];
                 
                 Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                           image:image
+                                                        updateAt:object.updatedAt
                                                        messageID:object.objectId
                                                           sender:sender
-                                                         channel:[self findChannelFromMyChannelList:object[@"channelID"]]
-                                                           image:image];
+                                                         channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
                 [messageList insertObject:message atIndex:0];
             }
         }

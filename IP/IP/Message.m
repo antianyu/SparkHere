@@ -13,6 +13,7 @@
 @synthesize sender;
 @synthesize channel;
 @synthesize messageID;
+@synthesize updateAt;
 @synthesize content;
 @synthesize image;
 
@@ -28,7 +29,7 @@
     return self;
 }
 
-- (id)initWithContent:(NSString *)msgContent messageID:(NSString *)msgID sender:(User *)msgSender channel:(Channel *)msgChannel image:(UIImage *)contentImage;
+- (id)initWithContent:(NSString *)msgContent image:(UIImage *)contentImage updateAt:(NSDate *)msgUpdateAt messageID:(NSString *)msgID sender:(User *)msgSender channel:(Channel *)msgChannel;
 {
     if(self=[super init])
     {
@@ -37,6 +38,7 @@
         messageID=msgID;
         content=msgContent;
         image=contentImage;
+        updateAt=msgUpdateAt;
     }
     return self;
 }

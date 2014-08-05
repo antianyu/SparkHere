@@ -15,6 +15,8 @@
 @synthesize autoLogin;
 @synthesize defaultUsername;
 @synthesize defaultPassword;
+@synthesize defaultNickname;
+@synthesize defaultLogo;
 
 - (id)init
 {
@@ -31,6 +33,8 @@
         autoLogin=[[defaults objectForKey:@"autoLogin"] boolValue];
         defaultUsername=[defaults objectForKey:@"defaultUsername"];
         defaultPassword=[defaults objectForKey:@"defaultPassword"];
+        defaultNickname=[defaults objectForKey:@"defaultNickname"];
+        defaultLogo=[UIImage imageWithData:[defaults objectForKey:@"defaultLogo"]];
         
         if (fontSize==0)
         {
@@ -59,8 +63,15 @@
     [defaults setInteger:fontSize forKey:@"fontSize"];
     [defaults setBool:receiveMessage forKey:@"receiveMessage"];
     [defaults setBool:autoLogin forKey:@"autoLogin"];
-    [defaults setObject:defaultUsername forKey:@"defaultUsername"];
-    [defaults setObject:defaultPassword forKey:@"defaultPassword"];
+}
+
+- (void)saveDefaultUser:(User *)user
+{
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    [defaults setObject:user.username forKey:@"defaultUsername"];
+    [defaults setObject:user.userPassword forKey:@"defaultPassword"];
+    [defaults setObject:user.nickname forKey:@"defaultNickname"];
+    [defaults setObject:UIImagePNGRepresentation(user.logo) forKey:@"defaultLogo"];
 }
 
 @end

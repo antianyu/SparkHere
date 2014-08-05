@@ -26,6 +26,8 @@
 		551ADBD119708E8500792132 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 551ADBD019708E8500792132 /* MBProgressHUD.m */; };
 		551CA5E1195323B500D3A0EB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 551CA5DF195323B500D3A0EB /* LoginViewController.m */; };
 		551CA5E2195323B500D3A0EB /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 551CA5E0195323B500D3A0EB /* LoginViewController.xib */; };
+		551D97541990EEBF0082530A /* AutoLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 551D97521990EEBF0082530A /* AutoLoginViewController.m */; };
+		551D97551990EEBF0082530A /* AutoLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 551D97531990EEBF0082530A /* AutoLoginViewController.xib */; };
 		551FDDEA197492C700FB94AA /* EditChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 551FDDE8197492C700FB94AA /* EditChannelViewController.m */; };
 		551FDDEB197492C700FB94AA /* EditChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 551FDDE9197492C700FB94AA /* EditChannelViewController.xib */; };
 		553097311950761C00B4D8F8 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 553097301950761C00B4D8F8 /* Settings.m */; };
@@ -130,6 +132,9 @@
 		551CA5DE195323B500D3A0EB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		551CA5DF195323B500D3A0EB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		551CA5E0195323B500D3A0EB /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		551D97511990EEBF0082530A /* AutoLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLoginViewController.h; sourceTree = "<group>"; };
+		551D97521990EEBF0082530A /* AutoLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLoginViewController.m; sourceTree = "<group>"; };
+		551D97531990EEBF0082530A /* AutoLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AutoLoginViewController.xib; sourceTree = "<group>"; };
 		551FDDE7197492C700FB94AA /* EditChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditChannelViewController.h; sourceTree = "<group>"; };
 		551FDDE8197492C700FB94AA /* EditChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditChannelViewController.m; sourceTree = "<group>"; };
 		551FDDE9197492C700FB94AA /* EditChannelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditChannelViewController.xib; sourceTree = "<group>"; };
@@ -408,6 +413,9 @@
 				551CA5DE195323B500D3A0EB /* LoginViewController.h */,
 				551CA5DF195323B500D3A0EB /* LoginViewController.m */,
 				551CA5E0195323B500D3A0EB /* LoginViewController.xib */,
+				551D97511990EEBF0082530A /* AutoLoginViewController.h */,
+				551D97521990EEBF0082530A /* AutoLoginViewController.m */,
+				551D97531990EEBF0082530A /* AutoLoginViewController.xib */,
 				5558D3AB1954D32B006BF7FA /* RegisterViewController.h */,
 				5558D3AC1954D32B006BF7FA /* RegisterViewController.m */,
 				5558D3AD1954D32B006BF7FA /* RegisterViewController.xib */,
@@ -554,6 +562,7 @@
 				5517584D1964A1AA00AF9C20 /* MyChannelsViewController.xib in Resources */,
 				551FDDEB197492C700FB94AA /* EditChannelViewController.xib in Resources */,
 				5517585C1964A75100AF9C20 /* MessagesViewController.xib in Resources */,
+				551D97551990EEBF0082530A /* AutoLoginViewController.xib in Resources */,
 				55B12CD11982E5E40062774B /* PublishMessageViewController.xib in Resources */,
 				5561FF191982A35700EB1D2D /* images.xcassets in Resources */,
 				556C63121949D9C70030FEFF /* AboutViewController.xib in Resources */,
@@ -605,6 +614,7 @@
 				55B12CD01982E5E40062774B /* PublishMessageViewController.m in Sources */,
 				551ADBD119708E8500792132 /* MBProgressHUD.m in Sources */,
 				55A2B7E41949F80F003DA300 /* MessageDetailViewController.m in Sources */,
+				551D97541990EEBF0082530A /* AutoLoginViewController.m in Sources */,
 				556C63161949D9D70030FEFF /* SettingsViewController.m in Sources */,
 				553097311950761C00B4D8F8 /* Settings.m in Sources */,
 				55A2B7EF194A122D003DA300 /* ChannelDetailViewController.m in Sources */,

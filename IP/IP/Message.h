@@ -16,10 +16,11 @@
 @property (strong, nonatomic) NSString *messageID;
 @property (strong, nonatomic) NSString *content;
 @property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSDate *updateAt;
 @property (strong, nonatomic) User *sender;
 @property (strong, nonatomic) Channel *channel;
 
 - (id)init;
-- (id)initWithContent:(NSString *)content messageID:(NSString *)msgID sender:(User *)msgSender channel:(Channel *)msgChannel image:(UIImage *)image;
+- (id)initWithContent:(NSString *)msgContent image:(UIImage *)contentImage updateAt:(NSDate *)msgUpdateAt messageID:(NSString *)msgID sender:(User *)msgSender channel:(Channel *)msgChannel;
 
 @end

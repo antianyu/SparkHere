@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User.h"
 
 @interface Settings : NSObject
 
@@ -15,9 +16,12 @@
 @property (nonatomic) BOOL autoLogin;
 @property (strong, nonatomic) NSString *defaultUsername;
 @property (strong, nonatomic) NSString *defaultPassword;
+@property (strong, nonatomic) NSString *defaultNickname;
+@property (strong, nonatomic) UIImage *defaultLogo;
 
 + (Settings *)sharedInstance;
 
 - (void)saveSettings;
+- (void)saveDefaultUser:(User *)user;
 
 @end

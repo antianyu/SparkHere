@@ -208,10 +208,11 @@
              UIImage *image=[UIImage imageWithData:[imageFile getData]];
              
              Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                        image:image
+                                                     updateAt:object.updatedAt
                                                     messageID:object.objectId
                                                        sender:sender
-                                                      channel:channel
-                                                        image:image];
+                                                      channel:channel];
              [postsList addObject:message];
          }
      }
@@ -260,10 +261,11 @@
              UIImage *image=[UIImage imageWithData:[imageFile getData]];
              
              Message *message=[[Message alloc]initWithContent:object[@"content"]
+                                                        image:image
+                                                     updateAt:object.updatedAt
                                                     messageID:object.objectId
                                                        sender:sender
-                                                      channel:channel
-                                                        image:image];
+                                                      channel:channel];
              [searchResults addObject:message];
          }
      }

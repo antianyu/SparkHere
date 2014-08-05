@@ -12,9 +12,9 @@ const int MAXIMUM_HEIGHT=1000;
 const int LABEL_WIDTH=280;
 const int IMAGE_WIDTH=240;
 const int LABEL_ORIGIN_X=20;
-const int LABEL_ORIGIN_Y=32;
+const int LABEL_ORIGIN_Y=49;
 const int IMAGE_ORIGIN_X=40;
-const int IMAGE_ORIGIN_Y=36;
+const int IMAGE_ORIGIN_Y=53;
 const int INTERVAL=8;
 
 @implementation MessageTableViewCell
@@ -24,14 +24,13 @@ const int INTERVAL=8;
 
 @synthesize senderLabel;
 @synthesize channelLabel;
+@synthesize updateLabel;
 @synthesize senderLogoImageView;
 @synthesize channelLogoImageView;
 
 - (void)awakeFromNib
 {
     [self setBackgroundColor:[UIColor clearColor]];
-    [senderLabel setTextColor:[UIColor lightGrayColor]];
-    [channelLabel setTextColor:[UIColor lightGrayColor]];
 }
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize
@@ -39,10 +38,34 @@ const int INTERVAL=8;
     senderLabel.font=[UIFont systemFontOfSize:fontSize-6];
     senderLogoImageView.image=message.sender.logo;
     senderLabel.text=message.sender.nickname;
+    [senderLabel setTextColor:[UIColor whiteColor]];
     
     channelLabel.font=[UIFont systemFontOfSize:fontSize-6];
     channelLogoImageView.image=message.channel.logo;
     channelLabel.text=message.channel.channelName;
+    [channelLabel setTextColor:[UIColor lightGrayColor]];
+    
+    updateLabel.font=[UIFont systemFontOfSize:fontSize-8];
+    [updateLabel setTextColor:[UIColor lightGrayColor]];
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit |NSMinuteCalendarUnit;
+    NSDateComponents *cmp1 = [calendar components:unitFlags fromDate:message.updateAt];
+    NSDateComponents *cmp2 = [calendar components:unitFlags fromDate:[NSDate date]];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    if ([cmp1 day] == [cmp2 day])
+    {
+        [formatter setDateFormat:@"HH:mm a"];
+        NSString *time = [formatter stringFromDate:message.updateAt];
+        updateLabel.text = [NSString stringWithFormat:@"Published at：Today %@", time];
+    }
+    else
+    {
+        formatter.dateFormat = @"dd/MM/yyyy HH:mm a";
+        NSString *time = [formatter stringFromDate:message.updateAt];
+        updateLabel.text = [NSString stringWithFormat:@"Published at：%@", time];
+    }
     
     if (message.content.length>0)
     {
@@ -62,7 +85,7 @@ const int INTERVAL=8;
         [self addSubview:contentLabel];
        
         CGRect frame=self.frame;
-        frame.size.height=actualSize.height+73;
+        frame.size.height+=actualSize.height+INTERVAL;
         self.frame=frame;
     }
     

@@ -11,6 +11,7 @@
 #import "Message.h"
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
+#import "AutoLoginViewController.h"
 
 @implementation AppDelegate
 
@@ -40,7 +41,15 @@
     
     LoginViewController *loginViewController=[[LoginViewController alloc]init];
     self.navController=[[UINavigationController alloc]initWithRootViewController:loginViewController];
-    self.window.rootViewController=navController;
+    if (settings.autoLogin)
+    {
+        AutoLoginViewController *autoLoginViewController=[[AutoLoginViewController alloc]init];
+        self.window.rootViewController=autoLoginViewController;
+    }
+    else
+    {
+        self.window.rootViewController=navController;
+    }
     
     [self.window makeKeyAndVisible];
     
@@ -78,10 +87,14 @@
 
 - (void)initData
 {
-    user=nil;
+    settings=[Settings sharedInstance];
+    
+    if (settings.autoLogin)
+    {
+        user=[[User alloc]init:settings.defaultUsername userPassword:settings.defaultPassword];
+    }
     myChannelList=[[NSMutableArray alloc]init];
     
-    settings=[Settings sharedInstance];
     
     refreshMessageList=true;
     loadMoreMessages=false;
@@ -130,6 +143,9 @@
                             forToolbarPosition:UIBarPositionAny
                                     barMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance] setTintColor:[UIColor whiteColor]];
+    
+    // UILabel
+    [[UILabel appearance] setTextColor:[UIColor whiteColor]];
     
     // UITextField
     [[UITextField appearance] setTextColor:[UIColor whiteColor]];
