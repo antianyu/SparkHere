@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SparkHere/AppDelegate.m"
-            timestampString = "429203869.522597"
+            timestampString = "429217578.514837"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
             landmarkName = "-setCurrentUser:"
             landmarkType = "5">
          </BreakpointContent>

@@ -39,6 +39,12 @@
     [self initData];
     [self initView];
     
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+                                                    UIRemoteNotificationTypeAlert|
+                                                    UIRemoteNotificationTypeSound];
+    
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
     LoginViewController *loginViewController=[[LoginViewController alloc]init];
     self.navController=[[UINavigationController alloc]initWithRootViewController:loginViewController];
     if (settings.autoLogin)
@@ -52,8 +58,6 @@
     }
     
     [self.window makeKeyAndVisible];
-    
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     return YES;
 }
@@ -83,6 +87,20 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    currentInstallation.channels=@[@"global"];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"%@", userInfo);
+    [PFPush handlePush:userInfo];
 }
 
 - (void)initData
