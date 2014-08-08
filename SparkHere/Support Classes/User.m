@@ -42,11 +42,11 @@
     return self;
 }
 
-- (id)init:(NSString *)name userPassword:(NSString *)password nickname:(NSString *)nickName logo:(UIImage *)image
+- (id)init:(NSString *)name userPassword:(NSString *)password nickname:(NSString *)nickName userID:(NSString *)userId logo:(UIImage *)image
 {
     if(self=[super init])
     {
-        userID=[[NSString alloc]init];
+        userID=userId;
         username=name;
         userPassword=password;
         nickname=nickName;
@@ -67,6 +67,16 @@
         logo=[UIImage imageWithData:[imageFile getData]];
     }
     return self;
+}
+
+- (void)setWithPFObject:(PFObject *)object
+{
+    username=object[@"username"];
+    userPassword=object[@"password"];
+    nickname=object[@"nickname"];
+    userID=object.objectId;
+    PFFile *imageFile=object[@"logo"];
+    logo=[UIImage imageWithData:[imageFile getData]];
 }
 
 @end

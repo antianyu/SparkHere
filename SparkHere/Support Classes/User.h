@@ -20,7 +20,9 @@
 - (id)init;
 - (id)init:(NSString *)userName userPassword:(NSString *)userPassword;
 - (id)init:(NSString *)userName userPassword:(NSString *)userPassword nickname:(NSString *)nickName
-      logo:(UIImage *)image;
+    userID:(NSString *)userId logo:(UIImage *)image;
 - (id)initWithPFObject:(PFObject *)object;
+
+- (void)setWithPFObject:(PFObject *)object;
 
 @end

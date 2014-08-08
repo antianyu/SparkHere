@@ -177,6 +177,7 @@
         user=[[User alloc]init:usernameTextField.text
                   userPassword:passwordTextField.text
                       nickname:nicknameTextField.text
+                        userID:nil
                           logo:logoImageView.image];
     }
 }
@@ -224,7 +225,11 @@
                       [newUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
                        {
                            if (!error)
-                           {                               
+                           {
+                               PFQuery *userQuery=[PFQuery queryWithClassName:@"User"];
+                               [userQuery whereKey:@"username" equalTo:user.username];
+                               [userQuery whereKey:@"password" equalTo:user.userPassword];
+                               [appDelegate setCurrentUser:[query getFirstObject]];
                                [progressHUD removeFromSuperview];
                                operation=UIAlertViewOperationChooseRegister;
                                UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
@@ -288,7 +293,6 @@
     {
         if (operation==UIAlertViewOperationChooseRegister)
         {
-            appDelegate.user=user;
             appDelegate.refreshMessageList=false;
             appDelegate.refreshMyChannelList=false;
             MainViewController *controller=[[MainViewController alloc]init];

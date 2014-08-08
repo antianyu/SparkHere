@@ -59,7 +59,7 @@
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    self.hidesBottomBarWhenPushed=NO;
+    self.hidesBottomBarWhenPushed=YES;
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -131,8 +131,6 @@
         controller.channel=[hotChannelList objectAtIndex:indexPath.row];
     }
     appDelegate.refreshChannelDetail=true;
-    
-    self.hidesBottomBarWhenPushed=YES;
     
     UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
     self.navigationItem.backBarButtonItem=backButton;

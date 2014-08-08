@@ -103,7 +103,7 @@
          [query whereKey:@"userID" equalTo:appDelegate.user.userID];
          [query whereKey:@"channelID" equalTo:channel.channelID];
          PFObject *result=[query getFirstObject];
-         if (result)
+         if (result!=nil)
          {
              privilege=[result[@"privilege"] intValue];
              isFollowing=true;

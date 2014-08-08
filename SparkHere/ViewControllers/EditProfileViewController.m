@@ -173,8 +173,7 @@
          [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
               PFQuery *query=[PFQuery queryWithClassName:@"User"];
-              appDelegate.user=[[User alloc]initWithPFObject:[query getObjectWithId:appDelegate.user.userID]];
-              [appDelegate.settings saveDefaultUser:appDelegate.user];
+              [appDelegate setCurrentUser:[query getObjectWithId:appDelegate.user.userID]];
               [progressHUD removeFromSuperview];
               operation=UIAlertViewOperationDone;
               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"

@@ -84,18 +84,6 @@
     [super viewDidLoad];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    AppDelegate *appDelegate=[[UIApplication sharedApplication] delegate];
-    PFQuery *query=[PFQuery queryWithClassName:@"User"];
-    [query whereKey:@"username" equalTo:appDelegate.user.username];
-    PFObject *object=[query getFirstObject];
-    appDelegate.user=[[User alloc]initWithPFObject:object];
-    [appDelegate.settings saveDefaultUser:appDelegate.user];
-}
-
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];

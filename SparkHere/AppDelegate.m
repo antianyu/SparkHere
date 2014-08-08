@@ -91,10 +91,13 @@
     
     if (settings.autoLogin)
     {
-        user=[[User alloc]init:settings.defaultUsername userPassword:settings.defaultPassword];
+        user=[[User alloc]init:settings.defaultUsername
+                  userPassword:settings.defaultPassword
+                      nickname:settings.defaultNickname
+                        userID:settings.defaultID
+                          logo:settings.defaultLogo];
     }
     myChannelList=[[NSMutableArray alloc]init];
-    
     
     refreshMessageList=true;
     loadMoreMessages=false;
@@ -159,6 +162,23 @@
     view.layer.borderColor=[[UIColor whiteColor]CGColor];
     view.layer.borderWidth=1.5;
     view.layer.cornerRadius=5;
+}
+
+- (void)setCurrentUser:(PFObject *)object
+{
+    if (user==nil)
+    {
+        user=[[User alloc]initWithPFObject:object];
+    }
+    else
+    {
+        [user setWithPFObject:object];
+    }
+    
+    if (settings.autoLogin)
+    {
+        [settings saveDefaultUser:user];
+    }
 }
 
 - (void)constructMyChannelList

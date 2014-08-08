@@ -142,9 +142,7 @@
                       if (autoLoginSegmentedControl.on)
                       {
                           appDelegate.settings.autoLogin=true;
-                          appDelegate.settings.defaultUsername=appDelegate.user.username;
-                          appDelegate.settings.defaultPassword=appDelegate.user.userPassword;
-                          [appDelegate.settings saveSettings];
+                          [appDelegate setCurrentUser:[objects firstObject]];
                       }
                       else
                       {

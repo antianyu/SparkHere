@@ -18,20 +18,20 @@
 #import "Message.h"
 #import "PassBoolDelegate.h"
 
-@implementation CLLocationManager (TemporaryHack)
-
-- (void)hackLocationFix
-{
-    CLLocation *location=[[CLLocation alloc]initWithLatitude:51.47435 longitude:-0.184062];
-    [[self delegate] locationManager:self didUpdateLocations:[NSArray arrayWithObject:location]];
-}
-
-- (void)startUpdatingLocation
-{
-    [self performSelector:@selector(hackLocationFix) withObject:nil afterDelay:0.1];
-}
-
-@end
+//@implementation CLLocationManager (TemporaryHack)
+//
+//- (void)hackLocationFix
+//{
+//    CLLocation *location=[[CLLocation alloc]initWithLatitude:51.47435 longitude:-0.184062];
+//    [[self delegate] locationManager:self didUpdateLocations:[NSArray arrayWithObject:location]];
+//}
+//
+//- (void)startUpdatingLocation
+//{
+//    [self performSelector:@selector(hackLocationFix) withObject:nil afterDelay:0.1];
+//}
+//
+//@end
 
 
 @interface MessagesViewController ()

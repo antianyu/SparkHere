@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString *defaultUsername;
 @property (strong, nonatomic) NSString *defaultPassword;
 @property (strong, nonatomic) NSString *defaultNickname;
+@property (strong, nonatomic) NSString *defaultID;
 @property (strong, nonatomic) UIImage *defaultLogo;
 
 + (Settings *)sharedInstance;

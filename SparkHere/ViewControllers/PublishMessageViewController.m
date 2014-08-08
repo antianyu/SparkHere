@@ -14,21 +14,6 @@
 #import "MBProgressHUD.h"
 #import "TextInputError.h"
 
-@implementation CLLocationManager (TemporaryHack)
-
-- (void)hackLocationFix
-{
-    CLLocation *location=[[CLLocation alloc]initWithLatitude:51.47431 longitude:-0.184063];
-    [[self delegate] locationManager:self didUpdateLocations:[NSArray arrayWithObject:location]];
-}
-
-- (void)startUpdatingLocation
-{
-    [self performSelector:@selector(hackLocationFix) withObject:nil afterDelay:0.1];
-}
-
-@end
-
 @interface PublishMessageViewController ()
 
 @end

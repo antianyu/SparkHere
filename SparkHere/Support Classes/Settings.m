@@ -16,6 +16,7 @@
 @synthesize defaultUsername;
 @synthesize defaultPassword;
 @synthesize defaultNickname;
+@synthesize defaultID;
 @synthesize defaultLogo;
 
 - (id)init
@@ -34,6 +35,7 @@
         defaultUsername=[defaults objectForKey:@"defaultUsername"];
         defaultPassword=[defaults objectForKey:@"defaultPassword"];
         defaultNickname=[defaults objectForKey:@"defaultNickname"];
+        defaultID=[defaults objectForKey:@"defaultID"];
         defaultLogo=[UIImage imageWithData:[defaults objectForKey:@"defaultLogo"]];
         
         if (fontSize==0)
@@ -71,6 +73,7 @@
     [defaults setObject:user.username forKey:@"defaultUsername"];
     [defaults setObject:user.userPassword forKey:@"defaultPassword"];
     [defaults setObject:user.nickname forKey:@"defaultNickname"];
+    [defaults setObject:user.userID forKey:@"defaultID"];
     [defaults setObject:UIImagePNGRepresentation(user.logo) forKey:@"defaultLogo"];
 }
 

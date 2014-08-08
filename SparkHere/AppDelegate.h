@@ -33,6 +33,7 @@
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
+- (void)setCurrentUser:(PFObject *)object;
 - (void)constructMyChannelList;
 - (void)setDefaultViewStyle:(UIView *)view;
 
