@@ -6,8 +6,8 @@
 //  Copyright (c) 2014年 Tianyu An. All rights reserved.
 //
 
-#ifndef IP_TextInputError_h
-#define IP_TextInputError_h
+#ifndef SparkHere_TextInputError_h
+#define SparkHere_TextInputError_h
 
 typedef enum
 {

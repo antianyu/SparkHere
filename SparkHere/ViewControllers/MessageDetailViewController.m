@@ -10,22 +10,6 @@
 #import "MessageDetailViewController.h"
 #import "AppDelegate.h"
 #import "MapViewAnnotation.h"
-#import "Constants.h"
-
-//@implementation CLLocationManager (TemporaryHack)
-//
-//- (void)hackLocationFix
-//{
-//    CLLocation *location=[[CLLocation alloc]initWithLatitude:51.474 longitude:-0.184];
-//    [[self delegate] locationManager:self didUpdateLocations:[NSArray arrayWithObject:location]];
-//}
-//
-//- (void)startUpdatingLocation
-//{
-//    [self performSelector:@selector(hackLocationFix) withObject:nil afterDelay:0.1];
-//}
-//
-//@end
 
 @interface MessageDetailViewController ()
 
@@ -34,7 +18,6 @@
 @implementation MessageDetailViewController
 {
     AppDelegate *appDelegate;
-    CLLocationManager *locationManager;
     MKMapView *mapView;
 }
 
@@ -50,7 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    appDelegate=[[UIApplication sharedApplication] delegate];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -135,30 +118,13 @@
     MKCoordinateRegion viewRegion=MKCoordinateRegionMakeWithDistance(annotation.coordinate, MAP_RANGE, MAP_RANGE);
     [mapView setRegion:viewRegion animated:YES];
     
-    if ([CLLocationManager locationServicesEnabled])
-    {
-        if (locationManager==nil)
-        {
-            locationManager=[[CLLocationManager alloc]init];
-            locationManager.delegate=self;
-            locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
-        }
-        [locationManager startUpdatingLocation];
-    }
+    [self drawYourPosition];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    appDelegate.refreshPostsList=false;
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    CLLocation *currentLocation=[locations lastObject];
-    MapViewAnnotation *annotation=[[MapViewAnnotation alloc]initWithTitle:@"You"
-                                                               coordinate:CLLocationCoordinate2DMake(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude)];
-    [mapView addAnnotation:annotation];
+    appDelegate.refreshPostsList=NO;
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
@@ -170,6 +136,38 @@
             mkView.pinColor=MKPinAnnotationColorGreen;
         }
     }
+}
+
+- (void)drawYourPosition
+{
+    [appDelegate getLocation];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        int count=0;
+        while (appDelegate.currentLocation==nil && count<30)
+        {
+            [NSThread sleepForTimeInterval:1];
+            count++;
+            NSLog(@"count:%d",count);
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (count==REQUEST_TIMEOUT)
+            {
+                [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Can't locate your position!" delegate:nil];
+
+            }
+            else
+            {
+                CLLocationCoordinate2D coordinate=CLLocationCoordinate2DMake(appDelegate.currentLocation.latitude, appDelegate.currentLocation.longitude);
+                MapViewAnnotation *annotation=[[MapViewAnnotation alloc]initWithTitle:@"You"
+                                                                           coordinate:coordinate];
+                [mapView addAnnotation:annotation];
+            }
+        });
+    });
 }
 
 @end

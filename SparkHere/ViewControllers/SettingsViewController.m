@@ -19,6 +19,7 @@
 {
     Settings *settings;
     AppDelegate *appDelegate;
+    BOOL receiveMessage;
 }
 
 @synthesize receiveMessagesLabel;
@@ -33,7 +34,7 @@
     
     settings=[[Settings alloc]init];
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -56,6 +57,7 @@
     }
     
     [receiveMessageSwitch setOn:appDelegate.settings.receiveMessage];
+    receiveMessage=appDelegate.settings.receiveMessage;
     if (settings.receiveMessage)
     {
         receiveMessagesLabel.text=@"YES";
@@ -68,7 +70,6 @@
 
 - (void)saveButtonClicked
 {
-    
     switch (fontSizeSegmentedControl.selectedSegmentIndex)
     {
         case 0:
@@ -83,6 +84,26 @@
         default:
             break;
     }
+    
+    if (receiveMessage && !receiveMessageSwitch.on)
+    {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        
+        settings.registeredForNotification=NO;
+        PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+        [currentInstallation setDeviceTokenFromData:settings.deviceToken];
+        currentInstallation[@"receiveMessage"]=[NSNumber numberWithBool:NO];
+        [currentInstallation saveInBackground];
+    }
+    
+    if (!receiveMessage && receiveMessageSwitch.on)
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+                                                                            UIRemoteNotificationTypeAlert|
+                                                                            UIRemoteNotificationTypeSound];
+    }
+    
     appDelegate.settings.receiveMessage=receiveMessageSwitch.on;
     [appDelegate.settings saveSettings];
     [self.navigationController popViewControllerAnimated:YES];

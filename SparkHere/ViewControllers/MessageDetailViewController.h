@@ -12,7 +12,7 @@
 #import "Message.h"
 #import "PassBoolDelegate.h"
 
-@interface MessageDetailViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate>
+@interface MessageDetailViewController : UIViewController <MKMapViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UILabel *senderLabel;

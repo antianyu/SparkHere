@@ -11,6 +11,7 @@
                 <outlet property="followersLabel" destination="BAO-EZ-vuy" id="FiR-Wu-6Hi"/>
                 <outlet property="logoImageView" destination="uFH-fb-SML" id="o4a-5v-LFJ"/>
                 <outlet property="scrollView" destination="qFU-R7-dRc" id="1Ij-HD-Zgm"/>
+                <outlet property="separateLine" destination="CXB-78-Mqn" id="MtG-eH-BF6"/>
                 <outlet property="titleLabel" destination="ZVZ-jG-jsT" id="3LR-ed-AZq"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -60,7 +61,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="CXB-78-Mqn">
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="CXB-78-Mqn">
                             <rect key="frame" x="0.0" y="140" width="320" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

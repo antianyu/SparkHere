@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import "User.h"
+#import "TextInputError.h"
 
 @interface LoginViewController ()
 
@@ -22,13 +23,15 @@
 {
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
+    TextInputError inputError;
 }
 
 @synthesize usernameTextField;
 @synthesize passwordTextField;
 @synthesize loginButton;
 @synthesize registerButton;
-@synthesize autoLoginSegmentedControl;
+@synthesize autoLoginSwitch;
+@synthesize autoLoginLabel;
 
 - (void)viewDidLoad
 {
@@ -36,8 +39,11 @@
     
     self.title=@"SparkHere";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -48,17 +54,14 @@
     [appDelegate setDefaultViewStyle:loginButton];
     [appDelegate setDefaultViewStyle:registerButton];
     
-    if (appDelegate.settings.autoLogin)
-    {
-        autoLoginSegmentedControl.on=true;
-        usernameTextField.text=appDelegate.settings.defaultUsername;
-        passwordTextField.text=appDelegate.settings.defaultPassword;
-        [self login];
-    }
-    else
-    {
-        autoLoginSegmentedControl.on=false;
-    }
+    autoLoginSwitch.on=NO;
+    autoLoginLabel.text=@"NO";
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
 }
 
 - (IBAction)loginButtonClicked:(id)sender
@@ -74,6 +77,19 @@
     self.navigationItem.backBarButtonItem=backButton;
     
     [self.navigationController pushViewController:controller animated:YES];
+}
+
+- (IBAction)switchValueChanged:(id)sender
+{
+    UISwitch *senderSwitch=(UISwitch *)sender;
+    if(senderSwitch.on)
+    {
+        autoLoginLabel.text=@"YES";
+    }
+    else
+    {
+        autoLoginLabel.text=@"NO";
+    }
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -98,25 +114,29 @@
     return NO;
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(inputError==TextInputErrorUserName)
+    {
+        [usernameTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorPassword)
+    {
+        [passwordTextField becomeFirstResponder];
+    }
+}
+
 - (void)constructUser
 {
     if (usernameTextField.text.length==0)
     {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Username can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        inputError=TextInputErrorUserName;
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username can't be empty!" delegate:self];
     }
     else if (passwordTextField.text.length==0)
     {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Password can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        inputError=TextInputErrorPassword;
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Password can't be empty!" delegate:self];
     }
     else
     {
@@ -137,19 +157,21 @@
               {
                   if (!error && objects.count>0)
                   {
-                      appDelegate.refreshMessageList=true;
-                      appDelegate.refreshMyChannelList=true;
-                      if (autoLoginSegmentedControl.on)
+                      if (autoLoginSwitch.on)
                       {
-                          appDelegate.settings.autoLogin=true;
+                          appDelegate.settings.autoLogin=YES;
                           [appDelegate setCurrentUser:[objects firstObject]];
                       }
                       else
                       {
-                          appDelegate.settings.autoLogin=false;
+                          appDelegate.settings.autoLogin=NO;
                           [appDelegate.settings saveSettings];
                       }
                       [progressHUD removeFromSuperview];
+                      appDelegate.refreshMessageList=YES;
+                      appDelegate.refreshMyChannelList=YES;
+                      [appDelegate.messageList removeAllObjects];
+                      [appDelegate.myChannelList removeAllObjects];
                       MainViewController *controller=[[MainViewController alloc]init];
                       [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
                       [self presentViewController:controller animated:YES completion:^{nil;}];
@@ -157,44 +179,28 @@
                   else if(!error && objects.count==0)
                   {
                       [progressHUD removeFromSuperview];
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                   message:@"Username and password do not match!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Confirm"
-                                                         otherButtonTitles:nil];
-                      [alert show];
+                      inputError=TextInputErrorPassword;
+                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username and password do not match!"  delegate:self];
                   }
                   else
                   {
                       [progressHUD removeFromSuperview];
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                   message:@"Query error!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Confirm"
-                                                         otherButtonTitles:nil];
-                      [alert show];
+                      inputError=TextInputErrorNone;
+                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];
                   }
               }];
          }
          else if(!error && objects.count==0)
          {
              [progressHUD removeFromSuperview];
-             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                          message:@"Invalid username!"
-                                                         delegate:self
-                                                cancelButtonTitle:@"Confirm"
-                                                otherButtonTitles:nil];
-             [alert show];
+             inputError=TextInputErrorUserName;
+             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Invalid username!" delegate:self];
          }
          else
          {
              [progressHUD removeFromSuperview];
-             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                          message:@"Query error!"
-                                                         delegate:self
-                                                cancelButtonTitle:@"Confirm"
-                                                otherButtonTitles:nil];
-             [alert show];
+             inputError=TextInputErrorNone;
+             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];
          }
      }];
 }
@@ -202,12 +208,11 @@
 - (void)login
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    appDelegate.user=nil;
     [self constructUser];
     if (appDelegate.user!=nil)
     {
         [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-        progressHUD.dimBackground = YES;
-        progressHUD.labelText = @"Loading...";
         [progressHUD showAnimated:YES whileExecutingBlock:^
          {
              [self loginRequest];

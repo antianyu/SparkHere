@@ -34,16 +34,19 @@
     
     self.title=@"My Channels";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     UIBarButtonItem *establishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(establishButtonClicked)];
     self.navigationItem.rightBarButtonItem=establishButtonItem;
     
-    [self.channelTableView setBackgroundColor:[UIColor clearColor]];
-    [self.channelTableView setSeparatorInset:UIEdgeInsetsZero];
+    [channelTableView setBackgroundColor:[UIColor clearColor]];
+    [channelTableView setSeparatorInset:UIEdgeInsetsZero];
     
     [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
@@ -58,22 +61,15 @@
     [self.tabBarItem setTitle:@"My Channels"];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Channel_unselected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"Channel_selected.png"]];
-    
-    if (appDelegate.refreshMyChannelList)
-    {
-        [self showRefreshMyChannelListWaitingView];
-        appDelegate.refreshMyChannelList=false;
-    }
-    else
-    {
-        [self.channelTableView reloadData];
-    }
+
+    [appDelegate constructListsWithTableView:channelTableView endRefreshing:NO];
 }
 
-- (void) viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
     self.hidesBottomBarWhenPushed=NO;
+    [progressHUD removeFromSuperview];
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -145,7 +141,7 @@
     {
         controller.channel=[appDelegate.myChannelList objectAtIndex:indexPath.row];
     }
-    appDelegate.refreshChannelDetail=true;
+    appDelegate.refreshChannelDetail=YES;
     
     self.hidesBottomBarWhenPushed=YES;
     
@@ -176,7 +172,7 @@
 - (void)establishButtonClicked
 {
     EditChannelViewController *controller=[[EditChannelViewController alloc]init];
-    controller.editChannel=false;
+    controller.editChannel=NO;
     self.hidesBottomBarWhenPushed=YES;
     
     UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
@@ -185,27 +181,9 @@
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (void)showRefreshMyChannelListWaitingView
-{
-    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Loading...";
-    [progressHUD showAnimated:YES whileExecutingBlock:^
-     {
-         [appDelegate constructMyChannelList];
-     }
-    completionBlock:^
-     {
-         [progressHUD removeFromSuperview];
-         [self.channelTableView reloadData];
-     }];
-}
-
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [searchResults removeAllObjects];

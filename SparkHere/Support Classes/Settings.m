@@ -12,6 +12,8 @@
 
 @synthesize fontSize;
 @synthesize receiveMessage;
+@synthesize registeredForNotification;
+@synthesize deviceToken;
 @synthesize autoLogin;
 @synthesize defaultUsername;
 @synthesize defaultPassword;
@@ -31,6 +33,8 @@
         NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
         fontSize=[[defaults objectForKey:@"fontSize"] intValue];
         receiveMessage=[[defaults objectForKey:@"receiveMessage"] boolValue];
+        registeredForNotification=[[defaults objectForKey:@"registeredForNotification"] boolValue];
+        deviceToken=[defaults objectForKey:@"deviceToken"];
         autoLogin=[[defaults objectForKey:@"autoLogin"] boolValue];
         defaultUsername=[defaults objectForKey:@"defaultUsername"];
         defaultPassword=[defaults objectForKey:@"defaultPassword"];
@@ -41,7 +45,8 @@
         if (fontSize==0)
         {
             fontSize=18;
-            receiveMessage=true;
+            receiveMessage=YES;
+            registeredForNotification=NO;
         }
     }
     
@@ -64,17 +69,26 @@
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     [defaults setInteger:fontSize forKey:@"fontSize"];
     [defaults setBool:receiveMessage forKey:@"receiveMessage"];
+    [defaults setBool:registeredForNotification forKey:@"registeredForNotification"];
+    [defaults setValue:deviceToken forKey:@"deviceToken"];
     [defaults setBool:autoLogin forKey:@"autoLogin"];
 }
 
 - (void)saveDefaultUser:(User *)user
 {
+    defaultUsername=user.username;
+    defaultPassword=user.userPassword;
+    defaultNickname=user.nickname;
+    defaultID=user.userID;
+    defaultLogo=user.logo;
+    
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    [defaults setObject:user.username forKey:@"defaultUsername"];
-    [defaults setObject:user.userPassword forKey:@"defaultPassword"];
-    [defaults setObject:user.nickname forKey:@"defaultNickname"];
-    [defaults setObject:user.userID forKey:@"defaultID"];
-    [defaults setObject:UIImagePNGRepresentation(user.logo) forKey:@"defaultLogo"];
+    [defaults setBool:autoLogin forKey:@"autoLogin"];
+    [defaults setObject:defaultUsername forKey:@"defaultUsername"];
+    [defaults setObject:defaultPassword forKey:@"defaultPassword"];
+    [defaults setObject:defaultNickname forKey:@"defaultNickname"];
+    [defaults setObject:defaultID forKey:@"defaultID"];
+    [defaults setObject:UIImagePNGRepresentation(defaultLogo) forKey:@"defaultLogo"];
 }
 
 @end

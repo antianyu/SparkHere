@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface MessagesViewController : UIViewController <CLLocationManagerDelegate>
+@interface MessagesViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *messagesTableView;
 

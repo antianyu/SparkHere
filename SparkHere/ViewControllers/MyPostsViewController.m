@@ -38,8 +38,11 @@
     
     self.title=@"My Posts";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -60,6 +63,12 @@
     {
         [self constructPostsList];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -143,12 +152,12 @@
         tempIndexPath=indexPath;
         if (tableView==self.searchDisplayController.searchResultsTableView)
         {
-            isMessageTable=false;
+            isMessageTable=NO;
             tempMessage=[searchResults objectAtIndex:indexPath.row];
         }
         else
         {
-            isMessageTable=true;
+            isMessageTable=YES;
             tempMessage=[postsList objectAtIndex:indexPath.row];
         }
         [self deleteMessage];
@@ -173,7 +182,7 @@
     if (modificationInSearchTableView)
     {
         [self constructPostsList];
-        modificationInSearchTableView=false;
+        modificationInSearchTableView=NO;
     }
 }
 
@@ -185,10 +194,9 @@
 - (void)constructPostsList
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Loading...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
+         
          postsList=[[NSMutableArray alloc]init];
          
          PFQuery *query=[PFQuery queryWithClassName:@"Message"];
@@ -210,7 +218,7 @@
              [postsList addObject:message];
          }
      }
-              completionBlock:^
+    completionBlock:^
      {
          [progressHUD removeFromSuperview];
          [self.postsTableView reloadData];
@@ -220,8 +228,6 @@
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [searchResults removeAllObjects];
@@ -266,9 +272,7 @@
 
 - (void)deleteMessage
 {
-    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
+    [appDelegate.window.rootViewController.view addSubview:progressHUD];
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Message"];
@@ -276,7 +280,7 @@
          [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
          {
              [progressHUD removeFromSuperview];
-             appDelegate.refreshMessageList=true;
+             appDelegate.refreshMessageList=YES;
              
              if (isMessageTable)
              {
@@ -287,7 +291,7 @@
              }
              else
              {
-                 modificationInSearchTableView=true;
+                 modificationInSearchTableView=YES;
                  [self.searchDisplayController.searchResultsTableView reloadData];
                  [searchResults removeObjectAtIndex:tempIndexPath.row];
                  

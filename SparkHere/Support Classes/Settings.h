@@ -13,6 +13,8 @@
 
 @property (nonatomic) int fontSize;
 @property (nonatomic) BOOL receiveMessage;
+@property (nonatomic) BOOL registeredForNotification;
+@property (nonatomic) NSData *deviceToken;
 @property (nonatomic) BOOL autoLogin;
 @property (strong, nonatomic) NSString *defaultUsername;
 @property (strong, nonatomic) NSString *defaultPassword;

@@ -39,8 +39,11 @@
     
     self.title=@"Choose New Admin";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -56,10 +59,16 @@
     searchPrivilegeList=[[NSMutableArray alloc]init];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     [self constructLists];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -147,12 +156,7 @@
     
     if ([tempUser.userID isEqualToString:appDelegate.user.userID])
     {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey!"
-                                                     message:@"You should choose someone else to be new super administrator!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Hey!" message:@"You should choose someone else to be new super administrator!" delegate:self];
     }
     else
     {
@@ -201,7 +205,7 @@
                 break;
                 
             case UIAlertViewOperationGoBack:
-                appDelegate.refreshChannelDetail=true;
+                appDelegate.refreshChannelDetail=YES;
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
                 
@@ -214,8 +218,6 @@
 - (void)constructLists
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [memberList removeAllObjects];
@@ -244,8 +246,6 @@
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [searchResults removeAllObjects];
@@ -276,8 +276,6 @@
 - (void)changeSuperAdministrator
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          // change privilege of new admin
@@ -303,7 +301,7 @@
                {
                    [progressHUD removeFromSuperview];
                    operation=UIAlertViewOperationGoBack;
-                   NSString *prompt=[NSString stringWithFormat:@"You have choose %@ to be new super adminstrator!", tempUser.nickname];
+                   NSString *prompt=[NSString stringWithFormat:@"You have chosen %@ to be new super adminstrator!", tempUser.nickname];
                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
                                                                 message:prompt
                                                                delegate:self
@@ -314,12 +312,7 @@
                else
                {
                    [progressHUD removeFromSuperview];
-                   UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                message:@"Unsubscribe failed! Something wrong with server!"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"Confirm"
-                                                      otherButtonTitles:nil];
-                   [alert show];
+                   [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Unsubscribe failed! Something wrong with server!" delegate:nil];
                }
            }];
      }];

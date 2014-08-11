@@ -45,8 +45,11 @@
     
     self.title=@"Establish new channel";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -85,6 +88,13 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
+}
+
+
 - (IBAction)viewTouchDown:(id)sender
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
@@ -113,32 +123,17 @@
     if([sender selectedSegmentIndex]==0)
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages";
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Tips"
-                                                     message:tip
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Tips" message:tip delegate:self];
     }
     else if([sender selectedSegmentIndex]==1)
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages\n2. Send messages";
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Tips"
-                                                     message:tip
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Tips" message:tip delegate:self];
     }
     else
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages\n2. Send messages\n3. Administrate channel";
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Tips"
-                                                     message:tip
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Tips" message:tip delegate:self];
     }
 }
 
@@ -243,14 +238,14 @@
         {
             if (!editChannel)
             {
-                appDelegate.refreshMyChannelList=true;
+                appDelegate.refreshMyChannelList=YES;
             }
             else if (editChannel && ![channel.channelName isEqualToString:newChannel[@"channelName"]])
             {
-                appDelegate.refreshMessageList=true;
-                appDelegate.refreshMyChannelList=true;
+                appDelegate.refreshMessageList=YES;
+                appDelegate.refreshMyChannelList=YES;
             }
-            appDelegate.refreshChannelDetail=true;
+            appDelegate.refreshChannelDetail=YES;
             [self.navigationController popViewControllerAnimated:YES];
         }
         else
@@ -267,12 +262,7 @@
                 }
                 else
                 {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                 message:@"Image picker is not supported on your phone!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
+                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
                 }
             }
             else
@@ -282,17 +272,13 @@
                     ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
                     controller.delegate=self;
                     controller.allowsEditing=YES;
+                    controller.sourceType=UIImagePickerControllerSourceTypeCamera;
                     controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
                     [self.navigationController presentViewController:controller animated:YES completion:nil];
                 }
                 else
                 {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                 message:@"Camera is not supported on your phone!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
+                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
                 }
             }
         }
@@ -312,22 +298,12 @@
     if (channelNameTextField.text.length==0)
     {
         inputError=TextInputErrorChannelName;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"The name of channel can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"The name of channel can't be empty!" delegate:self];
     }
     else if (descriptionTextView.text.length==0)
     {
         inputError=TextInputErrorDescription;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Description can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Description can't be empty!" delegate:self];
     }
     else
     {
@@ -371,12 +347,7 @@
              else
              {
                  [progressHUD removeFromSuperview];
-                 UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                              message:@"Update failed! Something wrong with server!"
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Confirm"
-                                                    otherButtonTitles:nil];
-                 [alert show];
+                 [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Update failed! Something wrong with server!" delegate:self];
              }
          }];
     }
@@ -389,12 +360,7 @@
              if (objects.count>0)
              {
                  [progressHUD removeFromSuperview];
-                 UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                              message:@"Channel already exists!"
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Confirm"
-                                                    otherButtonTitles:nil];
-                 [alert show];
+                 [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Channel already exists!" delegate:self];
              }
              else
              {
@@ -404,7 +370,7 @@
                       if (!error)
                       {
                           [progressHUD removeFromSuperview];
-                          appDelegate.refreshChannelDetail=true;
+                          appDelegate.refreshChannelDetail=YES;
                           operation=UIAlertViewOperationDone;
                           UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                                        message:@"Channel is updated!"
@@ -416,12 +382,7 @@
                       else
                       {
                           [progressHUD removeFromSuperview];
-                          UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                       message:@"Update failed! Something wrong with server!"
-                                                                      delegate:self
-                                                             cancelButtonTitle:@"Confirm"
-                                                             otherButtonTitles:nil];
-                          [alert show];
+                          [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Update failed! Something wrong with server!" delegate:self];
                       }
                   }];
              }
@@ -438,12 +399,7 @@
          if (objects.count>0)
          {
              [progressHUD removeFromSuperview];
-             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                          message:@"Channel already exists!"
-                                                         delegate:self
-                                                cancelButtonTitle:@"Confirm"
-                                                otherButtonTitles:nil];
-             [alert show];
+             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Channel already exists!" delegate:self];
          }
          else
          {
@@ -473,24 +429,14 @@
                            else
                            {
                                [progressHUD removeFromSuperview];
-                               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                            message:@"Subscribe failed! Something wrong with server!"
-                                                                           delegate:self
-                                                                  cancelButtonTitle:@"Confirm"
-                                                                  otherButtonTitles:nil];
-                               [alert show];
+                               [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Subscribe failed! Something wrong with server!" delegate:self];
                            }
                        }];
                   }
                   else
                   {
                       [progressHUD removeFromSuperview];
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                   message:@"Establish failed! Something wrong with server!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Confirm"
-                                                         otherButtonTitles:nil];
-                      [alert show];
+                      [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Establish failed! Something wrong with server!" delegate:self];
                   }
               }];
          }
@@ -500,8 +446,6 @@
 - (void)showEditWaitingView
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [self editRequest];
@@ -511,8 +455,6 @@
 - (void)showEstablishWaitingView
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [self establishRequest];

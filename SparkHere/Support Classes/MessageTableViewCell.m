@@ -18,7 +18,6 @@
 @synthesize channelLabel;
 @synthesize updateLabel;
 @synthesize senderLogoImageView;
-@synthesize channelLogoImageView;
 
 - (void)awakeFromNib
 {
@@ -30,15 +29,14 @@
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize
 {
-    int positionY=49;
+    int positionY=58;
     
     senderLabel.font=[UIFont systemFontOfSize:fontSize-6];
     senderLogoImageView.image=message.sender.logo;
     senderLabel.text=message.sender.nickname;
     
-    channelLabel.font=[UIFont systemFontOfSize:fontSize-6];
-    channelLogoImageView.image=message.channel.logo;
-    channelLabel.text=message.channel.channelName;
+    channelLabel.font=[UIFont systemFontOfSize:fontSize-8];
+    channelLabel.text=[@"via: " stringByAppendingString:message.channel.channelName];
     
     updateLabel.font=[UIFont systemFontOfSize:fontSize-8];
     
@@ -80,7 +78,7 @@
         [self addSubview:contentLabel];
        
         CGRect frame=self.frame;
-        frame.size.height+=actualSize.height+INTERVAL;
+        frame.size.height+=actualSize.height;
         self.frame=frame;
     }
     

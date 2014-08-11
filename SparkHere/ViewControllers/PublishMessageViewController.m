@@ -24,7 +24,6 @@
     MBProgressHUD *progressHUD;
     TextInputError inputError;
     CAShapeLayer *shapeLayer;
-    CLLocationManager *locationManager;
 }
 
 @synthesize contentTextView;
@@ -39,8 +38,11 @@
     
     self.title=@"New Message";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -58,6 +60,12 @@
     [self drawBorderOfImageView];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
+}
+
 - (IBAction)viewTouchDown:(id)sender
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
@@ -68,35 +76,12 @@
     if (contentTextView.text.length==0 && contentImageView.image==nil)
     {
         inputError=TextInputErrorMessageContent;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error!"
-                                                     message:@"Please write something or choose a picture!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Please write something or choose a picture!" delegate:self];
     }
     else
     {
-        if ([CLLocationManager locationServicesEnabled])
-        {
-            if (locationManager==nil)
-            {
-                locationManager=[[CLLocationManager alloc]init];
-                locationManager.delegate=self;
-                locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
-            }
-            [locationManager startUpdatingLocation];
-        }
-        else
-        {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                         message:@"Location service is not available. Please turn it on."
-                                                        delegate:self
-                                               cancelButtonTitle:@"Confirm"
-                                               otherButtonTitles:nil];
-            [alert show];
-            return;
-        }
+        [appDelegate getLocation];
+        [self publishMessage];
     }
 }
 
@@ -113,12 +98,7 @@
     else
     {
         inputError=TextInputErrorNone;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Image picker is not supported on your phone!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
     }
 }
 
@@ -129,18 +109,14 @@
         ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
         controller.delegate=self;
         controller.allowsEditing=YES;
+        controller.sourceType=UIImagePickerControllerSourceTypeCamera;
         controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
         [self.navigationController presentViewController:controller animated:YES completion:nil];
     }
     else
     {
         inputError=TextInputErrorNone;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Camera is not supported on your phone!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
     }
 }
 
@@ -159,12 +135,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex!=alertView.cancelButtonIndex)
-    {
-        appDelegate.loadMoreMessages=true;
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else if(inputError==TextInputErrorMessageContent)
+    if(inputError==TextInputErrorMessageContent)
     {
         [contentTextView becomeFirstResponder];
     }
@@ -213,18 +184,31 @@
     [scrollView.layer addSublayer:shapeLayer];
 }
 
-- (void)publishMessageWithLocation:(PFGeoPoint *)currentLocation
+- (void)publishMessage
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
+         int count=0;
+         while (appDelegate.currentLocation==nil && count<30)
+         {
+             [NSThread sleepForTimeInterval:1];
+             count++;
+             NSLog(@"count:%d",count);
+         }
+         if (count==REQUEST_TIMEOUT)
+         {
+             [progressHUD removeFromSuperview];
+             inputError=TextInputErrorNone;
+             [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Publish message failed! Can't locate your position!" delegate:nil];
+             return;
+         }
+
          PFObject *newMessage=[PFObject objectWithClassName:@"Message"];
          newMessage[@"channelID"]=channel.channelID;
          newMessage[@"senderID"]=appDelegate.user.userID;
          newMessage[@"content"]=contentTextView.text;
-         newMessage[@"location"]=currentLocation;
+         newMessage[@"location"]=appDelegate.currentLocation;
          if (contentImageView.image!=nil)
          {
              NSData *imageData=UIImageJPEGRepresentation(contentImageView.image, 1);
@@ -237,41 +221,18 @@
               if (!error)
               {
                   [progressHUD removeFromSuperview];
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
-                                                               message:@"Publish message succeed!"
-                                                              delegate:self
-                                                     cancelButtonTitle:nil
-                                                     otherButtonTitles:@"Confirm", nil];
-                  [alert show];
+                  appDelegate.loadMoreMessages=YES;
+                  inputError=TextInputErrorNone;
+                  [appDelegate showUIAlertViewWithTitle:@"Congratulations!" message:@"Publish message succeed!" delegate:nil];
               }
               else
               {
                   [progressHUD removeFromSuperview];
                   inputError=TextInputErrorNone;
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                               message:@"Publish message failed! Something wrong with server!"
-                                                              delegate:self
-                                                     cancelButtonTitle:@"Confirm"
-                                                     otherButtonTitles:nil];
-                  [alert show];
+                  [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Publish message failed! Something wrong with server!" delegate:nil];
               }
           }];
      }];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                 message:@"Location failed. Please try again."
-                                                delegate:self
-                                       cancelButtonTitle:@"Confirm"
-                                       otherButtonTitles:nil];
-    [alert show];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    [self publishMessageWithLocation:[PFGeoPoint geoPointWithLocation:[locations lastObject]]];
 }
 
 @end

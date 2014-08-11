@@ -19,6 +19,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UILabel *followersLabel;
 @property (strong, nonatomic) IBOutlet UIButton *followButton;
+@property (strong, nonatomic) IBOutlet UIImageView *separateLine;
 
 @property Channel *channel;
 @property BOOL isFollowing;

@@ -39,6 +39,7 @@
 @synthesize descriptionLabel;
 @synthesize followersLabel;
 @synthesize followButton;
+@synthesize separateLine;
 @synthesize channel;
 @synthesize isFollowing;
 
@@ -48,8 +49,11 @@
     
     self.title=@"Channel Detail";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -61,39 +65,36 @@
     
     buttons=[[NSMutableArray alloc]init];
     
-    [appDelegate setDefaultViewStyle:followButton];
-    
     [descriptionLabel setNumberOfLines:0];
     descriptionLabel.font=[UIFont systemFontOfSize:17];
     descriptionLabel.lineBreakMode=NSLineBreakByWordWrapping;
     descriptionLabel.textColor=[UIColor whiteColor];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     if (appDelegate.refreshChannelDetail)
     {
+        appDelegate.refreshChannelDetail=NO;
         [self initialise];
-        appDelegate.refreshChannelDetail=false;
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
     if (buttonClickTimes%2==1)
     {
-        appDelegate.refreshMessageList=true;
-        appDelegate.refreshMyChannelList=true;
+        appDelegate.refreshMessageList=YES;
+        appDelegate.refreshMyChannelList=YES;
     }
 }
 
 - (void)initialise
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
@@ -106,12 +107,12 @@
          if (result!=nil)
          {
              privilege=[result[@"privilege"] intValue];
-             isFollowing=true;
+             isFollowing=YES;
          }
          else
          {
              privilege=0;
-             isFollowing=false;
+             isFollowing=NO;
          }
      }
     completionBlock:^
@@ -147,6 +148,7 @@
          scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+170);
          [scrollView addSubview:descriptionLabel];
          
+         [appDelegate setDefaultViewStyle:followButton];
          if (isFollowing)
          {
              [followButton setTitle:@"Following" forState:UIControlStateNormal];
@@ -165,8 +167,10 @@
              logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];
          }
          
+         [separateLine setHidden:NO];
+         
          buttonClickTimes=0;
-         unfollowWithCancel=false;
+         unfollowWithCancel=NO;
      }];
 }
 
@@ -183,7 +187,7 @@
         if (privilege==4)
         {
             operation=UIAlertViewOperationChooseNewSuperAdmin;
-            unfollowWithCancel=true;
+            unfollowWithCancel=YES;
             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Prompt"
                                                          message:@"Would you like to choose someone to be new super administrator?"
                                                         delegate:self
@@ -234,8 +238,6 @@
 - (void)followCurrentChannel
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
@@ -277,8 +279,6 @@
 - (void)unfollowCurrentChannel
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
@@ -309,8 +309,8 @@
         {
             case UIAlertViewOperationGoBack:
             {
-                appDelegate.refreshMessageList=true;
-                appDelegate.refreshMyChannelList=true;
+                appDelegate.refreshMessageList=YES;
+                appDelegate.refreshMyChannelList=YES;
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
             }                
@@ -333,7 +333,7 @@
     }
     else if(unfollowWithCancel)
     {
-        unfollowWithCancel=false;
+        unfollowWithCancel=NO;
         [self unfollowCurrentChannel];
     }
 }
@@ -354,7 +354,7 @@
     else if (buttonIndex==actionSheet.cancelButtonIndex-2)
     {
         EditChannelViewController *controller=[[EditChannelViewController alloc]init];
-        controller.editChannel=true;
+        controller.editChannel=YES;
         controller.channel=channel;
         self.hidesBottomBarWhenPushed=YES;
         
@@ -384,8 +384,6 @@
 - (void)showDeleteChannelWaitingView
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Loading...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];

@@ -6,15 +6,15 @@
 //  Copyright (c) 2014年 Tianyu An. All rights reserved.
 //
 
-#ifndef IP_UIAlertViewOperation_h
-#define IP_UIAlertViewOperation_h
+#ifndef SparkHere_UIAlertViewOperation_h
+#define SparkHere_UIAlertViewOperation_h
 
 typedef enum
 {
     UIAlertViewOperationGoBack,
     UIAlertViewOperationDeleteChannel,
     UIAlertViewOperationChooseNewSuperAdmin,
-    UIAlertViewOperationChooseRegister,
+    UIAlertViewOperationRegister,
     UIAlertViewOperationDone,
     UIAlertViewOperationChooseImage
     

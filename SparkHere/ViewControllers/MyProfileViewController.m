@@ -37,7 +37,7 @@
     
     self.title=@"My Profile";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -47,12 +47,12 @@
     [myPostsButton setBackgroundColor:[UIColor colorWithRed:146/255.0 green:43/255.0 blue:236/255.0 alpha:1]];
     [myPostsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-    editProfileButton.titleLabel.lineBreakMode=TRUE;
+    editProfileButton.titleLabel.lineBreakMode=YES;
     [editProfileButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [editProfileButton setBackgroundColor:[UIColor colorWithRed:53/255.0 green:174/255.0 blue:238/255.0 alpha:1]];
     [editProfileButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-    settingsButton.titleLabel.lineBreakMode=TRUE;
+    settingsButton.titleLabel.lineBreakMode=YES;
     [settingsButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [settingsButton setBackgroundColor:[UIColor colorWithRed:194/255.0 green:19/255.0 blue:70/255.0 alpha:1]];
     [settingsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -92,7 +92,7 @@
 - (IBAction)logoutButtonClicked:(id)sender
 {
     appDelegate.user=nil;
-    appDelegate.settings.autoLogin=false;
+    appDelegate.settings.autoLogin=NO;
     [appDelegate.settings saveSettings];
     LoginViewController *controller=[[LoginViewController alloc]init];
     UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
@@ -102,7 +102,7 @@
 
 - (IBAction)myPostsButtonClicked:(id)sender
 {
-    appDelegate.refreshPostsList=true;
+    appDelegate.refreshPostsList=YES;
     MyPostsViewController *controller=[[MyPostsViewController alloc]init];
     self.hidesBottomBarWhenPushed=YES;
     [self.navigationController pushViewController:controller animated:YES];

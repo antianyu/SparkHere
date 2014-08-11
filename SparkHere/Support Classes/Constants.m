@@ -15,8 +15,8 @@ const int VIEW_WIDTH=320;
 
 const int TITLE_HEIGHT=101;
 
-const int LABEL_ORIGIN_X=20;
-const int LABEL_WIDTH=280;
+const int LABEL_ORIGIN_X=15;
+const int LABEL_WIDTH=290;
 const int LABEL_HEIGHT=27;
 
 const int IMAGE_ORIGIN_X=40;
@@ -30,3 +30,5 @@ const int INTERVAL=8;
 const int PADDING=20;
 
 const int MAP_RANGE=250;
+
+const int REQUEST_TIMEOUT=30;

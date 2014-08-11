@@ -30,4 +30,6 @@ extern const int MAP_RANGE;
 extern const int INTERVAL;
 extern const int PADDING;
 
+extern const int REQUEST_TIMEOUT;
+
 //extern NSString *const MJRefreshBundleName;

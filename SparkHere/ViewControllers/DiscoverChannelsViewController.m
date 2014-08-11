@@ -34,8 +34,11 @@
     
     self.title=@"Discover Channels";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -60,9 +63,10 @@
     [self.categoryTableView reloadData];
 }
 
-- (void) viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
     self.hidesBottomBarWhenPushed=NO;
 }
 
@@ -142,7 +146,7 @@
         controller.channel=[searchResults objectAtIndex:indexPath.row];
         controller.hidesBottomBarWhenPushed=YES;
         
-        appDelegate.refreshChannelDetail=true;
+        appDelegate.refreshChannelDetail=YES;
         
         self.hidesBottomBarWhenPushed=YES;
         
@@ -178,8 +182,6 @@
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [searchResults removeAllObjects];

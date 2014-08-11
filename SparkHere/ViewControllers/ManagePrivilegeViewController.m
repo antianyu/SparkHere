@@ -43,8 +43,11 @@
     
     self.title=@"Manage Privilege";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -59,14 +62,20 @@
     searchResults=[[NSMutableArray alloc]init];
     searchPrivilegeList=[[NSMutableArray alloc]init];
     
-    deleteSucceed=false;
-    modificationInSearchTableView=false;
+    deleteSucceed=NO;
+    modificationInSearchTableView=NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     [self constructLists];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -145,43 +154,28 @@
     index=indexPath.row;
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
-        isMemberTableView=false;
+        isMemberTableView=NO;
         originalPrivilege=[[searchPrivilegeList objectAtIndex:index] intValue];
         tempUser=[searchResults objectAtIndex:index];
     }
     else
     {
-        isMemberTableView=true;
+        isMemberTableView=YES;
         originalPrivilege=[[privilegeList objectAtIndex:index] intValue];
         tempUser=[memberList objectAtIndex:index];
     }
     
     if ([appDelegate.user.userID isEqualToString:tempUser.userID] && privilege==3)
     {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey!"
-                                                     message:@"Your privilege should be modified by your administrator!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Hey!" message:@"Your privilege should be modified by your administrator!" delegate:self];
     }
     else if ([appDelegate.user.userID isEqualToString:tempUser.userID] && privilege==4)
     {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey!"
-                                                     message:@"You are the king of the channel! What else do you want to do?"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Hey!" message:@"You are the king of the channel! What else do you want to do?" delegate:self];
     }
     else if (privilege<=originalPrivilege)
     {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey"
-                                                     message:@"You can't change the privilege of those who has higher one!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Hey!" message:@"You can't change the privilege of those who has higher one!" delegate:self];
     }
     else
     {
@@ -218,34 +212,24 @@
     {
         if (tableView==self.searchDisplayController.searchResultsTableView)
         {
-            isMemberTableView=false;
+            isMemberTableView=NO;
             tempUser=[searchResults objectAtIndex:index];
             targetPrivilege=[[searchPrivilegeList objectAtIndex:index] intValue];
         }
         else
         {
-            isMemberTableView=true;
+            isMemberTableView=YES;
             tempUser=[memberList objectAtIndex:index];
             targetPrivilege=[[privilegeList objectAtIndex:index] intValue];
         }
         
         if ([appDelegate.user.userID isEqualToString:tempUser.userID])
         {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey!"
-                                                         message:@"You can't delete yourself!"
-                                                        delegate:self
-                                               cancelButtonTitle:@"Confirm"
-                                               otherButtonTitles:nil];
-            [alert show];
+            [appDelegate showUIAlertViewWithTitle:@"Hey!" message:@"You can't delete yourself!" delegate:self];
         }
         else if (privilege<=targetPrivilege)
         {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey"
-                                                         message:@"You can't delete those who has higher privilege!"
-                                                        delegate:self
-                                               cancelButtonTitle:@"Confirm"
-                                               otherButtonTitles:nil];
-            [alert show];
+            [appDelegate showUIAlertViewWithTitle:@"Hey!" message:@"You can't delete those who has higher privilege!" delegate:self];
         }
         else
         {
@@ -278,7 +262,7 @@
     if (modificationInSearchTableView)
     {
         [self constructLists];
-        modificationInSearchTableView=false;
+        modificationInSearchTableView=NO;
     }
 }
 
@@ -295,7 +279,7 @@
     }
     else if (deleteSucceed)
     {
-        deleteSucceed=false;
+        deleteSucceed=NO;
         if (isMemberTableView)
         {
             [memberList removeObjectAtIndex:index];
@@ -314,8 +298,6 @@
 - (void)constructLists
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [memberList removeAllObjects];
@@ -344,8 +326,6 @@
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [searchResults removeAllObjects];
@@ -376,8 +356,6 @@
 - (void)saveNewPrivilege:(int)newPrivilege
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
@@ -390,12 +368,8 @@
               if (!error)
               {
                   [progressHUD removeFromSuperview];
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
-                                                               message:@"Privilege is modified!"
-                                                              delegate:self
-                                                     cancelButtonTitle:@"Confirm"
-                                                     otherButtonTitles:nil];
-                  [alert show];
+                  [appDelegate showUIAlertViewWithTitle:@"Congratulations!" message:@"Privilege is modified!" delegate:self];
+                  
                   if (isMemberTableView)
                   {
                       [privilegeList replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:newPrivilege]];
@@ -403,22 +377,16 @@
                   }
                   else
                   {
-                      modificationInSearchTableView=true;
+                      modificationInSearchTableView=YES;
                       [searchPrivilegeList replaceObjectAtIndex:index
                                                      withObject:[NSNumber numberWithInt:newPrivilege]];
                       [self.searchDisplayController.searchResultsTableView reloadData];
-
                   }
               }
               else
               {
                   [progressHUD removeFromSuperview];
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                               message:@"Modify failed! Something wrong with server!"
-                                                              delegate:self
-                                                     cancelButtonTitle:@"Confirm"
-                                                     otherButtonTitles:nil];
-                  [alert show];
+                  [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Modify failed! Something wrong with server!" delegate:self];
               }
           }];
      }];
@@ -427,8 +395,6 @@
 - (void)deleteSubsciption
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
@@ -440,24 +406,14 @@
               if (!error)
               {
                   [progressHUD removeFromSuperview];
-                  deleteSucceed=true;
+                  deleteSucceed=YES;
                   NSString *prompt=[NSString stringWithFormat:@"You have moved %@", tempUser.nickname];
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
-                                                               message:prompt
-                                                              delegate:self
-                                                     cancelButtonTitle:@"Confirm"
-                                                     otherButtonTitles:nil];
-                  [alert show];
+                  [appDelegate showUIAlertViewWithTitle:@"Congratulations!" message:prompt delegate:self];
               }
               else
               {
                   [progressHUD removeFromSuperview];
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                               message:@"Delete failed! Something wrong with server!"
-                                                              delegate:self
-                                                     cancelButtonTitle:@"Confirm"
-                                                     otherButtonTitles:nil];
-                  [alert show];
+                  [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Delete failed! Something wrong with server!" delegate:self];
               }
           }];
      }];

@@ -34,8 +34,11 @@
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     self.title=[[[NSArray alloc]initWithContentsOfFile:plistPath] objectAtIndex:category];
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -49,16 +52,16 @@
     searchResults=[[NSMutableArray alloc]init];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-
+    [super viewDidAppear:animated];
     [self showRefreshHotListWaitingView];
 }
 
-- (void) viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
     self.hidesBottomBarWhenPushed=YES;
 }
 
@@ -130,7 +133,7 @@
     {
         controller.channel=[hotChannelList objectAtIndex:indexPath.row];
     }
-    appDelegate.refreshChannelDetail=true;
+    appDelegate.refreshChannelDetail=YES;
     
     UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
     self.navigationItem.backBarButtonItem=backButton;
@@ -176,8 +179,6 @@
 - (void)showRefreshHotListWaitingView
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Loading...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [self constructList];
@@ -192,8 +193,6 @@
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [searchResults removeAllObjects];

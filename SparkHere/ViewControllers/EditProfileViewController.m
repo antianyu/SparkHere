@@ -41,8 +41,11 @@
     
     self.title=@"Edit Profile";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -66,6 +69,12 @@
     {
         logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];        
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -121,23 +130,13 @@
     if (nicknameTextField.text.length==0)
     {
         inputError=TextInputErrorNickname;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Nickname can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Nickname can't be empty!" delegate:self];
     }
     else if ([appDelegate.user.nickname isEqualToString:nicknameTextField.text] && [self isPasswordPartEmpty]
              && [logoImageView.image isEqual:appDelegate.user.logo])
     {
         inputError=TextInputErrorNickname;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Nothing changed!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Nothing changed!" delegate:self];
     }
     else if ((![appDelegate.user.nickname isEqualToString:nicknameTextField.text] ||
              ![logoImageView.image isEqual:appDelegate.user.logo])
@@ -150,8 +149,6 @@
 - (void)showEditProfileWaitingView
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          PFObject *object=[PFObject objectWithClassName:@"User"];
@@ -176,12 +173,8 @@
               [appDelegate setCurrentUser:[query getObjectWithId:appDelegate.user.userID]];
               [progressHUD removeFromSuperview];
               operation=UIAlertViewOperationDone;
-              UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
-                                                           message:@"Profile is updated!"
-                                                          delegate:self
-                                                 cancelButtonTitle:nil
-                                                 otherButtonTitles:@"Confirm", nil];
-              [alert show];
+              appDelegate.refreshMessageList=YES;
+              [appDelegate showUIAlertViewWithTitle:@"Congratulations" message:@"Profile is updated!" delegate:nil];
           }];
      }];
 }
@@ -190,12 +183,7 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        if (operation==UIAlertViewOperationDone)
-        {
-            appDelegate.refreshMessageList=true;
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        else
+        if (operation==UIAlertViewOperationChooseImage)
         {
             if (buttonIndex==1)
             {
@@ -209,12 +197,7 @@
                 }
                 else
                 {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                 message:@"Image picker is not supported on your phone!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
+                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
                 }
             }
             else
@@ -224,17 +207,13 @@
                     ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
                     controller.delegate=self;
                     controller.allowsEditing=YES;
+                    controller.sourceType=UIImagePickerControllerSourceTypeCamera;
                     controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
                     [self.navigationController presentViewController:controller animated:YES completion:nil];
                 }
                 else
                 {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                 message:@"Camera is not supported on your phone!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
+                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
                 }
             }
         }
@@ -279,71 +258,46 @@
     if (theOriginalPwdTextField.text.length==0 && theNewPwdTextField.text.length==0 &&
         theConfirmPwdTextField.text.length==0)
     {
-        return true;
+        return YES;
     }
     else
     {
-        return false;
+        return NO;
     }
 }
 
 - (BOOL)isPasswordPartValid
 {
-    BOOL result=false;
+    BOOL result=NO;
     
     if (theOriginalPwdTextField.text.length==0)
     {
         inputError=TextInputErrorOriginalPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Original password can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Original password can't be empty!" delegate:self];
     }
     else if (theNewPwdTextField.text.length==0)
     {
         inputError=TextInputErrorNewPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"New password can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"New password can't be empty!" delegate:self];
     }
     else if (theConfirmPwdTextField.text.length==0)
     {
         inputError=TextInputErrorConfirmPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Please confirm password!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Please confirm password!" delegate:self];
     }
     else if (![theNewPwdTextField.text isEqual:theConfirmPwdTextField.text])
     {
         inputError=TextInputErrorConfirmPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"The passwords you typed do not match!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"The passwords you typed do not match!" delegate:self];
     }
     else if (![appDelegate.user.userPassword isEqualToString:theOriginalPwdTextField.text])
     {
         inputError=TextInputErrorOriginalPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Invalid original password!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Invalid original password!" delegate:self];
     }
     else
     {
-        result=true;
+        result=YES;
     }
     return result;
 }

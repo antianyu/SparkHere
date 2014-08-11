@@ -27,7 +27,7 @@
     
     self.title=@"Help";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     

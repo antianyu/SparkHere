@@ -43,8 +43,11 @@
     
     self.title=@"Register";
     
-    appDelegate=[[UIApplication sharedApplication] delegate];
-    progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -60,6 +63,12 @@
     [usernameTextField becomeFirstResponder];
     
     user=nil;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [progressHUD removeFromSuperview];
 }
 
 - (void)doneButtonClicked
@@ -125,52 +134,27 @@
     if (usernameTextField.text.length==0)
     {
         inputError=TextInputErrorUserName;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Username can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username can't be empty!" delegate:self];
     }
     else if (passwordTextField.text.length==0)
     {
         inputError=TextInputErrorPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Password can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Password can't be empty!" delegate:self];
     }
     else if (confirmPwdTextField.text.length==0)
     {
         inputError=TextInputErrorConfirmPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Please confirm password!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Please confirm password!" delegate:self];
     }
     else if (nicknameTextField.text.length==0)
     {
         inputError=TextInputErrorNickname;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"Nickname can't be empty!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Nickname can't be empty!" delegate:self];
     }
     else if (![passwordTextField.text isEqual:confirmPwdTextField.text])
     {
         inputError=TextInputErrorConfirmPassword;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                     message:@"The passwords you typed do not match!"
-                                                    delegate:self
-                                           cancelButtonTitle:@"Confirm"
-                                           otherButtonTitles:nil];
-        [alert show];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"The passwords you typed do not match!" delegate:self];
     }
     else
     {
@@ -191,12 +175,7 @@
          if (!error && objects.count>0)
          {
              [progressHUD removeFromSuperview];
-             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                          message:@"Username already exists!"
-                                                         delegate:self
-                                                cancelButtonTitle:@"Confirm"
-                                                otherButtonTitles:nil];
-             [alert show];
+             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username already exists!" delegate:self];
          }
          else if(!error && objects.count==0)
          {
@@ -206,12 +185,7 @@
                   if (!error && objects.count>0)
                   {
                       [progressHUD removeFromSuperview];
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                   message:@"Nickname already exists!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Confirm"
-                                                         otherButtonTitles:nil];
-                      [alert show];
+                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Nickname already exists!" delegate:self];
                   }
                   else if(!error && objects.count==0)
                   {
@@ -231,7 +205,7 @@
                                [userQuery whereKey:@"password" equalTo:user.userPassword];
                                [appDelegate setCurrentUser:[query getFirstObject]];
                                [progressHUD removeFromSuperview];
-                               operation=UIAlertViewOperationChooseRegister;
+                               operation=UIAlertViewOperationRegister;
                                UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                                             message:@"Register succeed!"
                                                                            delegate:self
@@ -242,36 +216,20 @@
                            else
                            {
                                [progressHUD removeFromSuperview];
-                               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Woops!"
-                                                                            message:@"Register failed! Something wrong with server!"
-                                                                           delegate:self
-                                                                  cancelButtonTitle:@"Confirm"
-                                                                  otherButtonTitles:nil];
-                               [alert show];
+                               [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Register failed! Something wrong with server!" delegate:self];
                            }
                        }];
                   }
                   else
                   {
                       [progressHUD removeFromSuperview];
-                      UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                   message:@"Query error!"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Confirm"
-                                                         otherButtonTitles:nil];
-                      [alert show];                      
-                  }
+                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];                  }
               }];
          }
          else
          {
              [progressHUD removeFromSuperview];
-             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                          message:@"Query error!"
-                                                         delegate:self
-                                                cancelButtonTitle:@"Confirm"
-                                                otherButtonTitles:nil];
-             [alert show];
+             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];
          }
      }];
 }
@@ -279,8 +237,6 @@
 - (void)showRegisterWaitingView
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
-    progressHUD.dimBackground = YES;
-    progressHUD.labelText = @"Please wait...";
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
          [self registerRequest];
@@ -291,10 +247,10 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        if (operation==UIAlertViewOperationChooseRegister)
+        if (operation==UIAlertViewOperationRegister)
         {
-            appDelegate.refreshMessageList=false;
-            appDelegate.refreshMyChannelList=false;
+            appDelegate.refreshMessageList=NO;
+            appDelegate.refreshMyChannelList=NO;
             MainViewController *controller=[[MainViewController alloc]init];
             controller.selectedIndex=2;
             [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
@@ -314,12 +270,7 @@
                 }
                 else
                 {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                 message:@"Image picker is not supported on your phone!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
+                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
                 }
             }
             else
@@ -329,17 +280,13 @@
                     ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
                     controller.delegate=self;
                     controller.allowsEditing=YES;
+                    controller.sourceType=UIImagePickerControllerSourceTypeCamera;
                     controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
                     [self.navigationController presentViewController:controller animated:YES completion:nil];
                 }
                 else
                 {
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error"
-                                                                 message:@"Camera is not supported on your phone!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Confirm"
-                                                       otherButtonTitles:nil];
-                    [alert show];
+                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
                 }
             }
         }

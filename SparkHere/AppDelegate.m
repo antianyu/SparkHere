@@ -10,17 +10,24 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "AutoLoginViewController.h"
+#import "MJRefresh.h"
+#import "Constants.h"
 #import "Channel.h"
 #import "Message.h"
 
 @implementation AppDelegate
+{
+    CLLocationManager *locationManager;
+}
 
 @synthesize navController;
 @synthesize user;
+@synthesize messageList;
 @synthesize myChannelList;
 @synthesize lastUpdateTime;
 @synthesize backgroundImage;
 @synthesize settings;
+@synthesize currentLocation;
 
 @synthesize is4Inch;
 @synthesize refreshMessageList;
@@ -39,9 +46,12 @@
     [self initData];
     [self initView];
     
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
-                                                    UIRemoteNotificationTypeAlert|
-                                                    UIRemoteNotificationTypeSound];
+    if (settings.receiveMessage && !settings.registeredForNotification)
+    {
+        [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+                                                        UIRemoteNotificationTypeAlert|
+                                                        UIRemoteNotificationTypeSound];
+    }
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
@@ -94,12 +104,16 @@
     PFInstallation *currentInstallation=[PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
     currentInstallation.channels=@[@"global"];
+    currentInstallation[@"receiveMessage"]=[NSNumber numberWithBool:YES];
     [currentInstallation saveInBackground];
+    
+    settings.registeredForNotification=YES;
+    settings.deviceToken=deviceToken;
+    [settings saveSettings];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"%@", userInfo);
     [PFPush handlePush:userInfo];
 }
 
@@ -115,24 +129,25 @@
                         userID:settings.defaultID
                           logo:settings.defaultLogo];
     }
+    messageList=[[NSMutableArray alloc]init];
     myChannelList=[[NSMutableArray alloc]init];
     
-    refreshMessageList=true;
-    loadMoreMessages=false;
-    refreshMyChannelList=true;
-    refreshChannelDetail=false;
-    refreshPostsList=false;
+    refreshMessageList=YES;
+    loadMoreMessages=NO;
+    refreshMyChannelList=YES;
+    refreshChannelDetail=NO;
+    refreshPostsList=NO;
     
     float width=[UIScreen mainScreen].currentMode.size.width;
     float height=[UIScreen mainScreen].currentMode.size.height;
     if (height/width==1.5)
     {
-        is4Inch=false;
+        is4Inch=NO;
         backgroundImage=[UIImage imageNamed:@"Background_3.5.png"];
     }
     else
     {
-        is4Inch=true;
+        is4Inch=YES;
         backgroundImage=[UIImage imageNamed:@"Background_4.png"];
     }
 }
@@ -199,22 +214,214 @@
     }
 }
 
-- (void)constructMyChannelList
+- (void)constructListsWithTableView:(UITableView *)tableView endRefreshing:(BOOL)end
 {
-    [myChannelList removeAllObjects];
-    
-    PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
-    [query whereKey:@"userID" equalTo:user.userID];
-    [query orderByDescending:@"updatedAt"];
-    NSArray *subscriptions=[query findObjects];
-    
-    // get channels from subscriptions
-    for (PFObject *object in subscriptions)
+    if (refreshMessageList || loadMoreMessages)
     {
-        PFQuery *channelQuery=[PFQuery queryWithClassName:@"Channel"];
-        Channel *channel=[[Channel alloc]initWithPFObject:[channelQuery getObjectWithId:object[@"channelID"]]];
-        [myChannelList addObject:channel];
+        [self getLocation];
     }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        if (refreshMyChannelList)
+        {
+            refreshMyChannelList=NO;
+            
+            NSLog(@"refresh my channel");
+            [myChannelList removeAllObjects];
+            
+            PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
+            [query whereKey:@"userID" equalTo:user.userID];
+            [query orderByDescending:@"updatedAt"];
+            query.limit=10;
+            NSArray *subscriptions=[query findObjects];
+            
+            // get channels from subscriptions
+            for (PFObject *object in subscriptions)
+            {
+                PFQuery *channelQuery=[PFQuery queryWithClassName:@"Channel"];
+                Channel *channel=[[Channel alloc]initWithPFObject:[channelQuery getObjectWithId:object[@"channelID"]]];
+                [myChannelList addObject:channel];
+            }
+//            NSLog(@"%d objects in channel list", myChannelList.count);
+        }
+        
+        if (!refreshMessageList && !loadMoreMessages)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [tableView reloadData];
+                
+                if (end)
+                {
+                    [tableView headerEndRefreshing];
+                }
+            });
+            return;
+        }
+        
+        int count=0;
+        while (currentLocation==nil && count<30)
+        {
+            [NSThread sleepForTimeInterval:1];
+            count++;
+        }
+        if (count==REQUEST_TIMEOUT)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [tableView reloadData];
+                
+                if (end)
+                {
+                    [tableView headerEndRefreshing];
+                }
+            });
+            return;
+        }
+        
+        if (refreshMessageList)
+        {
+            refreshMessageList=NO;
+            
+            [messageList removeAllObjects];
+            
+            NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+            
+            // if the user is in the range of channel, add query constraint of the channel
+            for (Channel *channel in myChannelList)
+            {
+                PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+                [query whereKey:@"channelID" equalTo:channel.channelID];
+                [subQueries addObject:query];
+            }
+            
+            if (subQueries.count>0)
+            {
+                PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+                [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:messageRange];
+                [query orderByDescending:@"updatedAt"];
+                query.limit=20;
+                NSArray *messages=[query findObjects];
+                
+                for (PFObject *object in messages)
+                {
+                    query=[PFQuery queryWithClassName:@"User"];
+                    User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
+                    
+                    Message *message=[[Message alloc]initWithPFObject:object
+                                                               sender:sender
+                                                              channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
+                    [messageList addObject:message];
+                }
+            }
+            NSLog(@"%d objects in message list", messageList.count);
+            lastUpdateTime=[NSDate date];
+        }
+        else
+        {
+            loadMoreMessages=NO;
+            
+            NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+            
+            // if the user is in the range of channel, add query constraint of the channel
+            for (Channel *channel in myChannelList)
+            {
+                PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+                [query whereKey:@"channelID" equalTo:channel.channelID];
+                [subQueries addObject:query];
+            }
+            
+            if (subQueries.count>0)
+            {
+                PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+                if (lastUpdateTime!=nil)
+                {
+                    [query whereKey:@"updatedAt" greaterThan:lastUpdateTime];
+                }
+                [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:messageRange];
+                [query orderByAscending:@"updatedAt"];
+                
+                NSArray *messages=[query findObjects];
+                
+                for (PFObject *object in messages)
+                {
+                    query=[PFQuery queryWithClassName:@"User"];
+                    User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
+                    
+                    Message *message=[[Message alloc]initWithPFObject:object
+                                                               sender:sender
+                                                              channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
+                    [messageList insertObject:message atIndex:0];
+                }
+            }
+            NSLog(@"%d objects in load list", messageList.count);
+            lastUpdateTime=[NSDate date];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [tableView reloadData];
+            
+            if (end)
+            {
+                [tableView headerEndRefreshing];
+            }
+        });
+    });
+}
+
+- (Channel *)findChannelFromMyChannelList:(NSString *)channelID
+{
+    for (Channel *channel in myChannelList)
+    {
+        if ([channel.channelID isEqualToString:channelID])
+        {
+            return channel;
+        }
+    }
+    return nil;
+}
+
+- (void)showUIAlertViewWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate
+{
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:title
+                                                 message:message
+                                                delegate:delegate
+                                       cancelButtonTitle:@"Confirm"
+                                       otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)getLocation
+{
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        if (locationManager==nil)
+        {
+            locationManager=[[CLLocationManager alloc]init];
+            locationManager.delegate=self;
+            locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
+            locationManager.distanceFilter=200;
+        }
+        currentLocation=nil;
+        [locationManager startUpdatingLocation];
+    }
+    else
+    {
+        [self showUIAlertViewWithTitle:@"Error" message:@"Location service is not available. Please turn it on." delegate:nil];
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{    
+    [self showUIAlertViewWithTitle:@"Error" message:@"Location failed. Please try again." delegate:nil];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    currentLocation=[PFGeoPoint geoPointWithLocation:[locations lastObject]];
+    [locationManager stopUpdatingLocation];
 }
 
 @end
