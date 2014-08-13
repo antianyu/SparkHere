@@ -135,6 +135,10 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (buttonIndex!=alertView.cancelButtonIndex)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     if(inputError==TextInputErrorMessageContent)
     {
         [contentTextView becomeFirstResponder];
@@ -221,9 +225,14 @@
               if (!error)
               {
                   [progressHUD removeFromSuperview];
+                  [self pushMessage];
                   appDelegate.loadMoreMessages=YES;
-                  inputError=TextInputErrorNone;
-                  [appDelegate showUIAlertViewWithTitle:@"Congratulations!" message:@"Publish message succeed!" delegate:nil];
+                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
+                                                               message:@"Publish message succeed!"
+                                                              delegate:self
+                                                     cancelButtonTitle:nil
+                                                     otherButtonTitles:@"Confirm", nil];
+                  [alert show];
               }
               else
               {
@@ -233,6 +242,50 @@
               }
           }];
      }];
+}
+
+- (void)pushMessage
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        // construct push content
+        NSString *pushContent=contentTextView.text;
+        if (pushContent==nil)
+        {
+            pushContent=@"You have received an image. ";
+        }
+        pushContent=[pushContent stringByAppendingString:[NSString stringWithFormat:@"(via %@)", channel.channelName]];
+        
+        // get every subscriber
+        PFQuery *subscriptionQuery=[PFQuery queryWithClassName:@"Subscription"];
+        [subscriptionQuery whereKey:@"channelID" equalTo:channel.channelID];
+        NSArray *result=[subscriptionQuery findObjects];
+        
+        // check if every subscriber is valid for push
+        NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+        for (PFObject *object in result)
+        {
+            PFQuery *query=[PFInstallation query];
+            [query whereKey:@"currentUserID" equalTo:object[@"userID"]];
+            [subQueries addObject:query];
+        }
+        
+        PFQuery *pushQuery=[PFQuery orQueryWithSubqueries:subQueries];
+        [pushQuery whereKey:@"currentUserID" notEqualTo:appDelegate.user.userID];
+        [pushQuery whereKey:@"currentLocation" nearGeoPoint:appDelegate.currentLocation withinKilometers:MESSAGE_RANGE];
+        [pushQuery whereKey:@"receiveMessage" equalTo:[NSNumber numberWithBool:YES]];
+        
+        // set alert and badge
+        NSDictionary *data=[NSDictionary dictionaryWithObjectsAndKeys:
+                            pushContent, @"alert",
+                            @"Increment", @"badge", nil];
+        
+        // send push
+        PFPush *push=[[PFPush alloc]init];
+        [push setQuery:pushQuery];
+        [push setData:data];
+        [push sendPushInBackground];
+    });
 }
 
 @end

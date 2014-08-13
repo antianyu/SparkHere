@@ -14,6 +14,7 @@
 #import "HelpViewController.h"
 #import "AboutViewController.h"
 #import "AppDelegate.h"
+#import "MBProgressHUD.h"
 
 @interface MyProfileViewController ()
 
@@ -22,6 +23,7 @@
 @implementation MyProfileViewController
 {
     AppDelegate *appDelegate;
+    MBProgressHUD *progressHUD;
 }
 
 @synthesize logoutButton;
@@ -38,6 +40,10 @@
     self.title=@"My Profile";
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
+    progressHUD.dimBackground = NO;
+    progressHUD.userInteractionEnabled=NO;
+    progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
@@ -91,13 +97,23 @@
 
 - (IBAction)logoutButtonClicked:(id)sender
 {
-    appDelegate.user=nil;
-    appDelegate.settings.autoLogin=NO;
-    [appDelegate.settings saveSettings];
-    LoginViewController *controller=[[LoginViewController alloc]init];
-    UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
-    [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    [self presentViewController:navController animated:YES completion:^{nil;}];
+    [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
+    [progressHUD showAnimated:YES whileExecutingBlock:^
+     {
+         appDelegate.user=nil;
+         appDelegate.settings.autoLogin=NO;
+         [appDelegate.settings saveSettings];
+         
+         PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+         [currentInstallation setObject:@"" forKey:@"currentUserID"];
+         [currentInstallation saveInBackground];
+         
+         [progressHUD removeFromSuperview];
+         LoginViewController *controller=[[LoginViewController alloc]init];
+         UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
+         [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+         [self presentViewController:navController animated:YES completion:nil];
+     }];
 }
 
 - (IBAction)myPostsButtonClicked:(id)sender

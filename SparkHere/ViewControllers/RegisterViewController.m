@@ -254,7 +254,7 @@
             MainViewController *controller=[[MainViewController alloc]init];
             controller.selectedIndex=2;
             [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-            [self presentViewController:controller animated:YES completion:^{nil;}];
+            [self presentViewController:controller animated:YES completion:nil];
         }
         else
         {

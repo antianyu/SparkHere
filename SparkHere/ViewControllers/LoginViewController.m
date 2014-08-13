@@ -161,6 +161,10 @@
                       {
                           appDelegate.settings.autoLogin=YES;
                           [appDelegate setCurrentUser:[objects firstObject]];
+                          
+                          PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+                          [currentInstallation setObject:appDelegate.user.userID forKey:@"currentUserID"];
+                          [currentInstallation saveInBackground];
                       }
                       else
                       {
@@ -168,13 +172,15 @@
                           [appDelegate.settings saveSettings];
                       }
                       [progressHUD removeFromSuperview];
+                      
                       appDelegate.refreshMessageList=YES;
                       appDelegate.refreshMyChannelList=YES;
                       [appDelegate.messageList removeAllObjects];
                       [appDelegate.myChannelList removeAllObjects];
+                      
                       MainViewController *controller=[[MainViewController alloc]init];
                       [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-                      [self presentViewController:controller animated:YES completion:^{nil;}];
+                      [self presentViewController:controller animated:YES completion:nil];
                   }
                   else if(!error && objects.count==0)
                   {

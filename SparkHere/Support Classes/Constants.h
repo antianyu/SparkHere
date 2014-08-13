@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-extern const double messageRange;
+extern const double MESSAGE_RANGE;
 
 extern const int MAXIMUM_HEIGHT;
 extern const int VIEW_WIDTH;
@@ -31,5 +31,6 @@ extern const int INTERVAL;
 extern const int PADDING;
 
 extern const int REQUEST_TIMEOUT;
+extern const int LOCATION_UPDATE_INTERVAL;
 
 //extern NSString *const MJRefreshBundleName;

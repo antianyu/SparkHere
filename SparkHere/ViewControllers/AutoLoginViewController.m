@@ -42,7 +42,7 @@
     
     MainViewController *controller=[[MainViewController alloc]init];
     [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    [self presentViewController:controller animated:YES completion:^{nil;}];    
+    [self presentViewController:controller animated:YES completion:nil];    
 }
 
 @end

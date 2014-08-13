@@ -62,7 +62,7 @@
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Channel_unselected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"Channel_selected.png"]];
 
-    [appDelegate constructListsWithTableView:channelTableView endRefreshing:NO];
+    [appDelegate constructListsFromMessageVC:NO tableView:nil tabBarItem:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

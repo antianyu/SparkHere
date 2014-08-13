@@ -19,9 +19,9 @@
 
 @property (strong, nonatomic) User *user;
 
-@property (strong, nonatomic) NSMutableArray *messageList;
+@property (strong, atomic) NSMutableArray *messageList;
 
-@property (strong, nonatomic) NSMutableArray *myChannelList;
+@property (strong, atomic) NSMutableArray *myChannelList;
 
 @property (strong, nonatomic) NSDate *lastUpdateTime;
 
@@ -32,14 +32,14 @@
 @property (strong, nonatomic) PFGeoPoint *currentLocation;
 
 @property (nonatomic) BOOL is4Inch;
-@property (nonatomic) BOOL refreshMessageList;
-@property (nonatomic) BOOL loadMoreMessages;
-@property (nonatomic) BOOL refreshMyChannelList;
+@property (atomic) BOOL refreshMessageList;
+@property (atomic) BOOL loadMoreMessages;
+@property (atomic) BOOL refreshMyChannelList;
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
 - (void)setCurrentUser:(PFObject *)object;
-- (void)constructListsWithTableView:(UITableView *)tableView endRefreshing:(BOOL)end;
+- (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem;
 - (void)getLocation;
 - (void)setDefaultViewStyle:(UIView *)view;
 - (void)showUIAlertViewWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate;

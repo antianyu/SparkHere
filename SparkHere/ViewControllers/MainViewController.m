@@ -82,11 +82,4 @@
     self.hidesBottomBarWhenPushed=NO;
 }
 
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    if (item.tag==0)
-    {
-        [[self.tabBar.items objectAtIndex:0] setBadgeValue:nil];
-    }
-}
 @end

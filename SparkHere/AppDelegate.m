@@ -53,6 +53,8 @@
                                                         UIRemoteNotificationTypeSound];
     }
     
+    [self updateLocationWithInterval];
+    
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     LoginViewController *loginViewController=[[LoginViewController alloc]init];
@@ -114,6 +116,8 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+    application.applicationIconBadgeNumber=currentInstallation.badge;
     [PFPush handlePush:userInfo];
 }
 
@@ -128,6 +132,10 @@
                       nickname:settings.defaultNickname
                         userID:settings.defaultID
                           logo:settings.defaultLogo];
+        
+        PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+        [currentInstallation setObject:user.userID forKey:@"currentUserID"];
+        [currentInstallation saveInBackground];
     }
     messageList=[[NSMutableArray alloc]init];
     myChannelList=[[NSMutableArray alloc]init];
@@ -214,7 +222,7 @@
     }
 }
 
-- (void)constructListsWithTableView:(UITableView *)tableView endRefreshing:(BOOL)end
+- (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem
 {
     if (refreshMessageList || loadMoreMessages)
     {
@@ -252,7 +260,7 @@
                 
                 [tableView reloadData];
                 
-                if (end)
+                if (fromMessageVC)
                 {
                     [tableView headerEndRefreshing];
                 }
@@ -272,7 +280,7 @@
                 
                 [tableView reloadData];
                 
-                if (end)
+                if (fromMessageVC)
                 {
                     [tableView headerEndRefreshing];
                 }
@@ -299,7 +307,7 @@
             if (subQueries.count>0)
             {
                 PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
-                [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:messageRange];
+                [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:MESSAGE_RANGE];
                 [query orderByDescending:@"updatedAt"];
                 query.limit=20;
                 NSArray *messages=[query findObjects];
@@ -339,7 +347,7 @@
                 {
                     [query whereKey:@"updatedAt" greaterThan:lastUpdateTime];
                 }
-                [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:messageRange];
+                [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:MESSAGE_RANGE];
                 [query orderByAscending:@"updatedAt"];
                 
                 NSArray *messages=[query findObjects];
@@ -359,12 +367,19 @@
             lastUpdateTime=[NSDate date];
         }
         
+        // remove badge
+        PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+        currentInstallation.badge=0;
+        [currentInstallation saveInBackground];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [tableView reloadData];
             
-            if (end)
+            if (fromMessageVC)
             {
+                tabBarItem.badgeValue=nil;
                 [tableView headerEndRefreshing];
             }
         });
@@ -422,6 +437,39 @@
 {
     currentLocation=[PFGeoPoint geoPointWithLocation:[locations lastObject]];
     [locationManager stopUpdatingLocation];
+    
+    PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+    [currentInstallation setObject:currentLocation forKey:@"currentLocation"];
+    [currentInstallation saveInBackground];
+}
+
+- (void)updateLocationWithInterval
+{
+//    dispatch_queue_t updateLocationQueue=dispatch_queue_create("updateLocation", NULL);
+//    dispatch_queue_t globalQueue=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//    dispatch_queue_t mainQueue=dispatch_get_main_queue();
+//    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, updateLocationQueue);
+//    if (timer)
+//    {
+//        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, LOCATION_UPDATE_INTERVAL * NSEC_PER_SEC, 0.1 * LOCATION_UPDATE_INTERVAL * NSEC_PER_SEC);
+//        dispatch_source_set_event_handler(timer, ^{
+//            
+//            NSLog(@"update location out");
+//            if (settings.registeredForNotification) {
+//                
+//                NSLog(@"update location in");
+//                [self getLocation];
+//            }
+//        });
+//        dispatch_resume(timer);
+//    }
+    
+    NSTimer *timer=[NSTimer timerWithTimeInterval:LOCATION_UPDATE_INTERVAL
+                                           target:self
+                                         selector:@selector(getLocation)
+                                         userInfo:nil
+                                          repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 @end
