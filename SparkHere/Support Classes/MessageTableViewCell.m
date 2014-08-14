@@ -25,6 +25,13 @@
     [senderLabel setTextColor:[UIColor whiteColor]];
     [channelLabel setTextColor:[UIColor lightGrayColor]];
     [updateLabel setTextColor:[UIColor lightGrayColor]];
+    
+    self.layer.cornerRadius=5;
+    self.layer.shadowOpacity=0.8;
+    self.layer.shadowOffset=CGSizeMake(5, 5);
+    self.alpha=0.95;
+    CGAffineTransform transform=CGAffineTransformScale(self.contentView.transform, 0.9, 0.9);
+    [self setTransform:transform];
 }
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize

@@ -251,7 +251,7 @@
                 Channel *channel=[[Channel alloc]initWithPFObject:[channelQuery getObjectWithId:object[@"channelID"]]];
                 [myChannelList addObject:channel];
             }
-//            NSLog(@"%d objects in channel list", myChannelList.count);
+            NSLog(@"%d objects in channel list", myChannelList.count);
         }
         
         if (!refreshMessageList && !loadMoreMessages)

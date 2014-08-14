@@ -145,6 +145,21 @@
     }
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([textView.text isEqualToString:@"max. 500 characters"])
+    {
+        textView.text=@"";
+    }
+    
+    if (textView.text.length>499 && ![text isEqualToString:@""])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (void)imageViewTapped
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];

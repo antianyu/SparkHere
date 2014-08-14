@@ -43,7 +43,14 @@
 {
     [super viewDidLoad];
     
-    self.title=@"Establish new channel";
+    if (editChannel)
+    {
+        self.title=@"Edit channel";
+    }
+    else
+    {
+        self.title=@"Establish new channel";
+    }
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
@@ -55,10 +62,6 @@
     
     UIBarButtonItem *establishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=establishButtonItem;
-    
-    NSString *detailString=@"Lorem ipsum dolor sit er elit lametm";
-    
-    descriptionTextView.text=detailString;
     
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];
@@ -163,7 +166,25 @@
     [alert show];
 }
 
-
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([textField.text isEqualToString:@"max. 16 characters"])
+    {
+        textField.text=@"";
+    }
+    
+    if (textField.text.length>15 && ![string isEqualToString:@""])
+    {
+        return NO;
+    }
+    
+    if (textField.text.length==1 && [string isEqualToString:@""])
+    {
+        textField.text=@"max. 16 characters ";
+    }
+    
+    return YES;
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -192,6 +213,21 @@
         [channelNameTextField becomeFirstResponder];
     }
     return NO;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([textView.text isEqualToString:@"max. 500 characters"])
+    {
+        textView.text=@"";
+    }
+    
+    if (textView.text.length>499 && ![text isEqualToString:@""])
+    {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -419,6 +455,7 @@
                            if (!error)
                            {
                                [progressHUD removeFromSuperview];
+                               operation=UIAlertViewOperationDone;
                                UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
                                                                             message:@"Establish succeed!"
                                                                            delegate:self

@@ -99,6 +99,16 @@
     [alert show];
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.text.length>15 && ![string isEqualToString:@""])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (theOriginalPwdTextField.text.length>0 && theNewPwdTextField.text.length>0 &&
