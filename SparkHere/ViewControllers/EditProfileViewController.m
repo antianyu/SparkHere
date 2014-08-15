@@ -182,7 +182,6 @@
               PFQuery *query=[PFQuery queryWithClassName:@"User"];
               [appDelegate setCurrentUser:[query getObjectWithId:appDelegate.user.userID]];
               [progressHUD removeFromSuperview];
-              operation=UIAlertViewOperationDone;
               appDelegate.refreshMessageList=YES;
               [appDelegate showUIAlertViewWithTitle:@"Congratulations" message:@"Profile is updated!" delegate:nil];
           }];

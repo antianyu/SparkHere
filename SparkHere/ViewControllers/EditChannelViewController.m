@@ -89,6 +89,8 @@
             logoImageView.image=channel.logo;
         }
     }
+    inputError=TextInputErrorNone;
+    operation=UIAlertViewOperationNone;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -270,22 +272,9 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
-        if (operation==UIAlertViewOperationDone)
+        if (operation==UIAlertViewOperationChooseImage)
         {
-            if (!editChannel)
-            {
-                appDelegate.refreshMyChannelList=YES;
-            }
-            else if (editChannel && ![channel.channelName isEqualToString:newChannel[@"channelName"]])
-            {
-                appDelegate.refreshMessageList=YES;
-                appDelegate.refreshMyChannelList=YES;
-            }
-            appDelegate.refreshChannelDetail=YES;
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        else
-        {
+            operation=UIAlertViewOperationNone;
             if (buttonIndex==1)
             {
                 if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
@@ -372,13 +361,10 @@
              if (!error)
              {
                  [progressHUD removeFromSuperview];
-                 operation=UIAlertViewOperationDone;
-                 UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
-                                                              message:@"Channel is updated!"
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                                    otherButtonTitles:@"Confirm", nil];
-                 [alert show];
+                 [appDelegate showUIAlertViewWithTitle:@"Congratulations"
+                                               message:@"Channel is updated!"
+                                              delegate:nil];
+                 [self requestSucceed];
              }
              else
              {
@@ -406,19 +392,17 @@
                       if (!error)
                       {
                           [progressHUD removeFromSuperview];
-                          appDelegate.refreshChannelDetail=YES;
-                          operation=UIAlertViewOperationDone;
-                          UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
-                                                                       message:@"Channel is updated!"
-                                                                      delegate:self
-                                                             cancelButtonTitle:nil
-                                                             otherButtonTitles:@"Confirm", nil];
-                          [alert show];
+                          [appDelegate showUIAlertViewWithTitle:@"Congratulations!"
+                                                        message:@"Channel is updated!"
+                                                       delegate:nil];
+                          [self requestSucceed];
                       }
                       else
                       {
                           [progressHUD removeFromSuperview];
-                          [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Update failed! Something wrong with server!" delegate:self];
+                          [appDelegate showUIAlertViewWithTitle:@"Woops!"
+                                                        message:@"Update failed! Something wrong with server!"
+                                                       delegate:self];
                       }
                   }];
              }
@@ -455,13 +439,10 @@
                            if (!error)
                            {
                                [progressHUD removeFromSuperview];
-                               operation=UIAlertViewOperationDone;
-                               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
-                                                                            message:@"Establish succeed!"
-                                                                           delegate:self
-                                                                  cancelButtonTitle:nil
-                                                                  otherButtonTitles:@"Confirm", nil];
-                               [alert show];
+                               [appDelegate showUIAlertViewWithTitle:@"Congratulations"
+                                                             message:@"Establish succeed!"
+                                                            delegate:nil];
+                               [self requestSucceed];
                            }
                            else
                            {
@@ -519,6 +500,21 @@
     UIImage *scaledImage=UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return scaledImage;
+}
+
+- (void)requestSucceed
+{
+    if (!editChannel)
+    {
+        appDelegate.refreshMyChannelList=YES;
+    }
+    else if (editChannel && ![channel.channelName isEqualToString:newChannel[@"channelName"]])
+    {
+        appDelegate.refreshMessageList=YES;
+        appDelegate.refreshMyChannelList=YES;
+    }
+    appDelegate.refreshChannelDetail=YES;
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

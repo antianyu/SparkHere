@@ -58,6 +58,8 @@
                                                                              action:@selector(imageViewTapped)];
     [contentImageView addGestureRecognizer:singleTap];
     [self drawBorderOfImageView];
+    
+    inputError=TextInputErrorNone;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -97,8 +99,7 @@
     }
     else
     {
-        inputError=TextInputErrorNone;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:nil];
     }
 }
 
@@ -115,8 +116,7 @@
     }
     else
     {
-        inputError=TextInputErrorNone;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:nil];
     }
 }
 
@@ -135,12 +135,9 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex!=alertView.cancelButtonIndex)
-    {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
     if(inputError==TextInputErrorMessageContent)
     {
+        inputError=TextInputErrorNone;
         [contentTextView becomeFirstResponder];
     }
 }
@@ -218,7 +215,6 @@
          if (count==REQUEST_TIMEOUT)
          {
              [progressHUD removeFromSuperview];
-             inputError=TextInputErrorNone;
              [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Publish message failed! Can't locate your position!" delegate:nil];
              return;
          }
@@ -239,15 +235,11 @@
           {
               if (!error)
               {
-                  [progressHUD removeFromSuperview];
                   [self pushMessage];
+                  [progressHUD removeFromSuperview];
+                  [appDelegate showUIAlertViewWithTitle:@"Congratulations!" message:@"Publish message succeed!" delegate:nil];
                   appDelegate.loadMoreMessages=YES;
-                  UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
-                                                               message:@"Publish message succeed!"
-                                                              delegate:self
-                                                     cancelButtonTitle:nil
-                                                     otherButtonTitles:@"Confirm", nil];
-                  [alert show];
+                  [self.navigationController popViewControllerAnimated:YES];
               }
               else
               {

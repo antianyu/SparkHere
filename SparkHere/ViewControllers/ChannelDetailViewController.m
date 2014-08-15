@@ -306,14 +306,7 @@
     if (buttonIndex!=alertView.cancelButtonIndex)
     {
         switch (operation)
-        {
-            case UIAlertViewOperationGoBack:
-            {
-                appDelegate.refreshMessageList=YES;
-                appDelegate.refreshMyChannelList=YES;
-                [self.navigationController popViewControllerAnimated:YES];
-                break;
-            }                
+        {   
             case UIAlertViewOperationDeleteChannel:
             {
                 [self showDeleteChannelWaitingView];
@@ -412,13 +405,15 @@
          [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
               [progressHUD removeFromSuperview];
-              operation=UIAlertViewOperationGoBack;
               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Wow!"
                                                            message:@"Channel is deleted!"
                                                           delegate:self
                                                  cancelButtonTitle:nil
                                                  otherButtonTitles:@"Confirm", nil];
               [alert show];
+              appDelegate.refreshMessageList=YES;
+              appDelegate.refreshMyChannelList=YES;
+              [self.navigationController popViewControllerAnimated:YES];
           }];
          
      }];

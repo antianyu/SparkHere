@@ -203,12 +203,6 @@
             case UIAlertViewOperationChooseNewSuperAdmin:
                 [self changeSuperAdministrator];
                 break;
-                
-            case UIAlertViewOperationGoBack:
-                appDelegate.refreshChannelDetail=YES;
-                [self.navigationController popViewControllerAnimated:YES];
-                break;
-                
             default:
                 break;
         }
@@ -300,7 +294,6 @@
                if (!error)
                {
                    [progressHUD removeFromSuperview];
-                   operation=UIAlertViewOperationGoBack;
                    NSString *prompt=[NSString stringWithFormat:@"You have chosen %@ to be new super adminstrator!", tempUser.nickname];
                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
                                                                 message:prompt
@@ -308,6 +301,8 @@
                                                       cancelButtonTitle:nil
                                                       otherButtonTitles:@"Confirm", nil];
                    [alert show];
+                   appDelegate.refreshChannelDetail=YES;
+                   [self.navigationController popViewControllerAnimated:YES];
                }
                else
                {
