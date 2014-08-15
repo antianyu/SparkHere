@@ -140,9 +140,9 @@
     messageList=[[NSMutableArray alloc]init];
     myChannelList=[[NSMutableArray alloc]init];
     
-    refreshMessageList=YES;
+    refreshMessageList=NO;
     loadMoreMessages=NO;
-    refreshMyChannelList=YES;
+    refreshMyChannelList=NO;
     refreshChannelDetail=NO;
     refreshPostsList=NO;
     
@@ -224,18 +224,29 @@
 
 - (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem
 {
-    if (refreshMessageList || loadMoreMessages)
+    BOOL tempRefreshMessageList=refreshMessageList;
+    BOOL tempLoadMoreMessages=loadMoreMessages;
+    BOOL tempRefreshMyChannelList=refreshMyChannelList;
+    refreshMessageList=NO;
+    loadMoreMessages=NO;
+    refreshMyChannelList=NO;
+    
+    if (tempRefreshMessageList || tempLoadMoreMessages)
     {
         [self getLocation];
     }
     
+    if (tempRefreshMessageList && tempLoadMoreMessages)
+    {
+        tempLoadMoreMessages=NO;
+    }
+    
+    NSLog(@"FromMessageVC:%@\nrefreshMyChannelList:%@\nrefreshMessageList:%@\nloadMoreMessages:%@",fromMessageVC?@"YES":@"NO",refreshMyChannelList?@"YES":@"NO",refreshMessageList?@"YES":@"NO",loadMoreMessages?@"YES":@"NO");
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        if (refreshMyChannelList)
+        if (tempRefreshMyChannelList)
         {
-            refreshMyChannelList=NO;
-            
-            NSLog(@"refresh my channel");
             [myChannelList removeAllObjects];
             
             PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
@@ -254,7 +265,7 @@
             NSLog(@"%d objects in channel list", myChannelList.count);
         }
         
-        if (!refreshMessageList && !loadMoreMessages)
+        if (!tempRefreshMessageList && !tempLoadMoreMessages)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -288,10 +299,8 @@
             return;
         }
         
-        if (refreshMessageList)
+        if (tempRefreshMessageList)
         {
-            refreshMessageList=NO;
-            
             [messageList removeAllObjects];
             
             NSMutableArray *subQueries=[[NSMutableArray alloc]init];
@@ -326,10 +335,9 @@
             NSLog(@"%d objects in message list", messageList.count);
             lastUpdateTime=[NSDate date];
         }
-        else
+        
+        else if (tempLoadMoreMessages)
         {
-            loadMoreMessages=NO;
-            
             NSMutableArray *subQueries=[[NSMutableArray alloc]init];
             
             // if the user is in the range of channel, add query constraint of the channel

@@ -32,6 +32,9 @@
     
     logoImageView.image=appDelegate.settings.defaultLogo;
     nicknameLabel.text=appDelegate.settings.defaultNickname;
+    
+    appDelegate.refreshMessageList=YES;
+    appDelegate.refreshMyChannelList=YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated

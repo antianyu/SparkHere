@@ -140,11 +140,8 @@
 {
     // refresh tableView UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-        if (!appDelegate.refreshMessageList)
-        {
-            appDelegate.loadMoreMessages=YES;
-        }
+        
+        appDelegate.loadMoreMessages=YES;
         [appDelegate constructListsFromMessageVC:YES tableView:messagesTableView tabBarItem:self.tabBarItem];
     });
 }
