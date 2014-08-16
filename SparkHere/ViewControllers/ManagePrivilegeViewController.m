@@ -304,7 +304,7 @@
          [privilegeList removeAllObjects];
          PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
          [query whereKey:@"channelID" equalTo:channel.channelID];
-         query.limit=10;
+         query.limit=ITEMS_PER_REQUEST;
          NSArray *subscriptions=[query findObjects];
          
          // get members from subscriptions

@@ -8,7 +8,7 @@
 
 #import "Constants.h"
 
-const double MESSAGE_RANGE=1;
+const double MESSAGE_RANGE=5;
 
 const int MAXIMUM_HEIGHT=1000;
 const int VIEW_WIDTH=320;
@@ -33,3 +33,5 @@ const int MAP_RANGE=1000;
 
 const int REQUEST_TIMEOUT=30;
 const int LOCATION_UPDATE_INTERVAL=1800;
+const int MESSAGES_PER_REQUEST=20;
+const int ITEMS_PER_REQUEST=10;

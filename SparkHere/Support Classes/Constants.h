@@ -32,5 +32,7 @@ extern const int PADDING;
 
 extern const int REQUEST_TIMEOUT;
 extern const int LOCATION_UPDATE_INTERVAL;
+extern const int MESSAGES_PER_REQUEST;
+extern const int ITEMS_PER_REQUEST;
 
 //extern NSString *const MJRefreshBundleName;

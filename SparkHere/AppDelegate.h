@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 #import "User.h"
+#import "Channel.h"
 #import "Settings.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate>
@@ -24,6 +25,7 @@
 @property (strong, atomic) NSMutableArray *myChannelList;
 
 @property (strong, nonatomic) NSDate *lastUpdateTime;
+@property (strong, nonatomic) NSDate *firstUpdateTime;
 
 @property (strong, nonatomic) UIImage *backgroundImage;
 
@@ -40,6 +42,7 @@
 
 - (void)setCurrentUser:(PFObject *)object;
 - (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem;
+- (Channel *)findChannelFromMyChannelList:(NSString *)channelID;
 - (void)getLocation;
 - (void)setDefaultViewStyle:(UIView *)view;
 - (void)showUIAlertViewWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate;

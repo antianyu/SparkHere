@@ -12,7 +12,6 @@
 #import "AutoLoginViewController.h"
 #import "MJRefresh.h"
 #import "Constants.h"
-#import "Channel.h"
 #import "Message.h"
 
 @implementation AppDelegate
@@ -25,6 +24,7 @@
 @synthesize messageList;
 @synthesize myChannelList;
 @synthesize lastUpdateTime;
+@synthesize firstUpdateTime;
 @synthesize backgroundImage;
 @synthesize settings;
 @synthesize currentLocation;
@@ -252,7 +252,7 @@
             PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
             [query whereKey:@"userID" equalTo:user.userID];
             [query orderByDescending:@"updatedAt"];
-            query.limit=10;
+            query.limit=ITEMS_PER_REQUEST;
             NSArray *subscriptions=[query findObjects];
             
             // get channels from subscriptions
@@ -318,7 +318,8 @@
                 PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
                 [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:MESSAGE_RANGE];
                 [query orderByDescending:@"updatedAt"];
-                query.limit=20;
+                query.limit=MESSAGES_PER_REQUEST;
+                
                 NSArray *messages=[query findObjects];
                 
                 for (PFObject *object in messages)
@@ -330,6 +331,12 @@
                                                                sender:sender
                                                               channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
                     [messageList addObject:message];
+                }
+                
+                if (messages.count>0)
+                {                    
+                    PFObject *object=[messages lastObject];
+                    firstUpdateTime=object.updatedAt;
                 }
             }
             NSLog(@"%d objects in message list", messageList.count);

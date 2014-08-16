@@ -165,7 +165,7 @@
     PFQuery *query=[PFQuery queryWithClassName:@"Channel"];    
     [query whereKey:@"category" equalTo:[NSNumber numberWithInt:category]];
     [query orderByDescending:@"followersNumber"];
-    query.limit=10;
+    query.limit=ITEMS_PER_REQUEST;
     NSArray *channels=[query findObjects];
     
     // get channels from subscriptions

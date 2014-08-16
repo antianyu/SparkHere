@@ -47,6 +47,7 @@
     [messagesTableView setBackgroundColor:[UIColor clearColor]];
     [messagesTableView setSeparatorInset:UIEdgeInsetsZero];
     [messagesTableView addHeaderWithTarget:self action:@selector(headerRefreshing)];
+    [messagesTableView addFooterWithTarget:self action:@selector(footerRefreshing)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -151,10 +152,67 @@
     // refresh tableView UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        [messagesTableView reloadData];
-        
-        [messagesTableView footerEndRefreshing];
+        if (appDelegate.firstUpdateTime!=nil)
+        {
+            [self loadMoreMessagesFromFooter];
+        }
+        else
+        {
+            [messagesTableView footerEndRefreshing];
+        }
     });
 }
+
+- (void)loadMoreMessagesFromFooter
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableArray *subQueries=[[NSMutableArray alloc]init];
+        
+        // if the user is in the range of channel, add query constraint of the channel
+        for (Channel *channel in appDelegate.myChannelList)
+        {
+            PFQuery *query=[PFQuery queryWithClassName:@"Message"];
+            [query whereKey:@"channelID" equalTo:channel.channelID];
+            [subQueries addObject:query];
+        }
+        
+        if (subQueries.count>0)
+        {
+            PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+            [query whereKey:@"updatedAt" lessThan:appDelegate.firstUpdateTime];
+            [query whereKey:@"location" nearGeoPoint:appDelegate.currentLocation withinKilometers:MESSAGE_RANGE];
+            [query orderByDescending:@"updatedAt"];
+            query.limit=MESSAGES_PER_REQUEST;
+            
+            NSArray *messages=[query findObjects];
+            
+            for (PFObject *object in messages)
+            {
+                query=[PFQuery queryWithClassName:@"User"];
+                User *sender=[[User alloc]initWithPFObject:[query getObjectWithId:object[@"senderID"]]];
+                
+                Message *message=[[Message alloc]initWithPFObject:object
+                                                           sender:sender
+                                                          channel:[appDelegate findChannelFromMyChannelList:object[@"channelID"]]];
+                [appDelegate.messageList addObject:message];
+            }
+            
+            if (messages.count>0)
+            {
+                PFObject *object=[messages lastObject];
+                appDelegate.firstUpdateTime=object.updatedAt;
+            }
+            
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [messagesTableView reloadData];
+            [messagesTableView footerEndRefreshing];
+        });
+    });
+}
+
 
 @end

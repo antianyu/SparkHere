@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SparkHere/ViewControllers/MessagesViewController.m"
-            timestampString = "429796755.446249"
+            timestampString = "429886400.998498"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270">
+            startingLineNumber = "328"
+            endingLineNumber = "328">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -360,11 +360,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SparkHere/AppDelegate.m"
-            timestampString = "429827615.969767"
+            timestampString = "429886400.998498"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "422"
-            endingLineNumber = "422"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
             landmarkName = "-getLocation"
             landmarkType = "5">
          </BreakpointContent>
@@ -488,11 +488,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SparkHere/AppDelegate.m"
-            timestampString = "429802311.613624"
+            timestampString = "429886400.998498"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "390"
-            endingLineNumber = "390"
+            startingLineNumber = "397"
+            endingLineNumber = "397"
             landmarkName = "-constructListsFromMessageVC:tableView:tabBarItem:"
             landmarkType = "5">
          </BreakpointContent>
@@ -552,11 +552,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SparkHere/AppDelegate.m"
-            timestampString = "429827615.969767"
+            timestampString = "429886400.998498"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "410"
-            endingLineNumber = "410"
+            startingLineNumber = "417"
+            endingLineNumber = "417"
             landmarkName = "-showUIAlertViewWithTitle:message:delegate:"
             landmarkType = "5">
          </BreakpointContent>
