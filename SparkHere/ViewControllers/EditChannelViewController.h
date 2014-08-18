@@ -12,15 +12,18 @@
 
 @interface EditChannelViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate,  UIImagePickerControllerDelegate, PassIntDelegate>
 
+@property (strong, nonatomic) IBOutlet UILabel *channelNameLabel;
 @property (strong, nonatomic) IBOutlet UITextField *channelNameTextField;
+@property (strong, nonatomic) IBOutlet UILabel *privilegeLabel;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *privilegeSegmentedControl;
+@property (strong, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (strong, nonatomic) IBOutlet UIButton *categoryButton;
-@property (strong, nonatomic) IBOutlet UIButton *chooseLogoButton;
+@property (strong, nonatomic) IBOutlet UILabel *logoLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UITextView *descriptionTextView;
 
 - (IBAction)categoryButtonClicked:(id)sender;
-- (IBAction)chooseLogoButtonClicked:(id)sender;
 
 @property (strong, nonatomic) Channel *channel;
 @property BOOL editChannel;

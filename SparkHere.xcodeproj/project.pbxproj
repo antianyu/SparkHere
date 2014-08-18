@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		55209C9119A28D0900C80727 /* MyProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55209C8F19A28D0900C80727 /* MyProfileTableViewCell.m */; };
+		55209C9219A28D0900C80727 /* MyProfileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55209C9019A28D0900C80727 /* MyProfileTableViewCell.xib */; };
+		55209C9419A2B6DE00C80727 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55209C9319A2B6DE00C80727 /* images.xcassets */; };
 		5551D2D419915647005D4153 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D2D319915647005D4153 /* Foundation.framework */; };
 		5551D2D619915647005D4153 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D2D519915647005D4153 /* CoreGraphics.framework */; };
 		5551D2D819915647005D4153 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D2D719915647005D4153 /* UIKit.framework */; };
 		5551D2DE19915648005D4153 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5551D2DC19915648005D4153 /* InfoPlist.strings */; };
 		5551D2E019915648005D4153 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D2DF19915648005D4153 /* main.m */; };
 		5551D2E419915648005D4153 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D2E319915648005D4153 /* AppDelegate.m */; };
-		5551D2E619915648005D4153 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5551D2E519915648005D4153 /* Images.xcassets */; };
 		5551D2ED19915648005D4153 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D2EC19915648005D4153 /* XCTest.framework */; };
 		5551D2EE19915648005D4153 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D2D319915647005D4153 /* Foundation.framework */; };
 		5551D2EF19915648005D4153 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D2D719915647005D4153 /* UIKit.framework */; };
@@ -82,8 +84,6 @@
 		5551D3F919915C34005D4153 /* MessagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3C919915C34005D4153 /* MessagesViewController.xib */; };
 		5551D3FA19915C34005D4153 /* MyChannelsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D3CB19915C34005D4153 /* MyChannelsViewController.m */; };
 		5551D3FB19915C34005D4153 /* MyChannelsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3CC19915C34005D4153 /* MyChannelsViewController.xib */; };
-		5551D3FC19915C34005D4153 /* MyPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D3CE19915C34005D4153 /* MyPostsViewController.m */; };
-		5551D3FD19915C34005D4153 /* MyPostsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3CF19915C34005D4153 /* MyPostsViewController.xib */; };
 		5551D3FE19915C34005D4153 /* MyProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D3D119915C34005D4153 /* MyProfileViewController.m */; };
 		5551D3FF19915C34005D4153 /* MyProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3D219915C34005D4153 /* MyProfileViewController.xib */; };
 		5551D40019915C34005D4153 /* PublishMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D3D419915C34005D4153 /* PublishMessageViewController.m */; };
@@ -105,6 +105,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		55209C8E19A28D0900C80727 /* MyProfileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProfileTableViewCell.h; sourceTree = "<group>"; };
+		55209C8F19A28D0900C80727 /* MyProfileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyProfileTableViewCell.m; sourceTree = "<group>"; };
+		55209C9019A28D0900C80727 /* MyProfileTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyProfileTableViewCell.xib; sourceTree = "<group>"; };
+		55209C9319A2B6DE00C80727 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		5551D2D019915647005D4153 /* SparkHere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkHere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5551D2D319915647005D4153 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5551D2D519915647005D4153 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -115,7 +119,6 @@
 		5551D2E119915648005D4153 /* SparkHere-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SparkHere-Prefix.pch"; sourceTree = "<group>"; };
 		5551D2E219915648005D4153 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5551D2E319915648005D4153 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5551D2E519915648005D4153 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5551D2EB19915648005D4153 /* SparkHereTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparkHereTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5551D2EC19915648005D4153 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5551D2F419915648005D4153 /* SparkHereTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SparkHereTests-Info.plist"; sourceTree = "<group>"; };
@@ -222,9 +225,6 @@
 		5551D3CA19915C34005D4153 /* MyChannelsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyChannelsViewController.h; sourceTree = "<group>"; };
 		5551D3CB19915C34005D4153 /* MyChannelsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyChannelsViewController.m; sourceTree = "<group>"; };
 		5551D3CC19915C34005D4153 /* MyChannelsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyChannelsViewController.xib; sourceTree = "<group>"; };
-		5551D3CD19915C34005D4153 /* MyPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPostsViewController.h; sourceTree = "<group>"; };
-		5551D3CE19915C34005D4153 /* MyPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPostsViewController.m; sourceTree = "<group>"; };
-		5551D3CF19915C34005D4153 /* MyPostsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyPostsViewController.xib; sourceTree = "<group>"; };
 		5551D3D019915C34005D4153 /* MyProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProfileViewController.h; sourceTree = "<group>"; };
 		5551D3D119915C34005D4153 /* MyProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyProfileViewController.m; sourceTree = "<group>"; };
 		5551D3D219915C34005D4153 /* MyProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyProfileViewController.xib; sourceTree = "<group>"; };
@@ -320,7 +320,7 @@
 			children = (
 				5551D2E219915648005D4153 /* AppDelegate.h */,
 				5551D2E319915648005D4153 /* AppDelegate.m */,
-				5551D2E519915648005D4153 /* Images.xcassets */,
+				55209C9319A2B6DE00C80727 /* images.xcassets */,
 				5551D36019915AD3005D4153 /* Support Classes */,
 				5551D35D19915ABE005D4153 /* Delegates */,
 				5551D39B19915C34005D4153 /* ViewControllers */,
@@ -386,12 +386,15 @@
 				5551D36919915AD3005D4153 /* MapViewAnnotation.m */,
 				5551D36A19915AD3005D4153 /* MBProgressHUD.h */,
 				5551D36B19915AD3005D4153 /* MBProgressHUD.m */,
-				5551D36319915AD3005D4153 /* ChannelTableViewCell.h */,
-				5551D36419915AD3005D4153 /* ChannelTableViewCell.m */,
-				5551D36519915AD3005D4153 /* ChannelTableViewCell.xib */,
 				5551D36E19915AD3005D4153 /* MessageTableViewCell.h */,
 				5551D36F19915AD3005D4153 /* MessageTableViewCell.m */,
 				5551D37019915AD3005D4153 /* MessageTableViewCell.xib */,
+				5551D36319915AD3005D4153 /* ChannelTableViewCell.h */,
+				5551D36419915AD3005D4153 /* ChannelTableViewCell.m */,
+				5551D36519915AD3005D4153 /* ChannelTableViewCell.xib */,
+				55209C8E19A28D0900C80727 /* MyProfileTableViewCell.h */,
+				55209C8F19A28D0900C80727 /* MyProfileTableViewCell.m */,
+				55209C9019A28D0900C80727 /* MyProfileTableViewCell.xib */,
 				5551D38419915AD3005D4153 /* TextInputError.h */,
 				5551D38519915AD3005D4153 /* UIAlertViewOperation.h */,
 			);
@@ -471,9 +474,6 @@
 				5551D3D019915C34005D4153 /* MyProfileViewController.h */,
 				5551D3D119915C34005D4153 /* MyProfileViewController.m */,
 				5551D3D219915C34005D4153 /* MyProfileViewController.xib */,
-				5551D3CD19915C34005D4153 /* MyPostsViewController.h */,
-				5551D3CE19915C34005D4153 /* MyPostsViewController.m */,
-				5551D3CF19915C34005D4153 /* MyPostsViewController.xib */,
 				5551D3B419915C34005D4153 /* EditProfileViewController.h */,
 				5551D3B519915C34005D4153 /* EditProfileViewController.m */,
 				5551D3B619915C34005D4153 /* EditProfileViewController.xib */,
@@ -579,19 +579,19 @@
 				5551D40119915C34005D4153 /* PublishMessageViewController.xib in Resources */,
 				5551D39019915AD3005D4153 /* MessageTableViewCell.xib in Resources */,
 				5551D3E519915C34005D4153 /* ChooseNewSuperAdminViewController.xib in Resources */,
+				55209C9219A28D0900C80727 /* MyProfileTableViewCell.xib in Resources */,
 				5551D3F219915C34005D4153 /* LoginViewController.xib in Resources */,
 				5551D40519915C34005D4153 /* SettingsViewController.xib in Resources */,
+				55209C9419A2B6DE00C80727 /* images.xcassets in Resources */,
 				5551D3DF19915C34005D4153 /* AutoLoginViewController.xib in Resources */,
 				5551D3EB19915C34005D4153 /* EditChannelViewController.xib in Resources */,
 				5551D3E919915C34005D4153 /* DiscoverListsViewController.xib in Resources */,
 				5551D3221991593A005D4153 /* Category.plist in Resources */,
 				5551D3FB19915C34005D4153 /* MyChannelsViewController.xib in Resources */,
-				5551D2E619915648005D4153 /* Images.xcassets in Resources */,
 				5551D3E319915C34005D4153 /* ChooseCategoryViewController.xib in Resources */,
 				5551D3FF19915C34005D4153 /* MyProfileViewController.xib in Resources */,
 				5551D3E119915C34005D4153 /* ChannelDetailViewController.xib in Resources */,
 				5551D3F719915C34005D4153 /* MessageDetailViewController.xib in Resources */,
-				5551D3FD19915C34005D4153 /* MyPostsViewController.xib in Resources */,
 				5551D3EF19915C34005D4153 /* HelpViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -627,6 +627,7 @@
 				5551D3EE19915C34005D4153 /* HelpViewController.m in Sources */,
 				5551D2E419915648005D4153 /* AppDelegate.m in Sources */,
 				5551D38919915AD3005D4153 /* ChannelTableViewCell.m in Sources */,
+				55209C9119A28D0900C80727 /* MyProfileTableViewCell.m in Sources */,
 				5551D3F119915C34005D4153 /* LoginViewController.m in Sources */,
 				5551D39719915AD3005D4153 /* UIScrollView+MJRefresh.m in Sources */,
 				5551D3E219915C34005D4153 /* ChooseCategoryViewController.m in Sources */,
@@ -642,7 +643,6 @@
 				5551D3DE19915C34005D4153 /* AutoLoginViewController.m in Sources */,
 				5551D3F619915C34005D4153 /* MessageDetailViewController.m in Sources */,
 				5551D3F319915C34005D4153 /* MainViewController.m in Sources */,
-				5551D3FC19915C34005D4153 /* MyPostsViewController.m in Sources */,
 				5551D3DC19915C34005D4153 /* AboutViewController.m in Sources */,
 				5551D39319915AD3005D4153 /* MJRefreshConst.m in Sources */,
 				5551D39219915AD3005D4153 /* MJRefreshBaseView.m in Sources */,

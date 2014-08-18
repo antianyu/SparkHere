@@ -10,25 +10,25 @@
 
 extern const double MESSAGE_RANGE;
 
-extern const int MAXIMUM_HEIGHT;
-extern const int VIEW_WIDTH;
+extern const double MAXIMUM_HEIGHT;
+extern const double VIEW_WIDTH;
 
-extern const int TITLE_HEIGHT;
+extern const double TITLE_HEIGHT;
 
-extern const int LABEL_ORIGIN_X;
-extern const int LABEL_WIDTH;
-extern const int LABEL_HEIGHT;
+extern const double LABEL_ORIGIN_X;
+extern const double LABEL_WIDTH;
+extern const double LABEL_HEIGHT;
 
-extern const int IMAGE_ORIGIN_X;
-extern const int IMAGE_WIDTH;
+extern const double IMAGE_ORIGIN_X;
+extern const double IMAGE_WIDTH;
 
-extern const int MAP_ORIGIN_X;
-extern const int MAP_WIDTH;
-extern const int MAP_HEIGHT;
-extern const int MAP_RANGE;
+extern const double MAP_ORIGIN_X;
+extern const double MAP_WIDTH;
+extern const double MAP_HEIGHT;
+extern const double MAP_RANGE;
 
-extern const int INTERVAL;
-extern const int PADDING;
+extern const double INTERVAL;
+extern const double PADDING;
 
 extern const int REQUEST_TIMEOUT;
 extern const int LOCATION_UPDATE_INTERVAL;

@@ -7,24 +7,28 @@
 //
 
 #import "MessageTableViewCell.h"
-#import "Constants.h"
+#import "AppDelegate.h"
 
 @implementation MessageTableViewCell
 {
     UILabel *contentLabel;
+    AppDelegate *appDelegate;
 }
 
 @synthesize senderLabel;
 @synthesize channelLabel;
 @synthesize updateLabel;
+@synthesize locationLabel;
 @synthesize senderLogoImageView;
 
 - (void)awakeFromNib
 {
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self setBackgroundColor:[UIColor clearColor]];
-    [senderLabel setTextColor:[UIColor whiteColor]];
-    [channelLabel setTextColor:[UIColor lightGrayColor]];
-    [updateLabel setTextColor:[UIColor lightGrayColor]];
+    [senderLabel setTextColor:appDelegate.majorColor];
+    [channelLabel setTextColor:appDelegate.detailColor];
+    [updateLabel setTextColor:appDelegate.detailColor];
+    [locationLabel setTextColor:appDelegate.majorColor];
     
 //    self.layer.cornerRadius=5;
 //    self.layer.shadowOpacity=0.8;
@@ -35,15 +39,16 @@
 }
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize
-{
-    int positionY=58;
-    
+{    
     senderLabel.font=[UIFont systemFontOfSize:fontSize-6];
     senderLogoImageView.image=message.sender.logo;
     senderLabel.text=message.sender.nickname;
     
     channelLabel.font=[UIFont systemFontOfSize:fontSize-8];
     channelLabel.text=[@"via: " stringByAppendingString:message.channel.channelName];
+    
+    locationLabel.font=[UIFont systemFontOfSize:fontSize-6];
+    locationLabel.text=message.area;
     
     updateLabel.font=[UIFont systemFontOfSize:fontSize-8];
     
@@ -57,35 +62,34 @@
     {
         [formatter setDateFormat:@"HH:mm a"];
         NSString *time = [formatter stringFromDate:message.updateAt];
-        updateLabel.text = [NSString stringWithFormat:@"Published at：Today %@", time];
+        updateLabel.text = [NSString stringWithFormat:@"Today %@", time];
     }
     else
     {
         formatter.dateFormat = @"dd/MM/yyyy HH:mm a";
         NSString *time = [formatter stringFromDate:message.updateAt];
-        updateLabel.text = [NSString stringWithFormat:@"Published at：%@", time];
+        updateLabel.text = [NSString stringWithFormat:@"%@", time];
     }
     
     if (message.content.length>0)
     {
         contentLabel=[[UILabel alloc]init];
         contentLabel.font=[UIFont systemFontOfSize:fontSize];
-        [contentLabel setTextColor:[UIColor whiteColor]];
         contentLabel.text=message.content;
         contentLabel.numberOfLines=0;
         contentLabel.lineBreakMode=NSLineBreakByWordWrapping;
+        contentLabel.textColor=appDelegate.descriptionColor;
         
         CGSize constraint=CGSizeMake(LABEL_WIDTH, MAXIMUM_HEIGHT);
         NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:contentLabel.font, NSFontAttributeName, nil];
         
         CGSize actualSize=[message.content boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         
-        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, positionY, LABEL_WIDTH, actualSize.height);
-        positionY+=actualSize.height;
+        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, self.frame.size.height, LABEL_WIDTH, actualSize.height);
         [self addSubview:contentLabel];
        
         CGRect frame=self.frame;
-        frame.size.height+=actualSize.height;
+        frame.size.height+=actualSize.height+INTERVAL;
         self.frame=frame;
     }
     
@@ -93,7 +97,7 @@
     {
         CGRect frame;
         double imageHeight=IMAGE_WIDTH*message.image.size.height/message.image.size.width;
-        frame=CGRectMake(IMAGE_ORIGIN_X, positionY+INTERVAL, IMAGE_WIDTH, imageHeight);
+        frame=CGRectMake(IMAGE_ORIGIN_X, self.frame.size.height, IMAGE_WIDTH, imageHeight);
         
         UIImageView *imageView=[[UIImageView alloc]initWithFrame:frame];
         imageView.image=message.image;

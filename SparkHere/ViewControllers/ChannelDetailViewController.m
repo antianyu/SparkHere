@@ -65,10 +65,13 @@
     
     buttons=[[NSMutableArray alloc]init];
     
+    titleLabel.textColor=appDelegate.majorColor;
+    followersLabel.textColor=appDelegate.detailColor;
+    
     [descriptionLabel setNumberOfLines:0];
     descriptionLabel.font=[UIFont systemFontOfSize:17];
     descriptionLabel.lineBreakMode=NSLineBreakByWordWrapping;
-    descriptionLabel.textColor=[UIColor whiteColor];
+    descriptionLabel.textColor=appDelegate.descriptionColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -121,7 +124,7 @@
          
          titleLabel.text=channel.channelName;
          
-         followersLabel.text=[NSString stringWithFormat:@"Followers: %d", channel.followersNumber];
+         followersLabel.text=[self constructFollowersString:channel.followersNumber];
          
          [buttons removeAllObjects];
          if (privilege>=3)
@@ -143,12 +146,12 @@
          
          CGSize actualSize=[description boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
          
-         descriptionLabel.frame=CGRectMake(20, 150, self.view.frame.size.width-40, actualSize.height);
+         descriptionLabel.frame=CGRectMake(20, 210, self.view.frame.size.width-40, actualSize.height);
          
          scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+170);
          [scrollView addSubview:descriptionLabel];
          
-         [appDelegate setDefaultViewStyle:followButton];
+         [appDelegate setButtonStyle:followButton color:appDelegate.majorColor];
          if (isFollowing)
          {
              [followButton setTitle:@"Following" forState:UIControlStateNormal];
@@ -371,7 +374,6 @@
         self.hidesBottomBarWhenPushed=YES;
         [self.navigationController pushViewController:controller animated:YES];
     }
-
 }
 
 - (void)showDeleteChannelWaitingView
@@ -417,6 +419,69 @@
           }];
          
      }];
+}
+
+- (NSString *)constructFollowersString:(long long)followersNumber
+{
+    NSString *result;
+    if (followersNumber<1000)
+    {
+        result=[NSString stringWithFormat:@"%lld followers", followersNumber];
+    }
+    else if (followersNumber<10000)
+    {
+        int magnitude=10000;
+        long long quotient=followersNumber/(magnitude/10);
+        long long remainder=followersNumber%(magnitude/10);
+        remainder/=(magnitude/100);
+        if (remainder==0)
+        {
+            result=[NSString stringWithFormat:@"%lldK followers", quotient];
+        }
+        else
+        {
+            result=[NSString stringWithFormat:@"%lld.%lldK followers", quotient, remainder];
+        }
+    }
+    else if (followersNumber<1000000)
+    {
+        result=[NSString stringWithFormat:@"%lldK followers", followersNumber/1000];
+    }
+    else if (followersNumber<10000000)
+    {
+        int magnitude=10000000;
+        long long quotient=followersNumber/(magnitude/10);
+        long long remainder=followersNumber%(magnitude/10);
+        remainder/=(magnitude/100);
+        if (remainder==0)
+        {
+            result=[NSString stringWithFormat:@"%lldM followers", quotient];
+        }
+        else
+        {
+            result=[NSString stringWithFormat:@"%lld.%lldM followers", quotient, remainder];
+        }
+    }
+    else if (followersNumber<1000000000)
+    {
+        result=[NSString stringWithFormat:@"%lldM followers", followersNumber/1000000];
+    }
+    else
+    {
+        int magnitude=1000000000;
+        long long quotient=followersNumber/magnitude;
+        long long remainder=followersNumber%magnitude;
+        remainder/=(magnitude/10);
+        if (remainder==0)
+        {
+            result=[NSString stringWithFormat:@"%lldB followers", quotient];
+        }
+        else
+        {
+            result=[NSString stringWithFormat:@"%lld.%lldB followers", quotient, remainder];
+        }
+    }
+    return result;
 }
 
 @end

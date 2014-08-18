@@ -28,10 +28,13 @@
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     logoImageView.image=appDelegate.settings.defaultLogo;
     nicknameLabel.text=appDelegate.settings.defaultNickname;
+    nicknameLabel.textColor=appDelegate.majorColor;
     
     appDelegate.refreshMessageList=YES;
     appDelegate.refreshMyChannelList=YES;
@@ -48,4 +51,9 @@
     [self presentViewController:controller animated:YES completion:nil];    
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
 @end

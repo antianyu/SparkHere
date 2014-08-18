@@ -30,11 +30,15 @@
     NSArray *categoryList;
 }
 
+@synthesize channelNameLabel;
 @synthesize channelNameTextField;
+@synthesize privilegeLabel;
 @synthesize privilegeSegmentedControl;
+@synthesize categoryLabel;
 @synthesize categoryButton;
-@synthesize chooseLogoButton;
+@synthesize logoLabel;
 @synthesize logoImageView;
+@synthesize descriptionLabel;
 @synthesize descriptionTextView;
 @synthesize channel;
 @synthesize editChannel;
@@ -70,8 +74,19 @@
     
     [appDelegate setDefaultViewStyle:channelNameTextField];
     [appDelegate setDefaultViewStyle:descriptionTextView];
-    [appDelegate setDefaultViewStyle:categoryButton];
-    [appDelegate setDefaultViewStyle:chooseLogoButton];
+    [appDelegate setButtonStyle:categoryButton color:appDelegate.majorColor];
+    
+    channelNameLabel.textColor=appDelegate.majorColor;
+    privilegeLabel.textColor=appDelegate.majorColor;
+    categoryLabel.textColor=appDelegate.majorColor;
+    logoLabel.textColor=appDelegate.majorColor;
+    descriptionLabel.textColor=appDelegate.majorColor;
+    privilegeSegmentedControl.tintColor=appDelegate.majorColor;
+    
+    logoImageView.userInteractionEnabled=YES;
+    UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                             action:@selector(chooseLogo)];
+    [logoImageView addGestureRecognizer:singleTap];
     
     categoryButton.titleLabel.textAlignment=NSTextAlignmentCenter;
     [categoryButton setTitle:[categoryList objectAtIndex:0] forState:UIControlStateNormal];
@@ -98,7 +113,6 @@
     [super viewWillDisappear:animated];
     [progressHUD removeFromSuperview];
 }
-
 
 - (IBAction)viewTouchDown:(id)sender
 {
@@ -154,18 +168,6 @@
     self.navigationItem.backBarButtonItem=backButton;
     
     [self.navigationController pushViewController:controller animated:YES];    
-}
-
-- (IBAction)chooseLogoButtonClicked:(id)sender
-{
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-    operation=UIAlertViewOperationChooseImage;
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
-                                                 message:@"Please select a way to choose logo"
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:@"From albums", @"From camera", nil];
-    [alert show];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -266,6 +268,18 @@
     CGRect rect=CGRectMake(0, 64, width, height);
     self.view.frame=rect;
     [UIView commitAnimations];
+}
+
+- (void)chooseLogo
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    operation=UIAlertViewOperationChooseImage;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

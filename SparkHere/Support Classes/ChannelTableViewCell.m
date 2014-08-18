@@ -7,8 +7,12 @@
 //
 
 #import "ChannelTableViewCell.h"
+#import "AppDelegate.h"
 
 @implementation ChannelTableViewCell
+{
+    AppDelegate *appDelegate;
+}
 
 @synthesize channelNameLabel;
 @synthesize followersLabel;
@@ -16,9 +20,10 @@
 
 - (void)awakeFromNib
 {
+    appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self setBackgroundColor:[UIColor clearColor]];
-    [channelNameLabel setTextColor:[UIColor whiteColor]];
-    [followersLabel setTextColor:[UIColor lightGrayColor]];
+    [channelNameLabel setTextColor:appDelegate.majorColor];
+    [followersLabel setTextColor:appDelegate.detailColor];
 }
 
 - (void)setChannel:(Channel *)channel fontSize:(int)fontSize

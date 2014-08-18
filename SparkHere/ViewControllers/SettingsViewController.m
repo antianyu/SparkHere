@@ -22,8 +22,10 @@
     BOOL receiveMessage;
 }
 
+@synthesize receivePromptLabel;
 @synthesize receiveMessagesLabel;
 @synthesize receiveMessageSwitch;
+@synthesize fontSizeLabel;
 @synthesize fontSizeSegmentedControl;
 
 - (void)viewDidLoad
@@ -55,6 +57,11 @@
         default:
             break;
     }
+    
+    receivePromptLabel.textColor=appDelegate.majorColor;
+    receiveMessagesLabel.textColor=appDelegate.majorColor;
+    fontSizeLabel.textColor=appDelegate.majorColor;
+    fontSizeSegmentedControl.tintColor=appDelegate.majorColor;
     
     [receiveMessageSwitch setOn:appDelegate.settings.receiveMessage];
     receiveMessage=appDelegate.settings.receiveMessage;

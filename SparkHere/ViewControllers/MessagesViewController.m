@@ -143,6 +143,11 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         appDelegate.loadMoreMessages=YES;
+        if (appDelegate.lastUpdateTime==nil)
+        {
+            appDelegate.refreshMyChannelList=YES;
+            appDelegate.refreshMessageList=YES;
+        }
         [appDelegate constructListsFromMessageVC:YES tableView:messagesTableView tabBarItem:self.tabBarItem];
     });
 }

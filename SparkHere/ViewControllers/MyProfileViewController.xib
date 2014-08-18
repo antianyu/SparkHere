@@ -6,12 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyProfileViewController">
             <connections>
-                <outlet property="aboutButton" destination="PCp-Ni-LXF" id="9t2-8l-xmc"/>
-                <outlet property="editProfileButton" destination="5UH-22-RGo" id="N69-4S-37p"/>
-                <outlet property="helpButton" destination="UXz-K1-pWu" id="Sfp-Wt-0An"/>
-                <outlet property="logoutButton" destination="gKA-Wb-a46" id="egi-ZB-ait"/>
-                <outlet property="myPostsButton" destination="ZDS-SS-61K" id="3iy-gY-Lb1"/>
-                <outlet property="settingsButton" destination="Ltk-iO-ADE" id="Uf3-pK-oHc"/>
+                <outlet property="postsTableView" destination="kaP-aF-7Go" id="33S-fa-VrZ"/>
+                <outlet property="searchDisplayController" destination="0Ic-XB-sX5" id="hVp-T0-LWq"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -20,70 +16,36 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gKA-Wb-a46">
-                    <rect key="frame" x="40" y="40" width="100" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Logout">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="kaP-aF-7Go">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <searchBar key="tableHeaderView" contentMode="redraw" id="z2H-9X-Cao">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <outlet property="delegate" destination="-1" id="4qr-w4-QpR"/>
+                        </connections>
+                    </searchBar>
                     <connections>
-                        <action selector="logoutButtonClicked:" destination="-1" eventType="touchUpInside" id="42t-Bu-vWd"/>
+                        <outlet property="dataSource" destination="-1" id="jci-50-yzq"/>
+                        <outlet property="delegate" destination="-1" id="4mz-Te-Bmj"/>
                     </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZDS-SS-61K">
-                    <rect key="frame" x="180" y="40" width="100" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="My Posts">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="myPostsButtonClicked:" destination="-1" eventType="touchUpInside" id="joB-lZ-TvD"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5UH-22-RGo">
-                    <rect key="frame" x="40" y="180" width="100" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Edit Profile">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="editProfileButtonClicked:" destination="-1" eventType="touchUpInside" id="HAX-7U-1jP"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ltk-iO-ADE">
-                    <rect key="frame" x="180" y="180" width="100" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Application Settings">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="settingsButtonClicked:" destination="-1" eventType="touchUpInside" id="eQZ-TX-0Jv"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UXz-K1-pWu">
-                    <rect key="frame" x="40" y="320" width="100" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Help">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="helpButtonClicked:" destination="-1" eventType="touchUpInside" id="8gW-pU-rhk"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="PCp-Ni-LXF">
-                    <rect key="frame" x="180" y="320" width="100" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="About">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="aboutButtonClicked:" destination="-1" eventType="touchUpInside" id="aT9-Za-J3i"/>
-                    </connections>
-                </button>
+                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
+        <searchDisplayController id="0Ic-XB-sX5">
+            <connections>
+                <outlet property="delegate" destination="-1" id="pGZ-kA-oUn"/>
+                <outlet property="searchBar" destination="z2H-9X-Cao" id="k2J-7u-EmN"/>
+                <outlet property="searchContentsController" destination="-1" id="B6j-kk-aSM"/>
+                <outlet property="searchResultsDataSource" destination="-1" id="MyC-JR-1CO"/>
+                <outlet property="searchResultsDelegate" destination="-1" id="kTI-RS-82k"/>
+            </connections>
+        </searchDisplayController>
     </objects>
 </document>

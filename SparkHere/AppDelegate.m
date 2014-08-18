@@ -28,6 +28,9 @@
 @synthesize backgroundImage;
 @synthesize settings;
 @synthesize currentLocation;
+@synthesize majorColor;
+@synthesize detailColor;
+@synthesize descriptionColor;
 
 @synthesize is4Inch;
 @synthesize refreshMessageList;
@@ -144,7 +147,7 @@
     loadMoreMessages=NO;
     refreshMyChannelList=NO;
     refreshChannelDetail=NO;
-    refreshPostsList=NO;
+    refreshPostsList=YES;
     
     float width=[UIScreen mainScreen].currentMode.size.width;
     float height=[UIScreen mainScreen].currentMode.size.height;
@@ -162,6 +165,10 @@
 
 - (void)initView
 {
+    majorColor=[UIColor colorWithRed:0/255.0 green:117/255.0 blue:169/255.0 alpha:1];
+    detailColor=[UIColor darkGrayColor];
+    descriptionColor=[UIColor colorWithRed:43/255.0 green:43/255.0 blue:43/255.0 alpha:1];
+    
     // Status Bar
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
@@ -188,21 +195,33 @@
                                     barMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance] setTintColor:[UIColor whiteColor]];
     
+    // Search Bar
+    [[UISearchBar appearance] setTintColor:majorColor];
+    
     // UITextField
-    [[UITextField appearance] setTextColor:[UIColor whiteColor]];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+    [[UITextField appearance] setTextColor:majorColor];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:majorColor];
     
     // UITextView
-    [[UITextView appearance] setTextColor:[UIColor whiteColor]];
+    [[UITextView appearance] setTextColor:majorColor];
 }
 
 - (void)setDefaultViewStyle:(UIView *)view
 {
-    view.tintColor=[UIColor whiteColor];
+    view.tintColor=majorColor;
     view.backgroundColor=[UIColor clearColor];
-    view.layer.borderColor=[[UIColor whiteColor]CGColor];
+    view.layer.borderColor=majorColor.CGColor;
     view.layer.borderWidth=1.5;
     view.layer.cornerRadius=5;
+}
+
+- (void)setButtonStyle:(UIButton *)button color:(UIColor *)color
+{
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    button.backgroundColor=color;
+    button.layer.borderColor=color.CGColor;
+    button.layer.borderWidth=1.5;
+    button.layer.cornerRadius=5;
 }
 
 - (void)setCurrentUser:(PFObject *)object
@@ -241,8 +260,6 @@
         tempLoadMoreMessages=NO;
     }
     
-    NSLog(@"FromMessageVC:%@\nrefreshMyChannelList:%@\nrefreshMessageList:%@\nloadMoreMessages:%@",fromMessageVC?@"YES":@"NO",refreshMyChannelList?@"YES":@"NO",refreshMessageList?@"YES":@"NO",loadMoreMessages?@"YES":@"NO");
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         if (tempRefreshMyChannelList)
@@ -262,7 +279,7 @@
                 Channel *channel=[[Channel alloc]initWithPFObject:[channelQuery getObjectWithId:object[@"channelID"]]];
                 [myChannelList addObject:channel];
             }
-            NSLog(@"%d objects in channel list", myChannelList.count);
+            NSLog(@"%lu objects in channel list", (unsigned long)myChannelList.count);
         }
         
         if (!tempRefreshMessageList && !tempLoadMoreMessages)
@@ -337,10 +354,10 @@
                 {                    
                     PFObject *object=[messages lastObject];
                     firstUpdateTime=object.updatedAt;
+                    lastUpdateTime=[NSDate date];
                 }
             }
-            NSLog(@"%d objects in message list", messageList.count);
-            lastUpdateTime=[NSDate date];
+            NSLog(@"%lu objects in message list", (unsigned long)messageList.count);
         }
         
         else if (tempLoadMoreMessages)
@@ -377,9 +394,9 @@
                                                               channel:[self findChannelFromMyChannelList:object[@"channelID"]]];
                     [messageList insertObject:message atIndex:0];
                 }
+                lastUpdateTime=[NSDate date];
             }
-            NSLog(@"%d objects in load list", messageList.count);
-            lastUpdateTime=[NSDate date];
+            NSLog(@"%lu objects in load list", (unsigned long)messageList.count);
         }
         
         // remove badge

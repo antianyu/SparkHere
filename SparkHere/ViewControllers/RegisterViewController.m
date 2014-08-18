@@ -30,11 +30,14 @@
     TextInputError inputError;
 }
 
+@synthesize usernameLabel;
 @synthesize usernameTextField;
+@synthesize passwordLabel;
 @synthesize passwordTextField;
+@synthesize confirmPwdLabel;
 @synthesize confirmPwdTextField;
+@synthesize nicknameLabel;
 @synthesize nicknameTextField;
-@synthesize chooseLogoButton;
 @synthesize logoImageView;
 
 - (void)viewDidLoad
@@ -54,15 +57,27 @@
     UIBarButtonItem *doneButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=doneButtonItem;
     
+    usernameLabel.textColor=appDelegate.majorColor;
+    passwordLabel.textColor=appDelegate.majorColor;
+    confirmPwdLabel.textColor=appDelegate.majorColor;
+    nicknameLabel.textColor=appDelegate.majorColor;
+    
     [appDelegate setDefaultViewStyle:usernameTextField];
     [appDelegate setDefaultViewStyle:passwordTextField];
     [appDelegate setDefaultViewStyle:confirmPwdTextField];
     [appDelegate setDefaultViewStyle:nicknameTextField];
-    [appDelegate setDefaultViewStyle:chooseLogoButton];
+    
+    logoImageView.userInteractionEnabled=YES;
+    UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                             action:@selector(chooseLogo)];
+    [logoImageView addGestureRecognizer:singleTap];
     
     [usernameTextField becomeFirstResponder];
     
     user=nil;
+    
+    inputError=TextInputErrorNone;
+    operation=UIAlertViewOperationNone;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -84,18 +99,7 @@
 - (IBAction)viewTouchDown:(id)sender
 {    
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-}
-
-- (IBAction)chooseLogoButtonClicked:(id)sender
-{
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-    operation=UIAlertViewOperationChooseImage;
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
-                                                 message:@"Please select a way to choose logo"
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:@"From albums", @"From camera", nil];
-    [alert show];
+    [self resumeView];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -137,6 +141,64 @@
         [usernameTextField becomeFirstResponder];
     }
     return NO;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    NSTimeInterval animationDuration=0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    float width=self.view.frame.size.width;
+    float height=self.view.frame.size.height;
+    
+    if (textField==passwordTextField)
+    {
+        CGRect rect=CGRectMake(0, -18, width, height);
+        self.view.frame=rect;
+    }
+    else if (textField==confirmPwdTextField)
+    {
+        CGRect rect=CGRectMake(0, -85, width, height);
+        self.view.frame=rect;
+    }
+    else if (textField==nicknameTextField)
+    {
+        CGRect rect=CGRectMake(0, -152, width, height);
+        self.view.frame=rect;
+    }
+    
+    [UIView commitAnimations];
+    
+    return YES;
+}
+
+- (void)resumeView
+{
+    NSTimeInterval animationDuration=0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    float width=self.view.frame.size.width;
+    float height=self.view.frame.size.height;
+    
+    CGRect rect=CGRectMake(0, 64, width, height);
+    self.view.frame=rect;
+    [UIView commitAnimations];
+}
+
+- (void)chooseLogo
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    [self resumeView];
+    operation=UIAlertViewOperationChooseImage;
+    inputError=TextInputErrorNone;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
 }
 
 - (void)constructUser

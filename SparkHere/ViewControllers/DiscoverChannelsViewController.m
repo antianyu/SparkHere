@@ -124,7 +124,7 @@
         
         cell.textLabel.text=[categoryList objectAtIndex:indexPath.row];
         cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
-        [cell.textLabel setTextColor:[UIColor whiteColor]];
+        [cell.textLabel setTextColor:appDelegate.majorColor];
         [cell setBackgroundColor:[UIColor clearColor]];
         return cell;
     }
@@ -167,6 +167,16 @@
         
         [self.navigationController pushViewController:controller animated:YES];
     }
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
+
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar

@@ -10,8 +10,10 @@
 
 @interface SettingsViewController : UIViewController
 
+@property (strong, nonatomic) IBOutlet UILabel *receivePromptLabel;
 @property (strong, nonatomic) IBOutlet UILabel *receiveMessagesLabel;
 @property (strong, nonatomic) IBOutlet UISwitch *receiveMessageSwitch;
+@property (strong, nonatomic) IBOutlet UILabel *fontSizeLabel;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *fontSizeSegmentedControl;
 
 @end

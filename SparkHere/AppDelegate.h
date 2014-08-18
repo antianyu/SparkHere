@@ -33,6 +33,10 @@
 
 @property (strong, nonatomic) PFGeoPoint *currentLocation;
 
+@property (strong, nonatomic) UIColor *majorColor;
+@property (strong, nonatomic) UIColor *detailColor;
+@property (strong, nonatomic) UIColor *descriptionColor;
+
 @property (nonatomic) BOOL is4Inch;
 @property (atomic) BOOL refreshMessageList;
 @property (atomic) BOOL loadMoreMessages;
@@ -40,11 +44,12 @@
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
+- (void)setDefaultViewStyle:(UIView *)view;
+- (void)setButtonStyle:(UIButton *)button color:(UIColor *)color;
 - (void)setCurrentUser:(PFObject *)object;
 - (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem;
 - (Channel *)findChannelFromMyChannelList:(NSString *)channelID;
 - (void)getLocation;
-- (void)setDefaultViewStyle:(UIView *)view;
 - (void)showUIAlertViewWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate;
 
 @end

@@ -31,54 +31,29 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    NSString *helpString=@"Help\n\n"
+    NSString *helpString=@"FAQ:\n\n"
     
-    "This is help page!\n\n"
+    "1. How to register a new user?\n"
     
-    "This is help page!\n\n"
+    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n"
     
-    "This is help page!\n\n"
+    "2. How to register a new user?\n"
     
-    "This is help page!\n\n"
+    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n"
     
-    "This is help page!\n\n"
+    "3. How to register a new user?\n"
     
-    "This is help page!\n\n"
+    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n"
     
-    "This is help page!\n\n"
+    "4. How to register a new user?\n"
     
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n"
-    
-    "This is help page!\n\n";
+    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n";
     
     [helpLabel setNumberOfLines:0];
     helpLabel.font=[UIFont systemFontOfSize:17];
     helpLabel.lineBreakMode=NSLineBreakByWordWrapping;
     helpLabel.text=helpString;
+    helpLabel.textColor=appDelegate.majorColor;
     
     CGSize constraint=CGSizeMake(self.view.frame.size.width-40, 20000);
     NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:helpLabel.font, NSFontAttributeName, nil];

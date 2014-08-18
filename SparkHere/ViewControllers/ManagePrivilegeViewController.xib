@@ -7,7 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManagePrivilegeViewController">
             <connections>
                 <outlet property="memberTableView" destination="k9z-JN-EXE" id="zpv-pA-jJS"/>
-                <outlet property="searchDisplayController" destination="bq9-ai-Geh" id="5tE-5q-9lo"/>
+                <outlet property="searchDisplayController" destination="c5E-HP-CtQ" id="X7w-AP-Tkd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -20,14 +20,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" id="TcJ-sJ-qff">
+                    <searchBar key="tableHeaderView" contentMode="redraw" id="Fnn-Zn-YrX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <textInputTraits key="textInputTraits"/>
                         <connections>
-                            <outlet property="delegate" destination="-1" id="hBJ-Xg-JHz"/>
+                            <outlet property="delegate" destination="-1" id="bbH-AK-zdi"/>
                         </connections>
                     </searchBar>
                     <connections>
@@ -40,13 +38,13 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <searchDisplayController id="bq9-ai-Geh">
+        <searchDisplayController id="c5E-HP-CtQ">
             <connections>
-                <outlet property="delegate" destination="-1" id="lbs-SI-thR"/>
-                <outlet property="searchBar" destination="TcJ-sJ-qff" id="DBz-kJ-x9f"/>
-                <outlet property="searchContentsController" destination="-1" id="d5u-Eq-b0I"/>
-                <outlet property="searchResultsDataSource" destination="-1" id="kBb-8x-vhp"/>
-                <outlet property="searchResultsDelegate" destination="-1" id="OMt-A2-W3m"/>
+                <outlet property="delegate" destination="-1" id="Ha5-23-xaV"/>
+                <outlet property="searchBar" destination="Fnn-Zn-YrX" id="W3e-Lh-zqP"/>
+                <outlet property="searchContentsController" destination="-1" id="h2a-sC-PEW"/>
+                <outlet property="searchResultsDataSource" destination="-1" id="VGJ-aH-Owi"/>
+                <outlet property="searchResultsDelegate" destination="-1" id="exj-T4-Iok"/>
             </connections>
         </searchDisplayController>
     </objects>

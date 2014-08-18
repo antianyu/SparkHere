@@ -9,20 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "User.h"
 
-@interface MyProfileViewController : UIViewController
-
-@property (strong, nonatomic) IBOutlet UIButton *logoutButton;
-@property (strong, nonatomic) IBOutlet UIButton *myPostsButton;
-@property (strong, nonatomic) IBOutlet UIButton *editProfileButton;
-@property (strong, nonatomic) IBOutlet UIButton *settingsButton;
-@property (strong, nonatomic) IBOutlet UIButton *helpButton;
-@property (strong, nonatomic) IBOutlet UIButton *aboutButton;
-
-- (IBAction)logoutButtonClicked:(id)sender;
-- (IBAction)myPostsButtonClicked:(id)sender;
-- (IBAction)editProfileButtonClicked:(id)sender;
-- (IBAction)settingsButtonClicked:(id)sender;
-- (IBAction)helpButtonClicked:(id)sender;
-- (IBAction)aboutButtonClicked:(id)sender;
+@interface MyProfileViewController : UIViewController <UIActionSheetDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
+@property (strong, nonatomic) IBOutlet UITableView *postsTableView;
 
 @end

@@ -13,6 +13,7 @@
 @synthesize sender;
 @synthesize channel;
 @synthesize location;
+@synthesize area;
 @synthesize messageID;
 @synthesize updateAt;
 @synthesize content;
@@ -43,6 +44,34 @@
         PFFile *imageFile=object[@"image"];
         image=[UIImage imageWithData:[imageFile getData]];
         location=object[@"location"];
+        
+        CLLocation *newLocation=[[CLLocation alloc]initWithLatitude:location.latitude longitude:location.longitude];
+        CLGeocoder *geoCoder=[[CLGeocoder alloc]init];
+        [geoCoder reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error)
+        {
+            if (placemarks.count>0)
+            {
+                CLPlacemark *placemark=[placemarks firstObject];
+                NSString *city=placemark.locality;
+                NSString *region=placemark.subLocality;
+                if (region!=nil && city!=nil)
+                {
+                    area=[region stringByAppendingString:[NSString stringWithFormat:@", %@", city]];
+                }
+                else if (region!=nil)
+                {
+                    area=region;
+                }
+                else if (city!=nil)
+                {
+                    area=city;
+                }
+                else
+                {
+                    area=@"Somewhere";
+                }
+            }
+        }];
     }
     return self;
 }

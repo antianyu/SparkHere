@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString *content;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSDate *updateAt;
+@property (strong, nonatomic) NSString *area;
 @property (strong, nonatomic) PFGeoPoint *location;
 @property (strong, nonatomic) User *sender;
 @property (strong, nonatomic) Channel *channel;

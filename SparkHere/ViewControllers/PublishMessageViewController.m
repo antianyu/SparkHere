@@ -46,12 +46,38 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    UIBarButtonItem *pubishButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(pubishButtonClicked)];
+    UIBarButtonItem *pubishButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"Send"
+                                                                       style:UIBarButtonItemStyleDone
+                                                                      target:self
+                                                                      action:@selector(pubishButtonClicked)];
     self.navigationItem.rightBarButtonItem=pubishButtonItem;
     
-    [contentTextView becomeFirstResponder];
+    UIToolbar *keyBoardToolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     
-    [appDelegate setDefaultViewStyle:contentTextView];
+    UIBarButtonItem *albumButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"Album"
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(albumButtonClicked:)];
+    
+    UIBarButtonItem *cameraButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                                   target:self
+                                                                                   action:@selector(cameraButtonClicked:)];
+    
+    UIBarButtonItem *spaceButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                  target:nil
+                                                                                  action:nil];
+    
+    UIBarButtonItem *hideButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"Hide Keyboard"
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(viewTouchDown:)];
+    
+    [keyBoardToolBar setItems:[NSArray arrayWithObjects:albumButtonItem, cameraButtonItem, spaceButtonItem, hideButtonItem, nil]];
+    
+    contentTextView.tintColor=appDelegate.majorColor;
+    contentTextView.textColor=appDelegate.majorColor;
+    contentTextView.backgroundColor=[UIColor clearColor];
+    contentTextView.inputAccessoryView=keyBoardToolBar;
     
     contentImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
@@ -60,6 +86,8 @@
     [self drawBorderOfImageView];
     
     inputError=TextInputErrorNone;
+    
+    [contentTextView becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -124,7 +152,7 @@
 {
     UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
     CGRect rect=contentImageView.frame;
-    rect.size.height=280*image.size.height/image.size.width;
+    rect.size.height=IMAGE_WIDTH*image.size.height/image.size.width;
     contentImageView.frame=rect;
     contentImageView.image=image;
     
@@ -192,7 +220,7 @@
     shapeLayer.masksToBounds=NO;
     shapeLayer.backgroundColor=[UIColor clearColor].CGColor;
     shapeLayer.fillColor=[UIColor clearColor].CGColor;
-    shapeLayer.strokeColor=[UIColor whiteColor].CGColor;
+    shapeLayer.strokeColor=appDelegate.majorColor.CGColor;
     shapeLayer.lineWidth=2;
     shapeLayer.lineCap=kCALineCapSquare;
     shapeLayer.lineDashPattern=[NSArray arrayWithObjects:[NSNumber numberWithInt:5], [NSNumber numberWithInt:5],nil];
@@ -239,6 +267,7 @@
                   [progressHUD removeFromSuperview];
                   [appDelegate showUIAlertViewWithTitle:@"Congratulations!" message:@"Publish message succeed!" delegate:nil];
                   appDelegate.loadMoreMessages=YES;
+                  appDelegate.refreshPostsList=YES;
                   [self.navigationController popViewControllerAnimated:YES];
               }
               else

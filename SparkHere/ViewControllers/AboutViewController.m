@@ -31,54 +31,15 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    NSString *aboutString=@"About\n\n"
+    NSString *aboutString=@"SparkHere Version 1.0\n\n"
     
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n"
-    
-    "This is about page!\n\n";
+    "Any furthur questions please send email to aty_3361@sina.com";
     
     [aboutLabel setNumberOfLines:0];
     aboutLabel.font=[UIFont systemFontOfSize:17];
     aboutLabel.lineBreakMode=NSLineBreakByWordWrapping;
     aboutLabel.text=aboutString;
+    aboutLabel.textColor=appDelegate.majorColor;
     
     
     CGSize constraint=CGSizeMake(self.view.frame.size.width-40, 20000);

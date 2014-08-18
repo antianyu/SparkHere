@@ -62,9 +62,9 @@
     
     cell.textLabel.text=[categoryList objectAtIndex:indexPath.row];
     cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
+    [cell.textLabel setTextColor:appDelegate.majorColor];
     [cell setBackgroundColor:[UIColor clearColor]];
-    [cell setTintColor:[UIColor whiteColor]];
+    [cell setTintColor:appDelegate.majorColor];
     
     if (indexPath.row==category)
     {

@@ -28,11 +28,14 @@
     TextInputError inputError;
 }
 
+@synthesize nicknameLabel;
 @synthesize nicknameTextField;
+@synthesize theOriginalPwdLabel;
 @synthesize theOriginalPwdTextField;
+@synthesize theNewPwdLabel;
 @synthesize theNewPwdTextField;
+@synthesize theConfirmPwdLabel;
 @synthesize theConfirmPwdTextField;
-@synthesize chooseLogoButton;
 @synthesize logoImageView;
 
 - (void)viewDidLoad
@@ -52,14 +55,21 @@
     UIBarButtonItem *saveButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonClicked)];
     self.navigationItem.rightBarButtonItem=saveButtonItem;
     
-    [nicknameTextField becomeFirstResponder];
+    nicknameLabel.textColor=appDelegate.majorColor;
+    theOriginalPwdLabel.textColor=appDelegate.majorColor;
+    theNewPwdLabel.textColor=appDelegate.majorColor;
+    theConfirmPwdLabel.textColor=appDelegate.majorColor;
     
     [appDelegate setDefaultViewStyle:nicknameTextField];
     [appDelegate setDefaultViewStyle:theOriginalPwdTextField];
     [appDelegate setDefaultViewStyle:theNewPwdTextField];
     [appDelegate setDefaultViewStyle:theConfirmPwdTextField];
-    [appDelegate setDefaultViewStyle:chooseLogoButton];
     
+    logoImageView.userInteractionEnabled=YES;
+    UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                             action:@selector(chooseLogo)];
+    [logoImageView addGestureRecognizer:singleTap];
+
     nicknameTextField.text=appDelegate.user.nickname;
     if (appDelegate.user.logo!=nil)
     {
@@ -69,6 +79,8 @@
     {
         logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];        
     }
+    
+    [nicknameTextField becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -85,18 +97,6 @@
 - (void)saveButtonClicked
 {
     [self editProfileRequest];
-}
-
-- (IBAction)chooseLogoButtonClicked:(id)sender
-{
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-    operation=UIAlertViewOperationChooseImage;
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
-                                                 message:@"Please select a way to choose logo"
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:@"From albums", @"From camera", nil];
-    [alert show];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -133,6 +133,18 @@
         [theOriginalPwdTextField becomeFirstResponder];
     }
     return NO;
+}
+
+- (void)chooseLogo
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    operation=UIAlertViewOperationChooseImage;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
 }
 
 - (void)editProfileRequest

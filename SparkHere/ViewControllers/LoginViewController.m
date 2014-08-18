@@ -30,8 +30,6 @@
 @synthesize passwordTextField;
 @synthesize loginButton;
 @synthesize registerButton;
-@synthesize autoLoginSwitch;
-@synthesize autoLoginLabel;
 
 - (void)viewDidLoad
 {
@@ -49,13 +47,19 @@
     
     [usernameTextField becomeFirstResponder];
     
-    [appDelegate setDefaultViewStyle:usernameTextField];
-    [appDelegate setDefaultViewStyle:passwordTextField];
-    [appDelegate setDefaultViewStyle:loginButton];
-    [appDelegate setDefaultViewStyle:registerButton];
+    usernameTextField.backgroundColor=[UIColor whiteColor];
+    usernameTextField.tintColor=appDelegate.majorColor;
+    usernameTextField.textColor=appDelegate.majorColor;
     
-    autoLoginSwitch.on=NO;
-    autoLoginLabel.text=@"NO";
+    passwordTextField.backgroundColor=[UIColor whiteColor];
+    passwordTextField.tintColor=appDelegate.majorColor;
+    passwordTextField.textColor=appDelegate.majorColor;
+    
+    [appDelegate setButtonStyle:loginButton color:[UIColor lightGrayColor]];
+    [appDelegate setButtonStyle:registerButton color:appDelegate.majorColor];
+    
+    usernameTextField.text=@"user2";
+    passwordTextField.text=@"222";
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -77,19 +81,6 @@
     self.navigationItem.backBarButtonItem=backButton;
     
     [self.navigationController pushViewController:controller animated:YES];
-}
-
-- (IBAction)switchValueChanged:(id)sender
-{
-    UISwitch *senderSwitch=(UISwitch *)sender;
-    if(senderSwitch.on)
-    {
-        autoLoginLabel.text=@"YES";
-    }
-    else
-    {
-        autoLoginLabel.text=@"NO";
-    }
 }
 
 - (IBAction)viewTouchDown:(id)sender
@@ -157,26 +148,20 @@
               {
                   if (!error && objects.count>0)
                   {
-                      if (autoLoginSwitch.on)
-                      {
-                          appDelegate.settings.autoLogin=YES;
-                          [appDelegate setCurrentUser:[objects firstObject]];
-                          
-                          PFInstallation *currentInstallation=[PFInstallation currentInstallation];
-                          [currentInstallation setObject:appDelegate.user.userID forKey:@"currentUserID"];
-                          [currentInstallation saveInBackground];
-                      }
-                      else
-                      {
-                          appDelegate.settings.autoLogin=NO;
-                          [appDelegate.settings saveSettings];
-                      }
-                      [progressHUD removeFromSuperview];
+                      appDelegate.settings.autoLogin=YES;
+//                      appDelegate.settings.autoLogin=NO;
+                      [appDelegate setCurrentUser:[objects firstObject]];
+                      
+                      PFInstallation *currentInstallation=[PFInstallation currentInstallation];
+                      [currentInstallation setObject:appDelegate.user.userID forKey:@"currentUserID"];
+                      [currentInstallation saveInBackground];
                       
                       appDelegate.refreshMessageList=YES;
                       appDelegate.refreshMyChannelList=YES;
                       [appDelegate.messageList removeAllObjects];
                       [appDelegate.myChannelList removeAllObjects];
+                      
+                      [progressHUD removeFromSuperview];
                       
                       MainViewController *controller=[[MainViewController alloc]init];
                       [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];

@@ -41,7 +41,9 @@
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
     senderLabel.text=message.sender.nickname;
-    channelLabel.text=message.channel.channelName;
+    senderLabel.textColor=appDelegate.majorColor;
+    channelLabel.text=[@"via:" stringByAppendingString:message.channel.channelName];
+    channelLabel.textColor=appDelegate.detailColor;
     
     senderLogoImageView.image=message.sender.logo;
     channelLogoImageView.image=message.channel.logo;
@@ -56,14 +58,15 @@
     {
         [formatter setDateFormat:@"HH:mm a"];
         NSString *time = [formatter stringFromDate:message.updateAt];
-        updateLabel.text = [NSString stringWithFormat:@"Published at：Today %@", time];
+        updateLabel.text = [NSString stringWithFormat:@"Today %@", time];
     }
     else
     {
         formatter.dateFormat = @"dd/MM/yyyy HH:mm a";
         NSString *time = [formatter stringFromDate:message.updateAt];
-        updateLabel.text = [NSString stringWithFormat:@"Published at：%@", time];
+        updateLabel.text = [NSString stringWithFormat:@"%@", time];
     }
+    updateLabel.textColor=appDelegate.detailColor;
     
     scrollView.contentSize=CGSizeMake(VIEW_WIDTH, TITLE_HEIGHT);
     
@@ -71,7 +74,7 @@
     if (message.content.length>0)
     {
         contentLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
-        contentLabel.textColor=[UIColor whiteColor];
+        contentLabel.textColor=[UIColor blackColor];
         contentLabel.numberOfLines=0;
         contentLabel.lineBreakMode=NSLineBreakByWordWrapping;
         contentLabel.text=message.content;
@@ -100,11 +103,15 @@
         [scrollView addSubview:imageView];
     }
     
+    UIImageView *locationImageView=[[UIImageView alloc]initWithFrame:CGRectMake(15, scrollView.contentSize.height+INTERVAL+4, 20, 20)];
+    locationImageView.image=[UIImage imageNamed:@"Location.png"];
+    [scrollView addSubview:locationImageView];
+    
     UILabel *locationLabel=[[UILabel alloc]init];
     locationLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize-4];
-    locationLabel.textColor=[UIColor lightGrayColor];
-    locationLabel.text=@"Message location:";
-    locationLabel.frame=CGRectMake(LABEL_ORIGIN_X, scrollView.contentSize.height+INTERVAL, LABEL_WIDTH, LABEL_HEIGHT);
+    locationLabel.textColor=appDelegate.detailColor;
+    locationLabel.text=message.area;
+    locationLabel.frame=CGRectMake(LABEL_ORIGIN_X+20, scrollView.contentSize.height+INTERVAL, LABEL_WIDTH-20, LABEL_HEIGHT);
     scrollView.contentSize=CGSizeMake(VIEW_WIDTH, scrollView.contentSize.height+INTERVAL+LABEL_HEIGHT);
     [scrollView addSubview:locationLabel];
     

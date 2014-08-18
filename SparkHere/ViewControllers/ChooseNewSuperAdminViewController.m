@@ -115,7 +115,7 @@
     
     cell.textLabel.text=user.nickname;
     cell.textLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
+    [cell.textLabel setTextColor:appDelegate.majorColor];
     
     NSString *privilegeString;
     if (userPrivilege==1)
@@ -136,7 +136,7 @@
     }
     cell.detailTextLabel.text = privilegeString;
     cell.detailTextLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize-6];
-    [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
+    [cell.detailTextLabel setTextColor:appDelegate.detailColor];
     [cell setBackgroundColor:[UIColor clearColor]];
     
     return  cell;
@@ -169,6 +169,16 @@
         [alert show];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
+
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (void)filterContentForSearchText:(NSString *)searchText scope:(NSString *)scope

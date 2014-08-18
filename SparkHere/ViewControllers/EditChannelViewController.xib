@@ -7,10 +7,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditChannelViewController">
             <connections>
                 <outlet property="categoryButton" destination="vNb-Rw-REf" id="COb-6t-wIg"/>
+                <outlet property="categoryLabel" destination="UuH-lz-2HT" id="w1O-kt-Fvc"/>
+                <outlet property="channelNameLabel" destination="O3K-Ep-AHT" id="IGm-EY-chu"/>
                 <outlet property="channelNameTextField" destination="lw9-P7-RkX" id="dKh-8v-5sB"/>
-                <outlet property="chooseLogoButton" destination="5mw-Bi-Gnr" id="asV-w2-bpE"/>
+                <outlet property="descriptionLabel" destination="FAO-ga-UPA" id="mch-ec-YMm"/>
                 <outlet property="descriptionTextView" destination="3iY-W5-5Aw" id="mvu-xN-C8L"/>
                 <outlet property="logoImageView" destination="Mzy-Zz-Q0L" id="Kbq-A4-ptD"/>
+                <outlet property="logoLabel" destination="XB1-bV-mhZ" id="gzG-yy-ZZ5"/>
+                <outlet property="privilegeLabel" destination="RF6-hP-pcH" id="MgJ-NG-uuW"/>
                 <outlet property="privilegeSegmentedControl" destination="NkQ-l7-772" id="fhO-VD-v8d"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -24,41 +28,37 @@
                     <rect key="frame" x="20" y="20" width="119" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default Privilege:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RF6-hP-pcH">
                     <rect key="frame" x="20" y="57" width="130" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FAO-ga-UPA">
                     <rect key="frame" x="20" y="212" width="93" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UuH-lz-2HT">
                     <rect key="frame" x="20" y="95" width="75" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Logo:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XB1-bV-mhZ">
                     <rect key="frame" x="20" y="133" width="44" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="max. 16 characters" borderStyle="roundedRect" minimumFontSize="17" id="lw9-P7-RkX">
                     <rect key="frame" x="152" y="16" width="148" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
@@ -73,7 +73,6 @@
                         <segment title="2"/>
                         <segment title="3"/>
                     </segments>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <action selector="segmentControlValueChanged:" destination="-1" eventType="valueChanged" id="ErB-iy-ad6"/>
                     </connections>
@@ -93,7 +92,6 @@
                     <rect key="frame" x="20" y="241" width="280" height="307"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <connections>
@@ -104,19 +102,11 @@
                     <rect key="frame" x="200" y="133" width="100" height="100"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5mw-Bi-Gnr">
-                    <rect key="frame" x="20" y="162" width="115" height="30"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Edit" id="T9s-Rn-nCL">
+                    <rect key="frame" x="200" y="213" width="20" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Choose Logo">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="chooseLogoButtonClicked:" destination="-1" eventType="touchUpInside" id="FgH-1F-o2n"/>
-                    </connections>
-                </button>
+                </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <connections>
@@ -124,4 +114,7 @@
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="Edit" width="20" height="20"/>
+    </resources>
 </document>
