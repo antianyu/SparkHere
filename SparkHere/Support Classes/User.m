@@ -79,4 +79,19 @@
     logo=[UIImage imageWithData:[imageFile getData]];
 }
 
+- (PFObject *)getPFObject
+{
+    PFObject *object=[PFObject objectWithClassName:@"User"];
+    object.objectId=userID;
+    object[@"username"]=username;
+    object[@"password"]=userPassword;
+    object[@"nickname"]=nickname;
+    
+    NSData *logoData=UIImageJPEGRepresentation(logo, 1);
+    PFFile *logoFile=[PFFile fileWithName:@"logo.jpg" data:logoData];
+    object[@"logo"]=logoFile;
+    
+    return object;
+}
+
 @end

@@ -26,16 +26,17 @@
     TextInputError inputError;
 }
 
+@synthesize usernameLabel;
 @synthesize usernameTextField;
+@synthesize passwordLabel;
 @synthesize passwordTextField;
 @synthesize loginButton;
-@synthesize registerButton;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.title=@"SparkHere";
+    self.title=@"Sign In";
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
@@ -45,21 +46,13 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [usernameTextField becomeFirstResponder];
+    [appDelegate setTextFieldStyle:usernameTextField];
+    [appDelegate setTextFieldStyle:passwordTextField];
     
-    usernameTextField.backgroundColor=[UIColor whiteColor];
-    usernameTextField.tintColor=appDelegate.majorColor;
-    usernameTextField.textColor=appDelegate.majorColor;
+    [appDelegate setButtonStyle:loginButton color:appDelegate.buttonColor];
     
-    passwordTextField.backgroundColor=[UIColor whiteColor];
-    passwordTextField.tintColor=appDelegate.majorColor;
-    passwordTextField.textColor=appDelegate.majorColor;
-    
-    [appDelegate setButtonStyle:loginButton color:[UIColor lightGrayColor]];
-    [appDelegate setButtonStyle:registerButton color:appDelegate.majorColor];
-    
-    usernameTextField.text=@"user2";
-    passwordTextField.text=@"222";
+    usernameLabel.textColor=[UIColor lightGrayColor];
+    passwordLabel.textColor=[UIColor lightGrayColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -73,19 +66,47 @@
     [self login];
 }
 
-- (IBAction)registerButtonClicked:(id)sender
-{
-    RegisterViewController *controller=[[RegisterViewController alloc]init];
-    
-    UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Login" style:UIBarButtonItemStyleBordered target:self action:nil];
-    self.navigationItem.backBarButtonItem=backButton;
-    
-    [self.navigationController pushViewController:controller animated:YES];
-}
-
 - (IBAction)viewTouchDown:(id)sender
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField==usernameTextField)
+    {
+        usernameLabel.hidden=YES;
+    }
+    else if (textField==passwordTextField)
+    {
+        passwordLabel.hidden=YES;
+    }
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField==usernameTextField &&  textField.text.length==0)
+    {
+        usernameLabel.hidden=NO;
+    }
+    else if (textField==passwordTextField &&  textField.text.length==0)
+    {
+        passwordLabel.hidden=NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.text.length>15 && string.length>0)
+    {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -122,12 +143,12 @@
     if (usernameTextField.text.length==0)
     {
         inputError=TextInputErrorUserName;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Username can't be empty!" delegate:self];
     }
     else if (passwordTextField.text.length==0)
     {
         inputError=TextInputErrorPassword;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Password can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Password can't be empty!" delegate:self];
     }
     else
     {
@@ -149,7 +170,6 @@
                   if (!error && objects.count>0)
                   {
                       appDelegate.settings.autoLogin=YES;
-//                      appDelegate.settings.autoLogin=NO;
                       [appDelegate setCurrentUser:[objects firstObject]];
                       
                       PFInstallation *currentInstallation=[PFInstallation currentInstallation];
@@ -171,13 +191,13 @@
                   {
                       [progressHUD removeFromSuperview];
                       inputError=TextInputErrorPassword;
-                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username and password do not match!"  delegate:self];
+                      [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Username and password do not match!"  delegate:self];
                   }
                   else
                   {
                       [progressHUD removeFromSuperview];
                       inputError=TextInputErrorNone;
-                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];
+                      [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Query error!" delegate:self];
                   }
               }];
          }
@@ -185,13 +205,13 @@
          {
              [progressHUD removeFromSuperview];
              inputError=TextInputErrorUserName;
-             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Invalid username!" delegate:self];
+             [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Invalid username!" delegate:self];
          }
          else
          {
              [progressHUD removeFromSuperview];
              inputError=TextInputErrorNone;
-             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];
+             [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Query error!" delegate:self];
          }
      }];
 }

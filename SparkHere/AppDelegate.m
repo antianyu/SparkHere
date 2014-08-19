@@ -8,7 +8,7 @@
 
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
-#import "LoginViewController.h"
+#import "WelcomeViewController.h"
 #import "AutoLoginViewController.h"
 #import "MJRefresh.h"
 #import "Constants.h"
@@ -31,6 +31,7 @@
 @synthesize majorColor;
 @synthesize detailColor;
 @synthesize descriptionColor;
+@synthesize buttonColor;
 
 @synthesize is4Inch;
 @synthesize refreshMessageList;
@@ -60,8 +61,8 @@
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
-    LoginViewController *loginViewController=[[LoginViewController alloc]init];
-    self.navController=[[UINavigationController alloc]initWithRootViewController:loginViewController];
+    WelcomeViewController *welcomeViewController=[[WelcomeViewController alloc]init];
+    self.navController=[[UINavigationController alloc]initWithRootViewController:welcomeViewController];
     if (settings.autoLogin)
     {
         AutoLoginViewController *autoLoginViewController=[[AutoLoginViewController alloc]init];
@@ -168,6 +169,7 @@
     majorColor=[UIColor colorWithRed:0/255.0 green:117/255.0 blue:169/255.0 alpha:1];
     detailColor=[UIColor darkGrayColor];
     descriptionColor=[UIColor colorWithRed:43/255.0 green:43/255.0 blue:43/255.0 alpha:1];
+    buttonColor=[UIColor colorWithRed:146/255.0 green:208/255.0 blue:80/255.0 alpha:1];
     
     // Status Bar
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -206,13 +208,19 @@
     [[UITextView appearance] setTextColor:majorColor];
 }
 
-- (void)setDefaultViewStyle:(UIView *)view
+- (void)setTextFieldStyle:(UITextField *)textField
 {
-    view.tintColor=majorColor;
-    view.backgroundColor=[UIColor clearColor];
-    view.layer.borderColor=majorColor.CGColor;
-    view.layer.borderWidth=1.5;
-    view.layer.cornerRadius=5;
+    textField.tintColor=detailColor;
+    textField.textColor=detailColor;
+    textField.backgroundColor=[UIColor clearColor];
+    textField.borderStyle=UITextBorderStyleNone;
+}
+
+- (void)setTextViewStyle:(UITextView *)textView
+{
+    textView.tintColor=detailColor;
+    textView.textColor=detailColor;
+    textView.backgroundColor=[UIColor clearColor];
 }
 
 - (void)setButtonStyle:(UIButton *)button color:(UIColor *)color
@@ -221,7 +229,6 @@
     button.backgroundColor=color;
     button.layer.borderColor=color.CGColor;
     button.layer.borderWidth=1.5;
-    button.layer.cornerRadius=5;
 }
 
 - (void)setCurrentUser:(PFObject *)object
@@ -456,13 +463,13 @@
     }
     else
     {
-        [self showUIAlertViewWithTitle:@"Error" message:@"Location service is not available. Please turn it on." delegate:nil];
+        [self showUIAlertViewWithTitle:@"Error!" message:@"Location service is not available. Please turn it on." delegate:nil];
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {    
-    [self showUIAlertViewWithTitle:@"Error" message:@"Location failed. Please try again." delegate:nil];
+    [self showUIAlertViewWithTitle:@"Error!" message:@"Location failed. Please try again." delegate:nil];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -477,25 +484,6 @@
 
 - (void)updateLocationWithInterval
 {
-//    dispatch_queue_t updateLocationQueue=dispatch_queue_create("updateLocation", NULL);
-//    dispatch_queue_t globalQueue=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//    dispatch_queue_t mainQueue=dispatch_get_main_queue();
-//    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, updateLocationQueue);
-//    if (timer)
-//    {
-//        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, LOCATION_UPDATE_INTERVAL * NSEC_PER_SEC, 0.1 * LOCATION_UPDATE_INTERVAL * NSEC_PER_SEC);
-//        dispatch_source_set_event_handler(timer, ^{
-//            
-//            NSLog(@"update location out");
-//            if (settings.registeredForNotification) {
-//                
-//                NSLog(@"update location in");
-//                [self getLocation];
-//            }
-//        });
-//        dispatch_resume(timer);
-//    }
-    
     NSTimer *timer=[NSTimer timerWithTimeInterval:LOCATION_UPDATE_INTERVAL
                                            target:self
                                          selector:@selector(getLocation)

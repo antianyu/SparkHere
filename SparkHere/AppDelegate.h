@@ -36,6 +36,7 @@
 @property (strong, nonatomic) UIColor *majorColor;
 @property (strong, nonatomic) UIColor *detailColor;
 @property (strong, nonatomic) UIColor *descriptionColor;
+@property (strong, nonatomic) UIColor *buttonColor;
 
 @property (nonatomic) BOOL is4Inch;
 @property (atomic) BOOL refreshMessageList;
@@ -44,7 +45,8 @@
 @property (nonatomic) BOOL refreshChannelDetail;
 @property (nonatomic) BOOL refreshPostsList;
 
-- (void)setDefaultViewStyle:(UIView *)view;
+- (void)setTextFieldStyle:(UITextField *)textField;
+- (void)setTextViewStyle:(UITextView *)textView;
 - (void)setButtonStyle:(UIButton *)button color:(UIColor *)color;
 - (void)setCurrentUser:(PFObject *)object;
 - (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem;

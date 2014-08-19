@@ -11,6 +11,7 @@
 #import "EditChannelViewController.h"
 #import "ChooseCategoryViewController.h"
 #import "ImagePickerViewController.h"
+#import "CustomisedTableViewCell.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
 #import "TextInputError.h"
@@ -30,30 +31,31 @@
     NSArray *categoryList;
 }
 
+@synthesize logoImageView;
+@synthesize editImageView;
+@synthesize logoImageViewContainer;
 @synthesize channelNameLabel;
 @synthesize channelNameTextField;
-@synthesize privilegeLabel;
+@synthesize categoryTableView;
 @synthesize privilegeSegmentedControl;
-@synthesize categoryLabel;
-@synthesize categoryButton;
-@synthesize logoLabel;
-@synthesize logoImageView;
 @synthesize descriptionLabel;
 @synthesize descriptionTextView;
+@synthesize backgroundImageView;
 @synthesize channel;
 @synthesize editChannel;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     if (editChannel)
     {
-        self.title=@"Edit channel";
+        self.title=@"Edit Channel";
     }
     else
     {
-        self.title=@"Establish new channel";
+        self.title=@"Establish New Channel";
     }
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -70,34 +72,57 @@
     NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Category" ofType:@"plist"];
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];
     
-    [channelNameTextField becomeFirstResponder];
+    [appDelegate setTextFieldStyle:channelNameTextField];
+    [appDelegate setTextViewStyle:descriptionTextView];
     
-    [appDelegate setDefaultViewStyle:channelNameTextField];
-    [appDelegate setDefaultViewStyle:descriptionTextView];
-    [appDelegate setButtonStyle:categoryButton color:appDelegate.majorColor];
+    categoryTableView.separatorStyle=NO;
+    categoryTableView.scrollEnabled=NO;
     
-    channelNameLabel.textColor=appDelegate.majorColor;
-    privilegeLabel.textColor=appDelegate.majorColor;
-    categoryLabel.textColor=appDelegate.majorColor;
-    logoLabel.textColor=appDelegate.majorColor;
-    descriptionLabel.textColor=appDelegate.majorColor;
     privilegeSegmentedControl.tintColor=appDelegate.majorColor;
+    
+    CALayer *layer=logoImageView.layer;
+    layer.masksToBounds=YES;
+    layer.cornerRadius=50;
+    layer.borderColor=[UIColor whiteColor].CGColor;
+    layer.borderWidth=3;
+    
+    logoImageViewContainer.backgroundColor=[UIColor clearColor];
+    logoImageViewContainer.layer.shadowColor=[UIColor darkGrayColor].CGColor;
+    logoImageViewContainer.layer.shadowOpacity=0.8;
+    logoImageViewContainer.layer.shadowOffset=CGSizeMake(3, 3);
+    logoImageViewContainer.layer.shadowRadius=3;
+    logoImageViewContainer.layer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:logoImageView.bounds cornerRadius:50].CGPath;
     
     logoImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
                                                                              action:@selector(chooseLogo)];
     [logoImageView addGestureRecognizer:singleTap];
     
-    categoryButton.titleLabel.textAlignment=NSTextAlignmentCenter;
-    [categoryButton setTitle:[categoryList objectAtIndex:0] forState:UIControlStateNormal];
+    editImageView.userInteractionEnabled=YES;
+    UITapGestureRecognizer *editTap=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                           action:@selector(chooseLogo)];
+    [editImageView addGestureRecognizer:editTap];
     
     logoImageView.image=[UIImage imageNamed:@"Default_Logo.png"];
     
+    if (appDelegate.is4Inch)
+    {
+        backgroundImageView.image=[UIImage imageNamed:@"Channel_TextView_4.png"];
+    }
+    else
+    {
+        backgroundImageView.image=[UIImage imageNamed:@"Channel_TextView_3.5.png"];
+    }
+    
+    channelNameLabel.textColor=[UIColor lightGrayColor];
+    descriptionLabel.textColor=[UIColor lightGrayColor];
+    
     if (editChannel)
     {
+        channelNameLabel.hidden=YES;
         channelNameTextField.text=channel.channelName;
         privilegeSegmentedControl.selectedSegmentIndex=channel.defaultPrivilege-1;
-        [categoryButton setTitle:[categoryList objectAtIndex:channel.category] forState:UIControlStateNormal];
+        descriptionLabel.hidden=YES;
         descriptionTextView.text=channel.description;
         if (channel.logo!=nil)
         {
@@ -117,6 +142,7 @@
 - (IBAction)viewTouchDown:(id)sender
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    [self resumeView];
 }
 
 - (void)doneButtonClicked
@@ -142,22 +168,68 @@
     if([sender selectedSegmentIndex]==0)
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages";
-        [appDelegate showUIAlertViewWithTitle:@"Tips" message:tip delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Tips!" message:tip delegate:self];
     }
     else if([sender selectedSegmentIndex]==1)
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages\n2. Send messages";
-        [appDelegate showUIAlertViewWithTitle:@"Tips" message:tip delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Tips!" message:tip delegate:self];
     }
     else
     {
         NSString *tip= @"New users are allowed to:\n1. Receive messages\n2. Send messages\n3. Administrate channel";
-        [appDelegate showUIAlertViewWithTitle:@"Tips" message:tip delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Tips!" message:tip delegate:self];
     }
 }
 
-- (IBAction)categoryButtonClicked:(id)sender
+#pragma mark UITableView
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *customisedCellIdentifier = @"CustomisedCellIdentifier";
+    static BOOL nibsRegistered=NO;
+    if (!nibsRegistered)
+    {
+        UINib *nib=[UINib nibWithNibName:@"CustomisedTableViewCell" bundle:nil];
+        [tableView registerNib:nib forCellReuseIdentifier:customisedCellIdentifier];
+        nibsRegistered=YES;
+    }
+    
+    CustomisedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:customisedCellIdentifier];
+    if (cell == nil)
+    {
+        cell=[[[NSBundle mainBundle]loadNibNamed:@"CustomisedTableViewCell" owner:nil options:nil] lastObject];
+    }
+    
+    cell.logoImageView.image=[UIImage imageNamed:@"Category.png"];
+    cell.titleLabel.text=@"Category";
+    if (channel!=nil)
+    {
+        cell.detailLabel.text=[categoryList objectAtIndex:channel.category];
+    }
+    else
+    {
+        cell.detailLabel.text=[categoryList objectAtIndex:0];
+    }
+    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell=[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    return cell.frame.size.height;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     ChooseCategoryViewController *controller=[[ChooseCategoryViewController alloc]init];
     controller.category=channel.category;
     controller.delegate=self;
@@ -167,24 +239,35 @@
     UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
     self.navigationItem.backBarButtonItem=backButton;
     
-    [self.navigationController pushViewController:controller animated:YES];    
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
+#pragma mark UITextField
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField==channelNameTextField)
+    {
+        channelNameLabel.hidden=YES;
+    }
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField==channelNameTextField && textField.text.length==0)
+    {
+        channelNameLabel.hidden=NO;
+    }
+    
+    return YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if ([textField.text isEqualToString:@"max. 16 characters"])
-    {
-        textField.text=@"";
-    }
-    
-    if (textField.text.length>15 && ![string isEqualToString:@""])
+    if (textField.text.length>15 && string.length>0)
     {
         return NO;
-    }
-    
-    if (textField.text.length==1 && [string isEqualToString:@""])
-    {
-        textField.text=@"max. 16 characters ";
     }
     
     return YES;
@@ -212,30 +295,15 @@
     {
         [descriptionTextView becomeFirstResponder];
     }
-    else // textField==descriptionTextView
-    {
-        [channelNameTextField becomeFirstResponder];
-    }
+    
     return NO;
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([textView.text isEqualToString:@"max. 500 characters"])
-    {
-        textView.text=@"";
-    }
-    
-    if (textView.text.length>499 && ![text isEqualToString:@""])
-    {
-        return NO;
-    }
-    
-    return YES;
-}
-
+#pragma mark UITextView
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
+    descriptionLabel.hidden=YES;
+    
     NSTimeInterval animationDuration=0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
     [UIView setAnimationDuration:animationDuration];
@@ -250,38 +318,27 @@
     return YES;
 }
 
-- (IBAction)textViewDidEndEditing:(UITextView *)textView
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-    [self.descriptionTextView resignFirstResponder];
-    [self resumeView];
-}
-
-- (void)resumeView
-{
-    NSTimeInterval animationDuration=0.30f;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:animationDuration];
+    if (textView.text.length==0)
+    {
+        descriptionLabel.hidden=NO;
+    }
     
-    float width=self.view.frame.size.width;
-    float height=self.view.frame.size.height;
-    
-    CGRect rect=CGRectMake(0, 64, width, height);
-    self.view.frame=rect;
-    [UIView commitAnimations];
+    return YES;
 }
 
-- (void)chooseLogo
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-    operation=UIAlertViewOperationChooseImage;
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
-                                                 message:@"Please select a way to choose logo"
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:@"From albums", @"From camera", nil];
-    [alert show];
+    if (textView.text.length>499 && text.length>0)
+    {
+        return NO;
+    }
+    
+    return YES;
 }
 
+#pragma mark UIAlertView
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
@@ -301,7 +358,7 @@
                 }
                 else
                 {
-                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
+                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Image picker is not supported on your phone!" delegate:self];
                 }
             }
             else
@@ -317,7 +374,7 @@
                 }
                 else
                 {
-                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
+                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Camera is not supported on your phone!" delegate:self];
                 }
             }
         }
@@ -332,17 +389,44 @@
     }
 }
 
+#pragma mark Auxiliaries
+- (void)resumeView
+{
+    NSTimeInterval animationDuration=0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    float width=self.view.frame.size.width;
+    float height=self.view.frame.size.height;
+    
+    CGRect rect=CGRectMake(0, 64, width, height);
+    self.view.frame=rect;
+    [UIView commitAnimations];
+}
+
+- (void)chooseLogo
+{
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    operation=UIAlertViewOperationChooseImage;
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
+                                                 message:@"Please select a way to choose logo"
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"From albums", @"From camera", nil];
+    [alert show];
+}
+
 - (void)constructChannel
 {
     if (channelNameTextField.text.length==0)
     {
         inputError=TextInputErrorChannelName;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"The name of channel can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"The name of channel can't be empty!" delegate:self];
     }
     else if (descriptionTextView.text.length==0)
     {
         inputError=TextInputErrorDescription;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Description can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Description can't be empty!" delegate:self];
     }
     else
     {
@@ -396,7 +480,7 @@
              if (objects.count>0)
              {
                  [progressHUD removeFromSuperview];
-                 [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Channel already exists!" delegate:self];
+                 [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Channel already exists!" delegate:self];
              }
              else
              {
@@ -433,7 +517,7 @@
          if (objects.count>0)
          {
              [progressHUD removeFromSuperview];
-             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Channel already exists!" delegate:self];
+             [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Channel already exists!" delegate:self];
          }
          else
          {
@@ -495,8 +579,8 @@
 
 - (void)passIntDelegate:(int)value
 {
-    [categoryButton setTitle:[categoryList objectAtIndex:value] forState:UIControlStateNormal];
     channel.category=value;
+    [categoryTableView reloadData];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

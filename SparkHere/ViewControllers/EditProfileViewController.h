@@ -10,14 +10,11 @@
 
 @interface EditProfileViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate,  UIImagePickerControllerDelegate>
 
+@property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *editImageView;
+@property (strong, nonatomic) IBOutlet UIView *logoImageViewContainer;
 @property (strong, nonatomic) IBOutlet UILabel *nicknameLabel;
 @property (strong, nonatomic) IBOutlet UITextField *nicknameTextField;
-@property (strong, nonatomic) IBOutlet UILabel *theOriginalPwdLabel;
-@property (strong, nonatomic) IBOutlet UITextField *theOriginalPwdTextField;
-@property (strong, nonatomic) IBOutlet UILabel *theNewPwdLabel;
-@property (strong, nonatomic) IBOutlet UITextField *theNewPwdTextField;
-@property (strong, nonatomic) IBOutlet UILabel *theConfirmPwdLabel;
-@property (strong, nonatomic) IBOutlet UITextField *theConfirmPwdTextField;
-@property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (strong, nonatomic) IBOutlet UITableView *changePwdTableView;
 
 @end

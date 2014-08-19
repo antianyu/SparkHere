@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		55068CAD19A366E100A2FA9E /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55068CAB19A366E100A2FA9E /* WelcomeViewController.m */; };
+		55068CAE19A366E100A2FA9E /* WelcomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55068CAC19A366E100A2FA9E /* WelcomeViewController.xib */; };
+		55068CB719A3CE8B00A2FA9E /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55068CB519A3CE8B00A2FA9E /* ChangePasswordViewController.m */; };
+		55068CB819A3CE8B00A2FA9E /* ChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55068CB619A3CE8B00A2FA9E /* ChangePasswordViewController.xib */; };
+		55068CBC19A3F07600A2FA9E /* CustomisedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55068CBA19A3F07600A2FA9E /* CustomisedTableViewCell.m */; };
+		55068CBD19A3F07600A2FA9E /* CustomisedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55068CBB19A3F07600A2FA9E /* CustomisedTableViewCell.xib */; };
 		55209C9119A28D0900C80727 /* MyProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55209C8F19A28D0900C80727 /* MyProfileTableViewCell.m */; };
 		55209C9219A28D0900C80727 /* MyProfileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55209C9019A28D0900C80727 /* MyProfileTableViewCell.xib */; };
 		55209C9419A2B6DE00C80727 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55209C9319A2B6DE00C80727 /* images.xcassets */; };
@@ -105,6 +111,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		55068CAA19A366E100A2FA9E /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
+		55068CAB19A366E100A2FA9E /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		55068CAC19A366E100A2FA9E /* WelcomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WelcomeViewController.xib; sourceTree = "<group>"; };
+		55068CB419A3CE8A00A2FA9E /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		55068CB519A3CE8B00A2FA9E /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
+		55068CB619A3CE8B00A2FA9E /* ChangePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangePasswordViewController.xib; sourceTree = "<group>"; };
+		55068CB919A3F07600A2FA9E /* CustomisedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomisedTableViewCell.h; sourceTree = "<group>"; };
+		55068CBA19A3F07600A2FA9E /* CustomisedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomisedTableViewCell.m; sourceTree = "<group>"; };
+		55068CBB19A3F07600A2FA9E /* CustomisedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomisedTableViewCell.xib; sourceTree = "<group>"; };
 		55209C8E19A28D0900C80727 /* MyProfileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProfileTableViewCell.h; sourceTree = "<group>"; };
 		55209C8F19A28D0900C80727 /* MyProfileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyProfileTableViewCell.m; sourceTree = "<group>"; };
 		55209C9019A28D0900C80727 /* MyProfileTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyProfileTableViewCell.xib; sourceTree = "<group>"; };
@@ -395,6 +410,9 @@
 				55209C8E19A28D0900C80727 /* MyProfileTableViewCell.h */,
 				55209C8F19A28D0900C80727 /* MyProfileTableViewCell.m */,
 				55209C9019A28D0900C80727 /* MyProfileTableViewCell.xib */,
+				55068CB919A3F07600A2FA9E /* CustomisedTableViewCell.h */,
+				55068CBA19A3F07600A2FA9E /* CustomisedTableViewCell.m */,
+				55068CBB19A3F07600A2FA9E /* CustomisedTableViewCell.xib */,
 				5551D38419915AD3005D4153 /* TextInputError.h */,
 				5551D38519915AD3005D4153 /* UIAlertViewOperation.h */,
 			);
@@ -427,6 +445,9 @@
 		5551D39B19915C34005D4153 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				55068CAA19A366E100A2FA9E /* WelcomeViewController.h */,
+				55068CAB19A366E100A2FA9E /* WelcomeViewController.m */,
+				55068CAC19A366E100A2FA9E /* WelcomeViewController.xib */,
 				5551D3BC19915C34005D4153 /* LoginViewController.h */,
 				5551D3BD19915C34005D4153 /* LoginViewController.m */,
 				5551D3BE19915C34005D4153 /* LoginViewController.xib */,
@@ -477,6 +498,9 @@
 				5551D3B419915C34005D4153 /* EditProfileViewController.h */,
 				5551D3B519915C34005D4153 /* EditProfileViewController.m */,
 				5551D3B619915C34005D4153 /* EditProfileViewController.xib */,
+				55068CB419A3CE8A00A2FA9E /* ChangePasswordViewController.h */,
+				55068CB519A3CE8B00A2FA9E /* ChangePasswordViewController.m */,
+				55068CB619A3CE8B00A2FA9E /* ChangePasswordViewController.xib */,
 				5551D3D919915C34005D4153 /* SettingsViewController.h */,
 				5551D3DA19915C34005D4153 /* SettingsViewController.m */,
 				5551D3DB19915C34005D4153 /* SettingsViewController.xib */,
@@ -569,9 +593,12 @@
 			files = (
 				5551D2DE19915648005D4153 /* InfoPlist.strings in Resources */,
 				5551D40319915C34005D4153 /* RegisterViewController.xib in Resources */,
+				55068CAE19A366E100A2FA9E /* WelcomeViewController.xib in Resources */,
+				55068CBD19A3F07600A2FA9E /* CustomisedTableViewCell.xib in Resources */,
 				5551D3E719915C34005D4153 /* DiscoverChannelsViewController.xib in Resources */,
 				5551D3ED19915C34005D4153 /* EditProfileViewController.xib in Resources */,
 				5551D3F519915C34005D4153 /* ManagePrivilegeViewController.xib in Resources */,
+				55068CB819A3CE8B00A2FA9E /* ChangePasswordViewController.xib in Resources */,
 				5551D3DD19915C34005D4153 /* AboutViewController.xib in Resources */,
 				5551D38A19915AD3005D4153 /* ChannelTableViewCell.xib in Resources */,
 				5551D3F919915C34005D4153 /* MessagesViewController.xib in Resources */,
@@ -618,9 +645,12 @@
 				5551D3EA19915C34005D4153 /* EditChannelViewController.m in Sources */,
 				5551D3EC19915C34005D4153 /* EditProfileViewController.m in Sources */,
 				5551D39A19915AD3005D4153 /* User.m in Sources */,
+				55068CBC19A3F07600A2FA9E /* CustomisedTableViewCell.m in Sources */,
 				5551D38C19915AD3005D4153 /* MapViewAnnotation.m in Sources */,
 				5551D38E19915AD3005D4153 /* Message.m in Sources */,
 				5551D3F419915C34005D4153 /* ManagePrivilegeViewController.m in Sources */,
+				55068CAD19A366E100A2FA9E /* WelcomeViewController.m in Sources */,
+				55068CB719A3CE8B00A2FA9E /* ChangePasswordViewController.m in Sources */,
 				5551D38F19915AD3005D4153 /* MessageTableViewCell.m in Sources */,
 				5551D38B19915AD3005D4153 /* Constants.m in Sources */,
 				5551D40019915C34005D4153 /* PublishMessageViewController.m in Sources */,

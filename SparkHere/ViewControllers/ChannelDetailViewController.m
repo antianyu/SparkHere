@@ -28,9 +28,9 @@
     BOOL unfollowWithCancel;
     int privilege;
     int buttonClickTimes;
-    NSMutableArray *buttons;
     UIBarButtonItem *composeButtonItem;
     UIBarButtonItem *editButtonItem;
+    UIToolbar *composeToolBar;
 }
 
 @synthesize scrollView;
@@ -57,16 +57,11 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    // add composeButton
-    composeButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonClicked)];
-    
     // add editButton
     editButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonClicked)];
     
-    buttons=[[NSMutableArray alloc]init];
-    
-    titleLabel.textColor=appDelegate.majorColor;
-    followersLabel.textColor=appDelegate.detailColor;
+    titleLabel.textColor=[UIColor whiteColor];
+    followersLabel.textColor=[UIColor whiteColor];
     
     [descriptionLabel setNumberOfLines:0];
     descriptionLabel.font=[UIFont systemFontOfSize:17];
@@ -126,16 +121,43 @@
          
          followersLabel.text=[self constructFollowersString:channel.followersNumber];
          
-         [buttons removeAllObjects];
          if (privilege>=3)
          {
-             [buttons addObject:editButtonItem];
+             self.navigationItem.rightBarButtonItem=editButtonItem;
          }
          if (privilege>=2)
          {
-             [buttons addObject:composeButtonItem];
+             CGRect scrollViewFrame=scrollView.frame;
+             CGRect frame;
+             if (appDelegate.is4Inch)
+             {
+                 frame=CGRectMake(0, 460, 320, 44);
+                 scrollViewFrame.size.height=460;
+             }
+             else
+             {
+                 frame=CGRectMake(0, 372, 320, 44);
+                 scrollViewFrame.size.height=372;
+             }
+             scrollView.frame=scrollViewFrame;
+             
+             composeToolBar=[[UIToolbar alloc]initWithFrame:frame];
+             
+             composeButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                            target:self
+                                                                            action:@selector(composeButtonClicked)];
+             
+             UIBarButtonItem *spaceButtonItem1=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                           target:nil
+                                                                                           action:nil];
+             
+             UIBarButtonItem *spaceButtonItem2=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                           target:nil
+                                                                                           action:nil];
+             
+             [composeToolBar setItems:[NSArray arrayWithObjects:spaceButtonItem1, composeButtonItem, spaceButtonItem2, nil]];
+             [self.view addSubview:composeToolBar];
          }
-         self.navigationItem.rightBarButtonItems=buttons;
          
          NSString *description=channel.description;
          
@@ -151,7 +173,8 @@
          scrollView.contentSize=CGSizeMake(self.view.frame.size.width, actualSize.height+170);
          [scrollView addSubview:descriptionLabel];
          
-         [appDelegate setButtonStyle:followButton color:appDelegate.majorColor];
+         UIColor *buttonColor=[UIColor colorWithRed:30/255.0 green:187/255.0 blue:166/255.0 alpha:1];
+         [appDelegate setButtonStyle:followButton color:buttonColor];
          if (isFollowing)
          {
              [followButton setTitle:@"Following" forState:UIControlStateNormal];
@@ -191,7 +214,7 @@
         {
             operation=UIAlertViewOperationChooseNewSuperAdmin;
             unfollowWithCancel=YES;
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Prompt"
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Hey!"
                                                          message:@"Would you like to choose someone to be new super administrator?"
                                                         delegate:self
                                                cancelButtonTitle:@"No"
@@ -262,18 +285,45 @@
          }
          [subscription saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
-              followersLabel.text=[NSString stringWithFormat:@"%d", [channelObj[@"followersNumber"] intValue]];
+              followersLabel.text=[self constructFollowersString:[channelObj[@"followersNumber"] intValue]];
               privilege=[channelObj[@"defaultPrivilege"] intValue];
-              [buttons removeAllObjects];
               if (privilege>=3)
               {
-                  [buttons addObject:editButtonItem];
+                  self.navigationItem.rightBarButtonItem=editButtonItem;
               }
               if (privilege>=2)
               {
-                  [buttons addObject:composeButtonItem];
+                  CGRect scrollViewFrame=scrollView.frame;
+                  CGRect frame;
+                  if (appDelegate.is4Inch)
+                  {
+                      frame=CGRectMake(0, 460, 320, 44);
+                      scrollViewFrame.size.height=460;
+                  }
+                  else
+                  {
+                      frame=CGRectMake(0, 372, 320, 44);
+                      scrollViewFrame.size.height=372;
+                  }
+                  scrollView.frame=scrollViewFrame;
+                  
+                  composeToolBar=[[UIToolbar alloc]initWithFrame:frame];
+                  
+                  composeButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                                 target:self
+                                                                                 action:@selector(composeButtonClicked)];
+                  
+                  UIBarButtonItem *spaceButtonItem1=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                                 target:nil
+                                                                                                 action:nil];
+                  
+                  UIBarButtonItem *spaceButtonItem2=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                                 target:nil
+                                                                                                 action:nil];
+                  
+                  [composeToolBar setItems:[NSArray arrayWithObjects:spaceButtonItem1, composeButtonItem, spaceButtonItem2, nil]];
+                  [self.view addSubview:composeToolBar];
               }
-              self.navigationItem.rightBarButtonItems=buttons;
               [progressHUD removeFromSuperview];
           }];
      }];
@@ -295,9 +345,10 @@
          PFObject *object=[query getFirstObject];
          [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
-              followersLabel.text=[NSString stringWithFormat:@"%d", [channelObj[@"followersNumber"] intValue]];
+              followersLabel.text=[self constructFollowersString:[channelObj[@"followersNumber"] intValue]];
               privilege=0;
-              self.navigationItem.rightBarButtonItems=nil;
+              self.navigationItem.rightBarButtonItem=nil;
+              [composeToolBar removeFromSuperview];
               [followButton setTitle:@"Follow" forState:UIControlStateNormal];
               [progressHUD removeFromSuperview];
           }];
@@ -340,7 +391,7 @@
     {
         NSString *prompt=[NSString stringWithFormat:@"Are you sure you really want to delete channel %@?",channel.channelName];
         operation=UIAlertViewOperationDeleteChannel;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Delete"
+        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
                                                      message:prompt
                                                     delegate:self
                                            cancelButtonTitle:@"No"

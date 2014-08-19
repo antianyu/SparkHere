@@ -106,7 +106,7 @@
     if (contentTextView.text.length==0 && contentImageView.image==nil)
     {
         inputError=TextInputErrorMessageContent;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Please write something or choose a picture!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Please write something or choose a picture!" delegate:self];
     }
     else
     {
@@ -127,7 +127,7 @@
     }
     else
     {
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:nil];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Image picker is not supported on your phone!" delegate:nil];
     }
 }
 
@@ -144,7 +144,7 @@
     }
     else
     {
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:nil];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Camera is not supported on your phone!" delegate:nil];
     }
 }
 
@@ -172,12 +172,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if ([textView.text isEqualToString:@"max. 500 characters"])
-    {
-        textView.text=@"";
-    }
-    
-    if (textView.text.length>499 && ![text isEqualToString:@""])
+    if (textView.text.length>499 && text.length>0)
     {
         return NO;
     }

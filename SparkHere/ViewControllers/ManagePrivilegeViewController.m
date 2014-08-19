@@ -181,7 +181,7 @@
     {
         if (privilege==3)
         {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Modify Privilege"
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
                                                          message:@"Please select the privilege"
                                                         delegate:self
                                                cancelButtonTitle:@"Cancel"
@@ -190,7 +190,7 @@
         }
         else
         {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Modify Privilege"
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
                                                          message:@"Please select the privilege"
                                                         delegate:self
                                                cancelButtonTitle:@"Cancel"

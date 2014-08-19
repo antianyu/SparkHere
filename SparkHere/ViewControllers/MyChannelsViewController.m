@@ -64,7 +64,7 @@
 
     if (appDelegate.refreshMyChannelList)
     {
-        [appDelegate constructListsFromMessageVC:NO tableView:nil tabBarItem:nil];        
+        [appDelegate constructListsFromMessageVC:NO tableView:channelTableView tabBarItem:nil];
     }
     else
     {

@@ -7,7 +7,7 @@
 //
 
 #import "MyProfileViewController.h"
-#import "LoginViewController.h"
+#import "WelcomeViewController.h"
 #import "EditProfileViewController.h"
 #import "SettingsViewController.h"
 #import "HelpViewController.h"
@@ -146,7 +146,7 @@
                  [appDelegate.settings saveSettings];
                  
                  [progressHUD removeFromSuperview];
-                 LoginViewController *controller=[[LoginViewController alloc]init];
+                 WelcomeViewController *controller=[[WelcomeViewController alloc]init];
                  UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
                  [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
                  [self presentViewController:navController animated:YES completion:nil];
@@ -395,7 +395,6 @@
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
-         
          postsList=[[NSMutableArray alloc]init];
          
          PFQuery *query=[PFQuery queryWithClassName:@"Message"];

@@ -10,6 +10,7 @@
 #import "User.h"
 
 @interface MyProfileViewController : UIViewController <UIActionSheetDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
+
 @property (strong, nonatomic) IBOutlet UITableView *postsTableView;
 
 @end

@@ -24,5 +24,5 @@
 - (id)initWithPFObject:(PFObject *)object;
 
 - (void)setWithPFObject:(PFObject *)object;
-
+- (PFObject *)getPFObject;
 @end

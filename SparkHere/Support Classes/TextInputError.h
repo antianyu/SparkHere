@@ -14,7 +14,7 @@ typedef enum
     TextInputErrorUserName,
     TextInputErrorPassword,
     TextInputErrorConfirmPassword,
-    TextInputErrorOriginalPassword,
+    TextInputErrorOldPassword,
     TextInputErrorNewPassword,
     TextInputErrorNickname,
     TextInputErrorChannelName,

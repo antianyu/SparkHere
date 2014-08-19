@@ -8,6 +8,7 @@
 
 #import <Parse/Parse.h>
 #import <MobileCoreServices/UTCoreTypes.h>
+#import "QuartzCore/CALayer.h"
 #import "RegisterViewController.h"
 #import "MainViewController.h"
 #import "ImagePickerViewController.h"
@@ -32,13 +33,15 @@
 
 @synthesize usernameLabel;
 @synthesize usernameTextField;
-@synthesize passwordLabel;
-@synthesize passwordTextField;
-@synthesize confirmPwdLabel;
-@synthesize confirmPwdTextField;
 @synthesize nicknameLabel;
 @synthesize nicknameTextField;
+@synthesize passwordLabel;
+@synthesize passwordTextField;
+@synthesize confirmPwdTextField;
+@synthesize confirmPwdLabel;
+@synthesize logoImageViewContainer;
 @synthesize logoImageView;
+@synthesize editImageView;
 
 - (void)viewDidLoad
 {
@@ -57,22 +60,38 @@
     UIBarButtonItem *doneButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)];
     self.navigationItem.rightBarButtonItem=doneButtonItem;
     
-    usernameLabel.textColor=appDelegate.majorColor;
-    passwordLabel.textColor=appDelegate.majorColor;
-    confirmPwdLabel.textColor=appDelegate.majorColor;
-    nicknameLabel.textColor=appDelegate.majorColor;
+    [appDelegate setTextFieldStyle:usernameTextField];
+    [appDelegate setTextFieldStyle:passwordTextField];
+    [appDelegate setTextFieldStyle:confirmPwdTextField];
+    [appDelegate setTextFieldStyle:nicknameTextField];
     
-    [appDelegate setDefaultViewStyle:usernameTextField];
-    [appDelegate setDefaultViewStyle:passwordTextField];
-    [appDelegate setDefaultViewStyle:confirmPwdTextField];
-    [appDelegate setDefaultViewStyle:nicknameTextField];
+    usernameLabel.textColor=[UIColor lightGrayColor];
+    nicknameLabel.textColor=[UIColor lightGrayColor];
+    passwordLabel.textColor=[UIColor lightGrayColor];
+    confirmPwdLabel.textColor=[UIColor lightGrayColor];
+    
+    CALayer *layer=logoImageView.layer;
+    layer.masksToBounds=YES;
+    layer.cornerRadius=50;
+    layer.borderColor=[UIColor whiteColor].CGColor;
+    layer.borderWidth=3;
+    
+    logoImageViewContainer.backgroundColor=[UIColor clearColor];
+    logoImageViewContainer.layer.shadowColor=[UIColor darkGrayColor].CGColor;
+    logoImageViewContainer.layer.shadowOpacity=0.8;
+    logoImageViewContainer.layer.shadowOffset=CGSizeMake(3, 3);
+    logoImageViewContainer.layer.shadowRadius=3;
+    logoImageViewContainer.layer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:logoImageView.bounds cornerRadius:50].CGPath;
     
     logoImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self
                                                                              action:@selector(chooseLogo)];
     [logoImageView addGestureRecognizer:singleTap];
     
-    [usernameTextField becomeFirstResponder];
+    editImageView.userInteractionEnabled=YES;
+    UITapGestureRecognizer *editTap=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                             action:@selector(chooseLogo)];
+    [editImageView addGestureRecognizer:editTap];
     
     user=nil;
     
@@ -89,6 +108,7 @@
 - (void)doneButtonClicked
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    [self resumeView];
     [self constructUser];
     if (user!=nil)
     {
@@ -102,9 +122,94 @@
     [self resumeView];
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField==usernameTextField)
+    {
+        usernameLabel.hidden=YES;
+    }
+    else if (textField==nicknameTextField)
+    {
+        nicknameLabel.hidden=YES;
+    }
+    else if (textField==passwordTextField)
+    {
+        passwordLabel.hidden=YES;
+    }
+    else if (textField==confirmPwdTextField)
+    {
+        confirmPwdLabel.hidden=YES;
+    }
+    
+    NSTimeInterval animationDuration=0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    float width=self.view.frame.size.width;
+    float height=self.view.frame.size.height;
+    
+    if (appDelegate.is4Inch)
+    {
+        if (textField==usernameTextField)
+        {
+            CGRect rect=CGRectMake(0, 0, width, height);
+            self.view.frame=rect;
+        }
+        else if (textField==nicknameTextField || textField==passwordTextField || textField==confirmPwdTextField)
+        {
+            CGRect rect=CGRectMake(0, -74, width, height);
+            self.view.frame=rect;
+        }
+    }
+    else
+    {
+        if (textField==usernameTextField)
+        {
+            CGRect rect=CGRectMake(0, -20, width, height);
+            self.view.frame=rect;
+        }
+        else if (textField==nicknameTextField)
+        {
+            CGRect rect=CGRectMake(0, -74, width, height);
+            self.view.frame=rect;
+        }
+        else if (textField==passwordTextField || textField==confirmPwdTextField)
+        {
+            CGRect rect=CGRectMake(0, -150, width, height);
+            self.view.frame=rect;
+        }
+    }
+    
+    [UIView commitAnimations];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField==usernameTextField &&  textField.text.length==0)
+    {
+        usernameLabel.hidden=NO;
+    }
+    else if (textField==nicknameTextField &&  textField.text.length==0)
+    {
+        nicknameLabel.hidden=NO;
+    }
+    else if (textField==passwordTextField &&  textField.text.length==0)
+    {
+        passwordLabel.hidden=NO;
+    }
+    else if (textField==confirmPwdTextField &&  textField.text.length==0)
+    {
+        confirmPwdLabel.hidden=NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (textField.text.length>15 && ![string isEqualToString:@""])
+    if (textField.text.length>15 && string.length>0)
     {
         return NO;
     }
@@ -126,51 +231,21 @@
     }
     else if (textField==usernameTextField)
     {
+        [nicknameTextField becomeFirstResponder];
+    }
+    else if (textField==nicknameTextField)
+    {
         [passwordTextField becomeFirstResponder];
     }
     else if (textField==passwordTextField)
     {
         [confirmPwdTextField becomeFirstResponder];
     }
-    else if (textField==confirmPwdTextField)
-    {
-        [nicknameTextField becomeFirstResponder];
-    }
-    else // textField==nicknameTextField
+    else // textField==confirmPwdTextField
     {
         [usernameTextField becomeFirstResponder];
     }
     return NO;
-}
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    NSTimeInterval animationDuration=0.30f;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    
-    float width=self.view.frame.size.width;
-    float height=self.view.frame.size.height;
-    
-    if (textField==passwordTextField)
-    {
-        CGRect rect=CGRectMake(0, -18, width, height);
-        self.view.frame=rect;
-    }
-    else if (textField==confirmPwdTextField)
-    {
-        CGRect rect=CGRectMake(0, -85, width, height);
-        self.view.frame=rect;
-    }
-    else if (textField==nicknameTextField)
-    {
-        CGRect rect=CGRectMake(0, -152, width, height);
-        self.view.frame=rect;
-    }
-    
-    [UIView commitAnimations];
-    
-    return YES;
 }
 
 - (void)resumeView
@@ -193,7 +268,7 @@
     [self resumeView];
     operation=UIAlertViewOperationChooseImage;
     inputError=TextInputErrorNone;
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Choose Logo"
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
                                                  message:@"Please select a way to choose logo"
                                                 delegate:self
                                        cancelButtonTitle:@"Cancel"
@@ -206,27 +281,27 @@
     if (usernameTextField.text.length==0)
     {
         inputError=TextInputErrorUserName;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Username can't be empty!" delegate:self];
     }
     else if (passwordTextField.text.length==0)
     {
         inputError=TextInputErrorPassword;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Password can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Password can't be empty!" delegate:self];
     }
     else if (confirmPwdTextField.text.length==0)
     {
         inputError=TextInputErrorConfirmPassword;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Please confirm password!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Please confirm password!" delegate:self];
     }
     else if (nicknameTextField.text.length==0)
     {
         inputError=TextInputErrorNickname;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Nickname can't be empty!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Nickname can't be empty!" delegate:self];
     }
     else if (![passwordTextField.text isEqual:confirmPwdTextField.text])
     {
         inputError=TextInputErrorConfirmPassword;
-        [appDelegate showUIAlertViewWithTitle:@"Error" message:@"The passwords you typed do not match!" delegate:self];
+        [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"The passwords you typed do not match!" delegate:self];
     }
     else
     {
@@ -247,7 +322,7 @@
          if (!error && objects.count>0)
          {
              [progressHUD removeFromSuperview];
-             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Username already exists!" delegate:self];
+             [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Username already exists!" delegate:self];
          }
          else if(!error && objects.count==0)
          {
@@ -257,17 +332,11 @@
                   if (!error && objects.count>0)
                   {
                       [progressHUD removeFromSuperview];
-                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Nickname already exists!" delegate:self];
+                      [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Nickname already exists!" delegate:self];
                   }
                   else if(!error && objects.count==0)
                   {
-                      PFObject *newUser=[PFObject objectWithClassName:@"User"];
-                      newUser[@"username"]=user.username;
-                      newUser[@"password"]=user.userPassword;
-                      newUser[@"nickname"]=user.nickname;
-                      NSData *logoData=UIImageJPEGRepresentation(user.logo, 1);
-                      PFFile *logo=[PFFile fileWithName:@"logo.jpg" data:logoData];
-                      newUser[@"logo"]=logo;
+                      PFObject *newUser=[user getPFObject];
                       [newUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
                        {
                            if (!error)
@@ -278,7 +347,7 @@
                                [appDelegate setCurrentUser:[query getFirstObject]];
                                [progressHUD removeFromSuperview];
                                operation=UIAlertViewOperationRegister;
-                               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations"
+                               UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
                                                                             message:@"Register succeed!"
                                                                            delegate:self
                                                                   cancelButtonTitle:nil
@@ -295,13 +364,13 @@
                   else
                   {
                       [progressHUD removeFromSuperview];
-                      [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];                  }
+                      [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Query error!" delegate:self];                  }
               }];
          }
          else
          {
              [progressHUD removeFromSuperview];
-             [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Query error!" delegate:self];
+             [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Query error!" delegate:self];
          }
      }];
 }
@@ -342,7 +411,7 @@
                 }
                 else
                 {
-                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Image picker is not supported on your phone!" delegate:self];
+                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Image picker is not supported on your phone!" delegate:self];
                 }
             }
             else
@@ -358,7 +427,7 @@
                 }
                 else
                 {
-                    [appDelegate showUIAlertViewWithTitle:@"Error" message:@"Camera is not supported on your phone!" delegate:self];
+                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Camera is not supported on your phone!" delegate:self];
                 }
             }
         }
