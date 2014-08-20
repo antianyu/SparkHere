@@ -23,6 +23,7 @@
 @synthesize logoImageViewContainer;
 @synthesize nicknameLabel;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];

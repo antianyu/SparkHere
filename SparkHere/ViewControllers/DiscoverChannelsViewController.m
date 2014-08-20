@@ -28,6 +28,7 @@
 
 @synthesize categoryTableView;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -75,6 +76,7 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
+#pragma mark UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView==self.searchDisplayController.searchResultsTableView)
@@ -169,6 +171,7 @@
     }
 }
 
+#pragma mark SearchDisplayController
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -189,6 +192,7 @@
     [searchResults removeAllObjects];
 }
 
+#pragma mark Auxiliaries
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];

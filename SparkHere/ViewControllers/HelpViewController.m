@@ -21,6 +21,7 @@
 @synthesize scrollView;
 @synthesize helpLabel;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];

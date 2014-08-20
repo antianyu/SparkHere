@@ -30,6 +30,7 @@
 
 @synthesize messagesTableView;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -81,6 +82,7 @@
     [messagesTableView headerEndRefreshing];
 }
 
+#pragma mark UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return appDelegate.messageList.count;
@@ -168,6 +170,7 @@
     });
 }
 
+#pragma mark Auxilaries
 - (void)loadMoreMessagesFromFooter
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

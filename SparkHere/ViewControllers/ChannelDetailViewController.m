@@ -44,6 +44,7 @@
 @synthesize channel;
 @synthesize isFollowing;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -266,6 +267,80 @@
     }
 }
 
+#pragma mark Delegates
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex!=alertView.cancelButtonIndex)
+    {
+        switch (operation)
+        {
+            case UIAlertViewOperationDeleteChannel:
+            {
+                [self showDeleteChannelWaitingView];
+                break;
+            }
+            case UIAlertViewOperationChooseNewSuperAdmin:
+            {
+                ChooseNewSuperAdminViewController *controller=[[ChooseNewSuperAdminViewController alloc]init];
+                controller.channel=channel;
+                self.hidesBottomBarWhenPushed=YES;
+                [self.navigationController pushViewController:controller animated:YES];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    else if(unfollowWithCancel)
+    {
+        unfollowWithCancel=NO;
+        [self unfollowCurrentChannel];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==actionSheet.destructiveButtonIndex)
+    {
+        NSString *prompt=[NSString stringWithFormat:@"Are you sure you really want to delete channel %@?",channel.channelName];
+        operation=UIAlertViewOperationDeleteChannel;
+        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
+                                                     message:prompt
+                                                    delegate:self
+                                           cancelButtonTitle:@"No"
+                                           otherButtonTitles:@"Yes", nil];
+        [alert show];
+    }
+    else if (buttonIndex==actionSheet.cancelButtonIndex-2)
+    {
+        EditChannelViewController *controller=[[EditChannelViewController alloc]init];
+        controller.editChannel=YES;
+        controller.channel=channel;
+        self.hidesBottomBarWhenPushed=YES;
+        
+        UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
+        self.navigationItem.backBarButtonItem=backButton;
+        
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+    else if (buttonIndex==actionSheet.cancelButtonIndex-1)
+    {
+        ManagePrivilegeViewController *controller=[[ManagePrivilegeViewController alloc]init];
+        controller.channel=channel;
+        controller.privilege=privilege;
+        
+        UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back"
+                                                                    style:UIBarButtonItemStyleBordered
+                                                                   target:self
+                                                                   action:nil];
+        self.navigationItem.backBarButtonItem=backButton;
+        
+        self.hidesBottomBarWhenPushed=YES;
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+}
+
+#pragma mark Auxiliaries
 - (void)followCurrentChannel
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
@@ -358,78 +433,6 @@
               [progressHUD removeFromSuperview];
           }];
      }];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex!=alertView.cancelButtonIndex)
-    {
-        switch (operation)
-        {   
-            case UIAlertViewOperationDeleteChannel:
-            {
-                [self showDeleteChannelWaitingView];
-                break;
-            }
-            case UIAlertViewOperationChooseNewSuperAdmin:
-            {
-                ChooseNewSuperAdminViewController *controller=[[ChooseNewSuperAdminViewController alloc]init];
-                controller.channel=channel;
-                self.hidesBottomBarWhenPushed=YES;
-                [self.navigationController pushViewController:controller animated:YES];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    else if(unfollowWithCancel)
-    {
-        unfollowWithCancel=NO;
-        [self unfollowCurrentChannel];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex==actionSheet.destructiveButtonIndex)
-    {
-        NSString *prompt=[NSString stringWithFormat:@"Are you sure you really want to delete channel %@?",channel.channelName];
-        operation=UIAlertViewOperationDeleteChannel;
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil
-                                                     message:prompt
-                                                    delegate:self
-                                           cancelButtonTitle:@"No"
-                                           otherButtonTitles:@"Yes", nil];
-        [alert show];
-    }
-    else if (buttonIndex==actionSheet.cancelButtonIndex-2)
-    {
-        EditChannelViewController *controller=[[EditChannelViewController alloc]init];
-        controller.editChannel=YES;
-        controller.channel=channel;
-        self.hidesBottomBarWhenPushed=YES;
-        
-        UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
-        self.navigationItem.backBarButtonItem=backButton;
-        
-        [self.navigationController pushViewController:controller animated:YES];
-    }
-    else if (buttonIndex==actionSheet.cancelButtonIndex-1)
-    {
-        ManagePrivilegeViewController *controller=[[ManagePrivilegeViewController alloc]init];
-        controller.channel=channel;
-        controller.privilege=privilege;
-        
-        UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back"
-                                                                    style:UIBarButtonItemStyleBordered
-                                                                   target:self
-                                                                   action:nil];
-        self.navigationItem.backBarButtonItem=backButton;
-        
-        self.hidesBottomBarWhenPushed=YES;
-        [self.navigationController pushViewController:controller animated:YES];
-    }
 }
 
 - (void)showDeleteChannelWaitingView

@@ -27,6 +27,7 @@
 @synthesize channelTableView;
 @synthesize category;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -70,6 +71,7 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
+#pragma mark UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView==self.searchDisplayController.searchResultsTableView)
@@ -141,6 +143,7 @@
     [self.navigationController pushViewController:controller animated:YES];
 }
 
+#pragma mark SearchDisplayController
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -169,6 +172,7 @@
     [self constructSearchResultLists:searchBar.text];
 }
 
+#pragma mark Auxiliares
 - (void)constructList
 {
     [hotChannelList removeAllObjects];

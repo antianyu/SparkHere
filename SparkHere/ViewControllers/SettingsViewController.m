@@ -28,6 +28,7 @@
 @synthesize fontSizeLabel;
 @synthesize fontSizeSegmentedControl;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];

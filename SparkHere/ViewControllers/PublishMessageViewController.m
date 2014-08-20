@@ -33,6 +33,7 @@
 @synthesize toolbar;
 @synthesize channel;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -149,28 +150,7 @@
     }
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
-    CGRect rect=contentImageView.frame;
-    rect.size.height=IMAGE_WIDTH*image.size.height/image.size.width;
-    contentImageView.frame=rect;
-    contentImageView.image=image;
-    
-    scrollView.contentSize=CGSizeMake(contentImageView.frame.size.width, contentImageView.frame.size.height+145);
-    [shapeLayer removeFromSuperlayer];
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(inputError==TextInputErrorMessageContent)
-    {
-        inputError=TextInputErrorNone;
-        [contentTextView becomeFirstResponder];
-    }
-}
-
+#pragma mark UITextView
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     contentLabel.hidden=YES;
@@ -194,6 +174,30 @@
     return YES;
 }
 
+#pragma mark Other Delegates
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
+    CGRect rect=contentImageView.frame;
+    rect.size.height=IMAGE_WIDTH*image.size.height/image.size.width;
+    contentImageView.frame=rect;
+    contentImageView.image=image;
+    
+    scrollView.contentSize=CGSizeMake(contentImageView.frame.size.width, contentImageView.frame.size.height+145);
+    [shapeLayer removeFromSuperlayer];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(inputError==TextInputErrorMessageContent)
+    {
+        inputError=TextInputErrorNone;
+        [contentTextView becomeFirstResponder];
+    }
+}
+
+#pragma mark Auxiliaries
 - (void)imageViewTapped
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];

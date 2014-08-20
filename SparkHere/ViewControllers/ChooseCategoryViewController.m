@@ -23,6 +23,7 @@
 @synthesize categoryTableView;
 @synthesize category;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -43,6 +44,7 @@
     categoryList=[[NSArray alloc]initWithContentsOfFile:plistPath];
 }
 
+#pragma mark UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return categoryList.count;

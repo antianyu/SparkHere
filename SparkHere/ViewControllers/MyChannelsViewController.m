@@ -28,6 +28,7 @@
 
 @synthesize channelTableView;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -84,6 +85,19 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
+- (void)establishButtonClicked
+{
+    EditChannelViewController *controller=[[EditChannelViewController alloc]init];
+    controller.editChannel=NO;
+    self.hidesBottomBarWhenPushed=YES;
+    
+    UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
+    self.navigationItem.backBarButtonItem=backButton;
+    
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
+#pragma mark UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView==self.searchDisplayController.searchResultsTableView)
@@ -158,6 +172,7 @@
     [self.navigationController pushViewController:controller animated:YES];
 }
 
+#pragma mark SearchDisplayController
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -186,18 +201,7 @@
     [self constructSearchResultLists:searchBar.text];
 }
 
-- (void)establishButtonClicked
-{
-    EditChannelViewController *controller=[[EditChannelViewController alloc]init];
-    controller.editChannel=NO;
-    self.hidesBottomBarWhenPushed=YES;
-    
-    UIBarButtonItem *backButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:nil];
-    self.navigationItem.backBarButtonItem=backButton;
-    
-    [self.navigationController pushViewController:controller animated:YES];
-}
-
+#pragma mark Auxiliaries
 - (void)constructSearchResultLists:(NSString *)searchString
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];

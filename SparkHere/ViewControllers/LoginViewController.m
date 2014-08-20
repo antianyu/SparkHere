@@ -32,6 +32,7 @@
 @synthesize passwordTextField;
 @synthesize loginButton;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -71,6 +72,7 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
+#pragma mark UITextField
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     if (textField==usernameTextField)
@@ -126,6 +128,7 @@
     return NO;
 }
 
+#pragma mark Other Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(inputError==TextInputErrorUserName)
@@ -138,6 +141,7 @@
     }
 }
 
+#pragma mark Auxiliaries
 - (void)constructUser
 {
     if (usernameTextField.text.length==0)

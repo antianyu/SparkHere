@@ -26,6 +26,7 @@
 @synthesize signUpButton;
 @synthesize signInButton;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];

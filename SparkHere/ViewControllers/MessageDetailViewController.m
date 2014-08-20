@@ -30,6 +30,7 @@
 
 @synthesize message;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -45,10 +46,11 @@
     channelLabel.text=[@"via:" stringByAppendingString:message.channel.channelName];
     channelLabel.textColor=appDelegate.detailColor;
     
+    // init senderLogoImageView
+    [appDelegate setImageViewStyle:senderLogoImageView container:logoImageViewContainer borderWidth:1.5 shadowOffset:2];
     senderLogoImageView.image=message.sender.logo;
     
-    [appDelegate setImageViewStyle:senderLogoImageView container:logoImageViewContainer borderWidth:1.5 shadowOffset:2];
-    
+    // init updateLabel
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSUInteger unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit |NSMinuteCalendarUnit;
     NSDateComponents *cmp1 = [calendar components:unitFlags fromDate:message.updateAt];
@@ -71,6 +73,7 @@
     
     scrollView.contentSize=CGSizeMake(VIEW_WIDTH, TITLE_HEIGHT);
     
+    // init contentLabel
     UILabel *contentLabel=[[UILabel alloc]init];
     if (message.content.length>0)
     {
@@ -91,6 +94,7 @@
         [scrollView addSubview:contentLabel];
     }
     
+    // init image
     if(message.image!=nil)
     {
         CGRect frame;
@@ -104,10 +108,12 @@
         [scrollView addSubview:imageView];
     }
     
+    // init locationImageView
     UIImageView *locationImageView=[[UIImageView alloc]initWithFrame:CGRectMake(15, scrollView.contentSize.height+INTERVAL+4, 20, 20)];
     locationImageView.image=[UIImage imageNamed:@"Location.png"];
     [scrollView addSubview:locationImageView];
     
+    // init locationLabel
     UILabel *locationLabel=[[UILabel alloc]init];
     locationLabel.font=[UIFont systemFontOfSize:appDelegate.settings.fontSize-4];
     locationLabel.textColor=appDelegate.detailColor;
@@ -116,6 +122,7 @@
     scrollView.contentSize=CGSizeMake(VIEW_WIDTH, scrollView.contentSize.height+INTERVAL+LABEL_HEIGHT);
     [scrollView addSubview:locationLabel];
     
+    // add Message Annotation
     CGRect frame=CGRectMake(MAP_ORIGIN_X, scrollView.contentSize.height+INTERVAL, MAP_WIDTH, MAP_HEIGHT);
     mapView=[[MKMapView alloc]initWithFrame:frame];
     mapView.delegate=self;
@@ -138,6 +145,7 @@
     appDelegate.refreshPostsList=NO;
 }
 
+#pragma mark Other Delegate
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
     for (MKPinAnnotationView *mkView in views)
@@ -149,6 +157,7 @@
     }
 }
 
+#pragma mark Auxiliaries
 - (void)drawYourPosition
 {
     [appDelegate getLocation];

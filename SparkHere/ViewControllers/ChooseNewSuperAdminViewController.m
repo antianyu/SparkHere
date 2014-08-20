@@ -33,6 +33,7 @@
 @synthesize memberTableView;
 @synthesize channel;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -71,6 +72,7 @@
     [progressHUD removeFromSuperview];
 }
 
+#pragma mark UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView==self.searchDisplayController.searchResultsTableView)
@@ -171,6 +173,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark SearchDisplayController
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -204,6 +207,7 @@
     [self constructSearchResultLists:searchBar.text];
 }
 
+#pragma mark Other Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
@@ -219,6 +223,7 @@
     }
 }
 
+#pragma mark Auxiliaries
 - (void)constructLists
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];

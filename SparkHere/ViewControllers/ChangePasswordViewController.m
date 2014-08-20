@@ -29,6 +29,7 @@
 @synthesize theConfirmPwdLabel;
 @synthesize theConfirmPwdTextField;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -56,6 +57,7 @@
     [self savePasswordRequest];
 }
 
+#pragma mark UITextField
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     if (textField==theOldPwdTextField)
@@ -125,6 +127,7 @@
     return NO;
 }
 
+#pragma mark Other Delegates
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex!=alertView.cancelButtonIndex)
@@ -145,6 +148,7 @@
     }
 }
 
+#pragma mark Auxiliaries
 - (void)savePasswordRequest
 {
     if ([self isPasswordPartValid])

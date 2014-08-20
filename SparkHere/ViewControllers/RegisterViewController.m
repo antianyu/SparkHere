@@ -43,6 +43,7 @@
 @synthesize logoImageView;
 @synthesize editImageView;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -111,6 +112,7 @@
     [self resumeView];
 }
 
+#pragma mark UITextField
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     if (textField==usernameTextField)
@@ -237,6 +239,82 @@
     return NO;
 }
 
+#pragma mark Other Delegates
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex!=alertView.cancelButtonIndex)
+    {
+        if (operation==UIAlertViewOperationRegister)
+        {
+            appDelegate.refreshMessageList=NO;
+            appDelegate.refreshMyChannelList=NO;
+            MainViewController *controller=[[MainViewController alloc]init];
+            controller.selectedIndex=2;
+            [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+            [self presentViewController:controller animated:YES completion:nil];
+        }
+        else
+        {
+            if (buttonIndex==1)
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Image picker is not supported on your phone!" delegate:self];
+                }
+            }
+            else
+            {
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+                {
+                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
+                    controller.delegate=self;
+                    controller.allowsEditing=YES;
+                    controller.sourceType=UIImagePickerControllerSourceTypeCamera;
+                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
+                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                }
+                else
+                {
+                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Camera is not supported on your phone!" delegate:self];
+                }
+            }
+        }
+    }
+    else if(inputError==TextInputErrorUserName)
+    {
+        [usernameTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorPassword)
+    {
+        [passwordTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorConfirmPassword)
+    {
+        [confirmPwdTextField becomeFirstResponder];
+    }
+    else if(inputError==TextInputErrorNickname)
+    {
+        [nicknameTextField becomeFirstResponder];
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
+    image=[self scaleToSize:image size:CGSizeMake(100, 100)];
+    logoImageView.image=image;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark Auxiliaries
 - (void)resumeView
 {
     NSTimeInterval animationDuration=0.30f;
@@ -371,80 +449,6 @@
      {
          [self registerRequest];
      }];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex!=alertView.cancelButtonIndex)
-    {
-        if (operation==UIAlertViewOperationRegister)
-        {
-            appDelegate.refreshMessageList=NO;
-            appDelegate.refreshMyChannelList=NO;
-            MainViewController *controller=[[MainViewController alloc]init];
-            controller.selectedIndex=2;
-            [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-            [self presentViewController:controller animated:YES completion:nil];
-        }
-        else
-        {
-            if (buttonIndex==1)
-            {
-                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
-                {
-                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
-                    controller.delegate=self;
-                    controller.allowsEditing=YES;
-                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
-                    [self.navigationController presentViewController:controller animated:YES completion:nil];
-                }
-                else
-                {
-                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Image picker is not supported on your phone!" delegate:self];
-                }
-            }
-            else
-            {
-                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-                {
-                    ImagePickerViewController *controller=[[ImagePickerViewController alloc]init];
-                    controller.delegate=self;
-                    controller.allowsEditing=YES;
-                    controller.sourceType=UIImagePickerControllerSourceTypeCamera;
-                    controller.mediaTypes=[[NSArray alloc]initWithObjects:(NSString *)kUTTypeImage, nil];
-                    [self.navigationController presentViewController:controller animated:YES completion:nil];
-                }
-                else
-                {
-                    [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Camera is not supported on your phone!" delegate:self];
-                }
-            }
-        }
-    }
-    else if(inputError==TextInputErrorUserName)
-    {
-        [usernameTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorPassword)
-    {
-        [passwordTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorConfirmPassword)
-    {
-        [confirmPwdTextField becomeFirstResponder];
-    }
-    else if(inputError==TextInputErrorNickname)
-    {
-        [nicknameTextField becomeFirstResponder];
-    }
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *image=[info objectForKey:@"UIImagePickerControllerEditedImage"];
-    image=[self scaleToSize:image size:CGSizeMake(100, 100)];
-    logoImageView.image=image;
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UIImage *)scaleToSize:(UIImage *)image size:(CGSize)size

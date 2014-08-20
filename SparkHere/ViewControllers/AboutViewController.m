@@ -21,6 +21,7 @@
 @synthesize scrollView;
 @synthesize aboutLabel;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
