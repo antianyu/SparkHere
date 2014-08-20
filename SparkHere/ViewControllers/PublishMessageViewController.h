@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Channel.h"
 
-@interface PublishMessageViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface PublishMessageViewController : UIViewController <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
+@property (strong, nonatomic) IBOutlet UILabel *contentLabel;
 @property (strong, nonatomic) IBOutlet UITextView *contentTextView;
 @property (strong, nonatomic) IBOutlet UIImageView *contentImageView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;

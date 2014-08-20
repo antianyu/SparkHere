@@ -87,11 +87,12 @@
     layer.borderWidth=3;
     
     logoImageViewContainer.backgroundColor=[UIColor clearColor];
-    logoImageViewContainer.layer.shadowColor=[UIColor darkGrayColor].CGColor;
-    logoImageViewContainer.layer.shadowOpacity=0.8;
-    logoImageViewContainer.layer.shadowOffset=CGSizeMake(3, 3);
-    logoImageViewContainer.layer.shadowRadius=3;
-    logoImageViewContainer.layer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:logoImageView.bounds cornerRadius:50].CGPath;
+    CALayer *containerLayer=logoImageViewContainer.layer;
+    containerLayer.shadowColor=[UIColor darkGrayColor].CGColor;
+    containerLayer.shadowOpacity=0.8;
+    containerLayer.shadowOffset=CGSizeMake(3, 3);
+    containerLayer.shadowRadius=3;
+    containerLayer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:logoImageView.bounds cornerRadius:50].CGPath;
     
     logoImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self

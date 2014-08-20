@@ -26,6 +26,7 @@
     CAShapeLayer *shapeLayer;
 }
 
+@synthesize contentLabel;
 @synthesize contentTextView;
 @synthesize contentImageView;
 @synthesize scrollView;
@@ -167,6 +168,19 @@
     {
         inputError=TextInputErrorNone;
         [contentTextView becomeFirstResponder];
+    }
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    contentLabel.hidden=YES;
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if (textView.text.length==0)
+    {
+        contentLabel.hidden=NO;
     }
 }
 
