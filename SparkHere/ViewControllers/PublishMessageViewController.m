@@ -75,8 +75,8 @@
     
     [keyBoardToolBar setItems:[NSArray arrayWithObjects:albumButtonItem, cameraButtonItem, spaceButtonItem, hideButtonItem, nil]];
     
-    contentTextView.tintColor=appDelegate.majorColor;
-    contentTextView.textColor=appDelegate.majorColor;
+    contentTextView.tintColor=appDelegate.detailColor;
+    contentTextView.textColor=appDelegate.detailColor;
     contentTextView.backgroundColor=[UIColor clearColor];
     contentTextView.inputAccessoryView=keyBoardToolBar;
     

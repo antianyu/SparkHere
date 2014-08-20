@@ -33,21 +33,31 @@
     
     NSString *helpString=@"FAQ:\n\n"
     
-    "1. How to register a new user?\n"
+    "1. What is Channel?\n"
     
-    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n"
+    "Answer: Channel is a carrier, like frequecy in radio. When you subscribe a channel (just like switch to FM XX.X on your radio), "
+    "then you can receive messages via this channel.\n\n"
     
-    "2. How to register a new user?\n"
+    "2. How to subscribe a channel?\n"
     
-    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n"
+    "Answer: Choose a category of channels, or search key words in search bar, then select a channel, click \"Follow\" button.\n\n"
     
-    "3. How to register a new user?\n"
+    "3. Now I have subscribed a channel, how to send a message?\n"
     
-    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n"
+    "Answer: Click the button at bottom. It will lead you to new message page. Write your message there.\n\n"
     
-    "4. How to register a new user?\n"
+    "4. Why can't I see the button at bottom?\n"
     
-    "A: Click on \"Register\" button, fulfill your information and choose your logo, then click on \"Done\".\n\n";
+    "Answer: Have you subscribed the channel? If you do, the reason is that you don't have enough privilege to send a message.\n\n"
+    
+    "5. Privilege? What is privilege?\n"
+    
+    "Answer: When you subscribe a channel, there will a privilege that controls what you can do to that channel. \n\n"
+    "There are 4 levels:\n"
+    "Level 1: Just receive message via that channel.\n"
+    "Level 2: Receive and send message via that channel.\n"
+    "Level 3: Adminstrator, you can modify the privilege of those whose privilege is level 1 or 2 apart from receiving and sending message.\n"
+    "Level 4: Super Adminstrator, you can do whatever you want! Delete that channel, remove other subscribers...\n\n";
     
     [helpLabel setNumberOfLines:0];
     helpLabel.font=[UIFont systemFontOfSize:17];

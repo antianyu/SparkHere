@@ -20,6 +20,7 @@
 @synthesize updateLabel;
 @synthesize locationLabel;
 @synthesize senderLogoImageView;
+@synthesize logoImageViewContainer;
 
 - (void)awakeFromNib
 {
@@ -29,6 +30,7 @@
     [channelLabel setTextColor:appDelegate.detailColor];
     [updateLabel setTextColor:appDelegate.detailColor];
     [locationLabel setTextColor:appDelegate.majorColor];
+    [appDelegate setImageViewStyle:senderLogoImageView container:logoImageViewContainer borderWidth:1.5 shadowOffset:2];
 }
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize
@@ -78,7 +80,7 @@
         
         CGSize actualSize=[message.content boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         
-        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, self.frame.size.height, LABEL_WIDTH, actualSize.height);
+        contentLabel.frame=CGRectMake(LABEL_ORIGIN_X, self.frame.size.height+INTERVAL, LABEL_WIDTH, actualSize.height);
         [self addSubview:contentLabel];
        
         CGRect frame=self.frame;
@@ -90,7 +92,7 @@
     {
         CGRect frame;
         double imageHeight=IMAGE_WIDTH*message.image.size.height/message.image.size.width;
-        frame=CGRectMake(IMAGE_ORIGIN_X, self.frame.size.height, IMAGE_WIDTH, imageHeight);
+        frame=CGRectMake(IMAGE_ORIGIN_X, self.frame.size.height+INTERVAL, IMAGE_WIDTH, imageHeight);
         
         UIImageView *imageView=[[UIImageView alloc]initWithFrame:frame];
         imageView.image=message.image;
@@ -100,6 +102,10 @@
         frame.size.height+=imageHeight+INTERVAL;
         self.frame=frame;
     }
+    
+    CGRect frame=self.frame;
+    frame.size.height+=PADDING;
+    self.frame=frame;
 }
 
 @end

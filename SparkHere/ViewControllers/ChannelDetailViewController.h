@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (strong, nonatomic) IBOutlet UIView *logoImageViewContainer;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UILabel *followersLabel;

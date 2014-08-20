@@ -27,6 +27,7 @@
     AppDelegate *appDelegate;
     MBProgressHUD *progressHUD;
     Message *tempMessage;
+    PFGeoPoint *oldLocation;
     BOOL isSettingsAction;
     BOOL isMessageTable;
     BOOL modificationInSearchTableView;
@@ -37,6 +38,7 @@
 
 @synthesize postsTableView;
 
+#pragma mark View
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -71,6 +73,16 @@
     [self.searchDisplayController.searchResultsTableView setSeparatorInset:UIEdgeInsetsZero];
     
     searchResults=[[NSMutableArray alloc]init];
+    oldLocation=appDelegate.currentLocation;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tabBarItem setTitle:@"My Profile"];
+    [self.tabBarItem setImage:[[UIImage imageNamed:@"MyProfile_unselected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"MyProfile_selected.png"]];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -81,15 +93,10 @@
     {
         [self constructPostsList];
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.tabBarItem setTitle:@"My Profile"];
-    [self.tabBarItem setImage:[[UIImage imageNamed:@"MyProfile_unselected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"MyProfile_selected.png"]];
+    else if (oldLocation!=appDelegate.currentLocation)
+    {
+        [postsTableView reloadData];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -128,6 +135,7 @@
     [actionSheet showInView:self.view.superview];
 }
 
+#pragma mark Action Sheet
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (isSettingsAction)
@@ -186,6 +194,7 @@
     }
 }
 
+#pragma mark UITableView
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (tableView==self.searchDisplayController.searchResultsTableView)
@@ -353,6 +362,7 @@
     }
 }
 
+#pragma mark SearchDisplayController
 - (void)filterContentForSearchText:(NSString *)searchText scope:(NSString *)scope
 {
     NSPredicate *resultPredicate=[NSPredicate predicateWithFormat:@"(SELF.content contains[cd] %@) or (SELF.channel.channelName contains[cd] %@)", searchText, searchText];
@@ -390,6 +400,7 @@
     [self constructSearchResultLists:searchBar.text];
 }
 
+#pragma mark Auxiliaries
 - (void)constructPostsList
 {
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];

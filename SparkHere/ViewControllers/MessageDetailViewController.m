@@ -24,8 +24,8 @@
 @synthesize scrollView;
 @synthesize senderLabel;
 @synthesize senderLogoImageView;
+@synthesize logoImageViewContainer;
 @synthesize channelLabel;
-@synthesize channelLogoImageView;
 @synthesize updateLabel;
 
 @synthesize message;
@@ -46,7 +46,8 @@
     channelLabel.textColor=appDelegate.detailColor;
     
     senderLogoImageView.image=message.sender.logo;
-    channelLogoImageView.image=message.channel.logo;
+    
+    [appDelegate setImageViewStyle:senderLogoImageView container:logoImageViewContainer borderWidth:1.5 shadowOffset:2];
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSUInteger unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit |NSMinuteCalendarUnit;

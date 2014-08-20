@@ -13,35 +13,42 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" id="33H-FW-Tse">
+                        <rect key="frame" x="15" y="15" width="30" height="30"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Xhz-wA-lpL">
+                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AaBbCcDdGg" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Poa-Vi-zBu">
-                        <rect key="frame" x="53" y="3" width="252" height="26"/>
+                        <rect key="frame" x="53" y="10" width="252" height="26"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AaBbCcDdGg" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ga2-dx-YUC">
-                        <rect key="frame" x="53" y="18" width="252" height="26"/>
+                        <rect key="frame" x="53" y="25" width="252" height="26"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12/08/2014 21:01" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kJN-2D-VTY">
-                        <rect key="frame" x="189" y="7" width="116" height="18"/>
+                        <rect key="frame" x="189" y="14" width="116" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Xhz-wA-lpL">
-                        <rect key="frame" x="15" y="8" width="30" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Location" id="4hh-va-2ty">
-                        <rect key="frame" x="15" y="46" width="20" height="20"/>
+                        <rect key="frame" x="15" y="53" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3b0-jV-4Yf">
-                        <rect key="frame" x="35" y="45" width="270" height="21"/>
+                        <rect key="frame" x="35" y="52" width="270" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -52,6 +59,7 @@
             <connections>
                 <outlet property="channelLabel" destination="Ga2-dx-YUC" id="a75-YO-zH8"/>
                 <outlet property="locationLabel" destination="3b0-jV-4Yf" id="zzm-Dm-OiP"/>
+                <outlet property="logoImageViewContainer" destination="33H-FW-Tse" id="ger-KZ-Phu"/>
                 <outlet property="senderLabel" destination="Poa-Vi-zBu" id="rHg-gz-g3n"/>
                 <outlet property="senderLogoImageView" destination="Xhz-wA-lpL" id="vjE-c0-S2Z"/>
                 <outlet property="updateLabel" destination="kJN-2D-VTY" id="llu-li-eOZ"/>

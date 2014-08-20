@@ -48,6 +48,8 @@
 - (void)setTextFieldStyle:(UITextField *)textField;
 - (void)setTextViewStyle:(UITextView *)textView;
 - (void)setButtonStyle:(UIButton *)button color:(UIColor *)color;
+- (void)setImageViewStyle:(UIImageView *)imageView container:(UIView *)container borderWidth:(float)borderWidth shadowOffset:(float)offset;
+
 - (void)setCurrentUser:(PFObject *)object;
 - (void)constructListsFromMessageVC:(BOOL)fromMessageVC tableView:(UITableView *)tableView tabBarItem:(UITabBarItem *)tabBarItem;
 - (Channel *)findChannelFromMyChannelList:(NSString *)channelID;

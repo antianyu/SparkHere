@@ -27,7 +27,7 @@ const double MAP_WIDTH=290;
 const double MAP_HEIGHT=217.5;
 
 const double INTERVAL=8;
-const double PADDING=20;
+const double PADDING=15;
 
 const double MAP_RANGE=1000;
 

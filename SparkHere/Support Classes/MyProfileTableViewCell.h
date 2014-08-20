@@ -11,6 +11,7 @@
 @interface MyProfileTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (strong, nonatomic) IBOutlet UIView *logoImageViewContainer;
 @property (strong, nonatomic) IBOutlet UILabel *nicknameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *locationLabel;
 

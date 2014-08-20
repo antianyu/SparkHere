@@ -53,19 +53,7 @@
     self.navigationItem.rightBarButtonItem=saveButtonItem;
     
     // init logoImageView
-    CALayer *layer=logoImageView.layer;
-    layer.masksToBounds=YES;
-    layer.cornerRadius=50;
-    layer.borderColor=[UIColor whiteColor].CGColor;
-    layer.borderWidth=3;
-    
-    logoImageViewContainer.backgroundColor=[UIColor clearColor];
-    CALayer *containerLayer=logoImageViewContainer.layer;
-    containerLayer.shadowColor=[UIColor darkGrayColor].CGColor;
-    containerLayer.shadowOpacity=0.8;
-    containerLayer.shadowOffset=CGSizeMake(3, 3);
-    containerLayer.shadowRadius=3;
-    containerLayer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:logoImageView.bounds cornerRadius:50].CGPath;
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
     
     logoImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self

@@ -231,6 +231,25 @@
     button.layer.borderWidth=1.5;
 }
 
+- (void)setImageViewStyle:(UIImageView *)imageView container:(UIView *)container borderWidth:(float)borderWidth shadowOffset:(float)offset
+{
+    float radius=imageView.frame.size.height/2;
+    
+    CALayer *layer=imageView.layer;
+    layer.masksToBounds=YES;
+    layer.cornerRadius=radius;
+    layer.borderColor=[UIColor whiteColor].CGColor;
+    layer.borderWidth=borderWidth;
+    
+    container.backgroundColor=[UIColor clearColor];
+    CALayer *containerLayer=container.layer;
+    containerLayer.shadowColor=[UIColor darkGrayColor].CGColor;
+    containerLayer.shadowOpacity=0.8;
+    containerLayer.shadowOffset=CGSizeMake(offset, offset);
+    containerLayer.shadowRadius=3;
+    containerLayer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:imageView.bounds cornerRadius:radius].CGPath;
+}
+
 - (void)setCurrentUser:(PFObject *)object
 {
     if (user==nil)

@@ -35,6 +35,7 @@
 
 @synthesize scrollView;
 @synthesize logoImageView;
+@synthesize logoImageViewContainer;
 @synthesize titleLabel;
 @synthesize descriptionLabel;
 @synthesize followersLabel;
@@ -56,6 +57,8 @@
     progressHUD.labelText = @"Please wait...";
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
+    
+    logoImageViewContainer.hidden=YES;
     
     // add editButton
     editButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonClicked)];
@@ -184,6 +187,8 @@
              [followButton setTitle:@"Follow" forState:UIControlStateNormal];
          }
          
+         logoImageViewContainer.hidden=NO;
+         [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
          if (channel.logo!=nil)
          {
              logoImageView.image=channel.logo;

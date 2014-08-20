@@ -12,6 +12,7 @@
 @interface ChannelTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (strong, nonatomic) IBOutlet UIView *logoImageViewContainer;
 @property (strong, nonatomic) IBOutlet UILabel *channelNameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *followersLabel;
 

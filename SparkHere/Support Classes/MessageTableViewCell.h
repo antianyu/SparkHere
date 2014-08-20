@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *updateLabel;
 @property (strong, nonatomic) IBOutlet UILabel *locationLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *senderLogoImageView;
+@property (strong, nonatomic) IBOutlet UIView *logoImageViewContainer;
 
 - (void)setMessage:(Message *)message fontSize:(int)fontSize;
 @end

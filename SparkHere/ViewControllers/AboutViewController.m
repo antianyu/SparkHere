@@ -33,6 +33,8 @@
     
     NSString *aboutString=@"SparkHere Version 1.0\n\n"
     
+    "Many thanks to Dr. Chao Wu, Wuyang Xu and Minghao Fan.\n\n"
+    
     "Any furthur questions please send email to aty_3361@sina.com";
     
     [aboutLabel setNumberOfLines:0];

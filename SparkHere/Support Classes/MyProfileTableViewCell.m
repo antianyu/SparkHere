@@ -16,6 +16,7 @@
 }
 
 @synthesize logoImageView;
+@synthesize logoImageViewContainer;
 @synthesize nicknameLabel;
 @synthesize locationLabel;
 
@@ -23,6 +24,8 @@
 {
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self setBackgroundColor:[UIColor whiteColor]];
+    
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
     
     nicknameLabel.text=appDelegate.user.nickname;
     nicknameLabel.textColor=appDelegate.majorColor;

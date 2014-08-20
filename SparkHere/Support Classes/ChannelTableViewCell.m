@@ -14,9 +14,10 @@
     AppDelegate *appDelegate;
 }
 
+@synthesize logoImageView;
+@synthesize logoImageViewContainer;
 @synthesize channelNameLabel;
 @synthesize followersLabel;
-@synthesize logoImageView;
 
 - (void)awakeFromNib
 {
@@ -24,6 +25,7 @@
     [self setBackgroundColor:[UIColor clearColor]];
     [channelNameLabel setTextColor:appDelegate.majorColor];
     [followersLabel setTextColor:appDelegate.detailColor];
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:1.5 shadowOffset:2];
 }
 
 - (void)setChannel:(Channel *)channel fontSize:(int)fontSize
