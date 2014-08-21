@@ -189,7 +189,7 @@
          }
          
          logoImageViewContainer.hidden=NO;
-         [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
+         [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:2.5 shadowOffset:3];
          if (channel.logo!=nil)
          {
              logoImageView.image=channel.logo;

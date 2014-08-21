@@ -53,7 +53,7 @@
     self.navigationItem.rightBarButtonItem=saveButtonItem;
     
     // init logoImageView
-    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:2.5 shadowOffset:3];
     
     logoImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self

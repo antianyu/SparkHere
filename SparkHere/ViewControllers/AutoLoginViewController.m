@@ -34,10 +34,22 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:appDelegate.backgroundImage]];
     
-    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
+    if (!appDelegate.is4Inch)
+    {
+        CGRect frame=logoImageViewContainer.frame;
+        frame.origin.y-=40;
+        logoImageViewContainer.frame=frame;
+        
+        frame=nicknameLabel.frame;
+        frame.origin.y-=40;
+        nicknameLabel.frame=frame;
+    }
+    
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:2.5 shadowOffset:3];
     
     logoImageView.image=appDelegate.settings.defaultLogo;
-    nicknameLabel.text=appDelegate.settings.defaultNickname;
+    
+    nicknameLabel.text=[@"Welcome back,\n" stringByAppendingString:appDelegate.settings.defaultNickname];
     nicknameLabel.textColor=appDelegate.majorColor;
     
     appDelegate.refreshMessageList=YES;

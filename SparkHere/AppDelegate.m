@@ -245,7 +245,7 @@
     CALayer *containerLayer=container.layer;
     containerLayer.shadowColor=[UIColor darkGrayColor].CGColor;
     containerLayer.shadowOpacity=0.8;
-    containerLayer.shadowOffset=CGSizeMake(offset, offset);
+    containerLayer.shadowOffset=CGSizeMake(0, offset);
     containerLayer.shadowRadius=3;
     containerLayer.shadowPath=[UIBezierPath bezierPathWithRoundedRect:imageView.bounds cornerRadius:radius].CGPath;
 }

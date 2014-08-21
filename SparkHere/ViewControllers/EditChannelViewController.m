@@ -55,7 +55,7 @@
     }
     else
     {
-        self.title=@"Establish New Channel";
+        self.title=@"New Channel";
     }
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -80,7 +80,7 @@
     
     privilegeSegmentedControl.tintColor=appDelegate.majorColor;
     
-    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:2.5 shadowOffset:3];
     
     logoImageView.userInteractionEnabled=YES;
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc]initWithTarget:self

@@ -25,7 +25,7 @@
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self setBackgroundColor:[UIColor whiteColor]];
     
-    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:3 shadowOffset:3];
+    [appDelegate setImageViewStyle:logoImageView container:logoImageViewContainer borderWidth:2.5 shadowOffset:3];
     
     nicknameLabel.text=appDelegate.user.nickname;
     nicknameLabel.textColor=appDelegate.majorColor;
