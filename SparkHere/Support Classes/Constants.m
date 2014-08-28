@@ -8,7 +8,7 @@
 
 #import "Constants.h"
 
-const double MESSAGE_RANGE=5;
+const double MESSAGE_RANGE=1;
 
 const double MAXIMUM_HEIGHT=1000;
 const double VIEW_WIDTH=320;

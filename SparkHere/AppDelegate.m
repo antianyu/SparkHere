@@ -296,7 +296,8 @@
             [query whereKey:@"userID" equalTo:user.userID];
             [query orderByDescending:@"updatedAt"];
             query.limit=ITEMS_PER_REQUEST;
-            NSArray *subscriptions=[query findObjects];
+            NSError *error=nil;
+            NSArray *subscriptions=[query findObjects:&error];
             
             // get channels from subscriptions
             for (PFObject *object in subscriptions)

@@ -16,7 +16,7 @@
 @property (strong, nonatomic) NSString *messageID;
 @property (strong, nonatomic) NSString *content;
 @property (strong, nonatomic) UIImage *image;
-@property (strong, nonatomic) NSDate *updateAt;
+@property (strong, nonatomic) NSDate *updatedAt;
 @property (strong, nonatomic) NSString *area;
 @property (strong, nonatomic) PFGeoPoint *location;
 @property (strong, nonatomic) User *sender;

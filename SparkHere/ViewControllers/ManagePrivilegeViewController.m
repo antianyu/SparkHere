@@ -153,7 +153,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    index=indexPath.row;
+    index=(int)indexPath.row;
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
         isMemberTableView=NO;
@@ -206,7 +206,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    index=indexPath.row;
+    index=(int)indexPath.row;
     int targetPrivilege;
     
     // swipe to delete
@@ -289,7 +289,7 @@
 {
     if (buttonIndex!=alertView.cancelButtonIndex && buttonIndex!=originalPrivilege)
     {
-        [self saveNewPrivilege:buttonIndex];
+        [self saveNewPrivilege:(int)buttonIndex];
     }
     else if (deleteSucceed)
     {

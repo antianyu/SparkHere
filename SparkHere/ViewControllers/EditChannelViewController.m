@@ -430,7 +430,7 @@
         {
             newChannel[@"followersNumber"]=[NSNumber numberWithInt:channel.followersNumber];
         }
-        newChannel[@"defaultPrivilege"]=[NSNumber numberWithInt:privilegeSegmentedControl.selectedSegmentIndex+1];
+        newChannel[@"defaultPrivilege"]=[NSNumber numberWithInt:(int)privilegeSegmentedControl.selectedSegmentIndex+1];
         newChannel[@"category"]=[NSNumber numberWithInt:channel.category];
         NSData *logoData=UIImageJPEGRepresentation(logoImageView.image, 1);
         PFFile *logo=[PFFile fileWithName:@"logo.jpg" data:logoData];

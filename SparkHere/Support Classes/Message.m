@@ -15,7 +15,7 @@
 @synthesize location;
 @synthesize area;
 @synthesize messageID;
-@synthesize updateAt;
+@synthesize updatedAt;
 @synthesize content;
 @synthesize image;
 
@@ -39,7 +39,7 @@
         sender=msgSender;
         channel=msgChannel;
         messageID=object.objectId;
-        updateAt=object.updatedAt;
+        updatedAt=object.updatedAt;
         content=object[@"content"];
         PFFile *imageFile=object[@"image"];
         image=[UIImage imageWithData:[imageFile getData]];

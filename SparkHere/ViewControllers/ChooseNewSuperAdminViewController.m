@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     
-    self.title=@"Choose New Admin";
+    self.title=@"New Super Admin";
     
     appDelegate=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     progressHUD=[[MBProgressHUD alloc] initWithView:self.view];
@@ -146,7 +146,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    index=indexPath.row;
+    index=(int)indexPath.row;
     if (tableView==self.searchDisplayController.searchResultsTableView)
     {
         tempUser=[searchResults objectAtIndex:index];

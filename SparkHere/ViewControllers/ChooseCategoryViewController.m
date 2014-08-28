@@ -78,7 +78,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.delegate passIntDelegate:indexPath.row];
+    [self.delegate passIntDelegate:(int)indexPath.row];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

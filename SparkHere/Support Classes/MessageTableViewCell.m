@@ -49,20 +49,20 @@
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSUInteger unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit |NSMinuteCalendarUnit;
-    NSDateComponents *cmp1 = [calendar components:unitFlags fromDate:message.updateAt];
+    NSDateComponents *cmp1 = [calendar components:unitFlags fromDate:message.updatedAt];
     NSDateComponents *cmp2 = [calendar components:unitFlags fromDate:[NSDate date]];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     if ([cmp1 day] == [cmp2 day])
     {
         [formatter setDateFormat:@"HH:mm a"];
-        NSString *time = [formatter stringFromDate:message.updateAt];
+        NSString *time = [formatter stringFromDate:message.updatedAt];
         updateLabel.text = [NSString stringWithFormat:@"Today %@", time];
     }
     else
     {
         formatter.dateFormat = @"dd/MM/yyyy HH:mm a";
-        NSString *time = [formatter stringFromDate:message.updateAt];
+        NSString *time = [formatter stringFromDate:message.updatedAt];
         updateLabel.text = [NSString stringWithFormat:@"%@", time];
     }
     

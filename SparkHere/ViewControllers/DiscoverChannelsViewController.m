@@ -160,7 +160,7 @@
     else
     {
         DiscoverListsViewController *controller=[[DiscoverListsViewController alloc]init];
-        controller.category=indexPath.row;
+        controller.category=(int)indexPath.row;
         
         self.hidesBottomBarWhenPushed=YES;
         

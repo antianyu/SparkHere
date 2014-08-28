@@ -349,7 +349,7 @@
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
          PFObject *channelObj=[query getObjectWithId:channel.channelID];
          int followersNumber=[channelObj[@"followersNumber"] intValue];
-         channelObj[@"followersNumber"]=[NSNumber numberWithInt:followersNumber+1];
+         [channelObj incrementKey:@"followersNumber"];
          [channelObj saveInBackground];
          
          PFObject *subscription=[PFObject objectWithClassName:@"Subscription"];
@@ -416,7 +416,7 @@
      {
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
          PFObject *channelObj=[query getObjectWithId:channel.channelID];
-         channelObj[@"followersNumber"]=[NSNumber numberWithInt:[channelObj[@"followersNumber"] intValue]-1];
+         [channelObj incrementKey:@"followersNumber" byAmount:[NSNumber numberWithInt:-1]];
          [channelObj saveInBackground];
          
          query=[PFQuery queryWithClassName:@"Subscription"];
@@ -476,7 +476,6 @@
               appDelegate.refreshMyChannelList=YES;
               [self.navigationController popViewControllerAnimated:YES];
           }];
-         
      }];
 }
 

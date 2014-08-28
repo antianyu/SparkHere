@@ -57,7 +57,7 @@
     PFInstallation *currentInstallation=[PFInstallation currentInstallation];
     if (currentInstallation.badge!=0)
     {
-        self.tabBarItem.badgeValue=[NSString stringWithFormat:@"%d", currentInstallation.badge];
+        self.tabBarItem.badgeValue=[NSString stringWithFormat:@"%ld", (long)currentInstallation.badge];
     }
     else
     {
