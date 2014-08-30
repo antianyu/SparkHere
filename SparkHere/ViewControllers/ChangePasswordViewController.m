@@ -156,8 +156,11 @@
         [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^
          {
+             // construct new object of user
              PFObject *object=[appDelegate.user getPFObject];
              object[@"password"]=theNewPwdTextField.text;
+             
+             // save to table
              [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
               {
                   if (!error)
@@ -212,6 +215,5 @@
     
     return result;
 }
-
 
 @end

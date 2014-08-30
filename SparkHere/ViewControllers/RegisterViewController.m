@@ -403,15 +403,19 @@
                   }
                   else if(!error && objects.count==0)
                   {
+                      // construct user PFOject
                       PFObject *newUser=[user getPFObject];
                       [newUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
                        {
-                           if (!error)
+                           if (!error) // register succeed
                            {
+                               // get unique ID
                                PFQuery *userQuery=[PFQuery queryWithClassName:@"User"];
                                [userQuery whereKey:@"username" equalTo:user.username];
                                [userQuery whereKey:@"password" equalTo:user.userPassword];
                                [appDelegate setCurrentUser:[query getFirstObject]];
+                               
+                               // prompt user
                                [progressHUD removeFromSuperview];
                                operation=UIAlertViewOperationRegister;
                                UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Congratulations!"
@@ -421,7 +425,7 @@
                                                                   otherButtonTitles:@"Confirm", nil];
                                [alert show];
                            }
-                           else
+                           else // query error
                            {
                                [progressHUD removeFromSuperview];
                                [appDelegate showUIAlertViewWithTitle:@"Woops!" message:@"Register failed! Something wrong with server!" delegate:self];

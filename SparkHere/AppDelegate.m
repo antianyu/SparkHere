@@ -292,14 +292,14 @@
         {
             [myChannelList removeAllObjects];
             
+            // get all subscriptions of current User
             PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
             [query whereKey:@"userID" equalTo:user.userID];
             [query orderByDescending:@"updatedAt"];
             query.limit=ITEMS_PER_REQUEST;
-            NSError *error=nil;
-            NSArray *subscriptions=[query findObjects:&error];
+            NSArray *subscriptions=[query findObjects];
             
-            // get channels from subscriptions
+            // get all subscribed channels
             for (PFObject *object in subscriptions)
             {
                 PFQuery *channelQuery=[PFQuery queryWithClassName:@"Channel"];
@@ -349,7 +349,7 @@
             
             NSMutableArray *subQueries=[[NSMutableArray alloc]init];
             
-            // if the user is in the range of channel, add query constraint of the channel
+            // add query constraint of channels
             for (Channel *channel in myChannelList)
             {
                 PFQuery *query=[PFQuery queryWithClassName:@"Message"];
@@ -357,15 +357,18 @@
                 [subQueries addObject:query];
             }
             
-            if (subQueries.count>0)
+            if (subQueries.count>0) // subscribed at least one channel
             {
+                // get messages which are within certain distance
                 PFQuery *query=[PFQuery orQueryWithSubqueries:subQueries];
+                // set location filter constraints
                 [query whereKey:@"location" nearGeoPoint:currentLocation withinKilometers:MESSAGE_RANGE];
                 [query orderByDescending:@"updatedAt"];
                 query.limit=MESSAGES_PER_REQUEST;
                 
                 NSArray *messages=[query findObjects];
                 
+                // convert from PFObject to Message
                 for (PFObject *object in messages)
                 {
                     query=[PFQuery queryWithClassName:@"User"];
@@ -377,6 +380,7 @@
                     [messageList addObject:message];
                 }
                 
+                // change update time (used for pull-to-refresh)
                 if (messages.count>0)
                 {                    
                     PFObject *object=[messages lastObject];
@@ -391,7 +395,7 @@
         {
             NSMutableArray *subQueries=[[NSMutableArray alloc]init];
             
-            // if the user is in the range of channel, add query constraint of the channel
+            // add query constraint of channels
             for (Channel *channel in myChannelList)
             {
                 PFQuery *query=[PFQuery queryWithClassName:@"Message"];
@@ -511,5 +515,6 @@
                                           repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
-
 @end
+
+

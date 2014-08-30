@@ -10,7 +10,6 @@
 #import "User.h"
 #import "Channel.h"
 
-
 @interface Message : NSObject
 
 @property (strong, nonatomic) NSString *messageID;

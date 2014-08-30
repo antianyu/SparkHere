@@ -346,12 +346,14 @@
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
+         // increment followersNumber
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
          PFObject *channelObj=[query getObjectWithId:channel.channelID];
          int followersNumber=[channelObj[@"followersNumber"] intValue];
          [channelObj incrementKey:@"followersNumber"];
          [channelObj saveInBackground];
          
+         // save subscription object
          PFObject *subscription=[PFObject objectWithClassName:@"Subscription"];
          subscription[@"channelID"]=channel.channelID;
          subscription[@"userID"]=appDelegate.user.userID;
@@ -365,6 +367,7 @@
          }
          [subscription saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
+              // refresh view
               followersLabel.text=[self constructFollowersString:[channelObj[@"followersNumber"] intValue]];
               privilege=[channelObj[@"defaultPrivilege"] intValue];
               if (privilege>=3)
@@ -414,17 +417,20 @@
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
+         // decrement followersNumber
          PFQuery *query=[PFQuery queryWithClassName:@"Channel"];
          PFObject *channelObj=[query getObjectWithId:channel.channelID];
          [channelObj incrementKey:@"followersNumber" byAmount:[NSNumber numberWithInt:-1]];
          [channelObj saveInBackground];
          
+         // delete subscription object
          query=[PFQuery queryWithClassName:@"Subscription"];
          [query whereKey:@"channelID" equalTo:channel.channelID];
          [query whereKey:@"userID" equalTo:appDelegate.user.userID];
          PFObject *object=[query getFirstObject];
          [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
+              // refresh view
               followersLabel.text=[self constructFollowersString:[channelObj[@"followersNumber"] intValue]];
               privilege=0;
               self.navigationItem.rightBarButtonItem=nil;
@@ -440,16 +446,17 @@
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
+         // get and delete subscriptions associated to the channel
          PFQuery *query=[PFQuery queryWithClassName:@"Subscription"];
          [query whereKey:@"channelID" equalTo:channel.channelID];
          NSArray *subscriptions=[query findObjects];
          
-         // get channels from subscriptions
          for (PFObject *object in subscriptions)
          {
              [object deleteInBackground];
          }
          
+         // get and delete messages associated to the channel
          query=[PFQuery queryWithClassName:@"Message"];
          [query whereKey:@"channelID" equalTo:channel.channelID];
          NSArray *messages=[query findObjects];
@@ -462,6 +469,7 @@
          
          query=[PFQuery queryWithClassName:@"Channel"];
          
+         // delete channel
          PFObject *object=[query getObjectWithId:channel.channelID];
          [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {

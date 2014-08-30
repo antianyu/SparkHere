@@ -145,17 +145,20 @@
             [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
             [progressHUD showAnimated:YES whileExecutingBlock:^
              {
+                 // wipe out user information in server
                  PFInstallation *currentInstallation=[PFInstallation currentInstallation];
                  [currentInstallation setObject:@"" forKey:@"currentUserID"];
                  [currentInstallation saveInBackground];
                  
+                 // update local settings
                  appDelegate.user=nil;
                  appDelegate.settings.autoLogin=NO;
                  [appDelegate.settings saveSettings];
                  
+                 // jump to welcome page
                  [progressHUD removeFromSuperview];
                  WelcomeViewController *controller=[[WelcomeViewController alloc]init];
-                 UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:controller];
+                 UINavigationController *navController=[[UINavigationController alloc] initWithRootViewController:controller];
                  [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
                  [self presentViewController:navController animated:YES completion:nil];
              }];

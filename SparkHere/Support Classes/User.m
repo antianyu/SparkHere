@@ -75,6 +75,8 @@
     userPassword=object[@"password"];
     nickname=object[@"nickname"];
     userID=object.objectId;
+    
+    // get image from PFObject
     PFFile *imageFile=object[@"logo"];
     logo=[UIImage imageWithData:[imageFile getData]];
 }
@@ -87,6 +89,7 @@
     object[@"password"]=userPassword;
     object[@"nickname"]=nickname;
     
+    // construct file of image and attach it to PFObject
     NSData *logoData=UIImageJPEGRepresentation(logo, 1);
     PFFile *logoFile=[PFFile fileWithName:@"logo.jpg" data:logoData];
     object[@"logo"]=logoFile;

@@ -282,6 +282,7 @@
     [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
     [progressHUD showAnimated:YES whileExecutingBlock:^
      {
+         // construct new object of user
          PFObject *object=[appDelegate.user getPFObject];
          object[@"nickname"]=nicknameTextField.text;
          if (logoImageView.image!=appDelegate.user.logo)
@@ -291,8 +292,10 @@
              object[@"logo"]=logo;
          }
          
+         // save to table
          [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
+              // refresh attributes and set local variable
               PFQuery *query=[PFQuery queryWithClassName:@"User"];
               [appDelegate setCurrentUser:[query getObjectWithId:appDelegate.user.userID]];
               [progressHUD removeFromSuperview];

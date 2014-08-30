@@ -43,6 +43,8 @@
         followersNumber=[object[@"followersNumber"] intValue];
         defaultPrivilege=[object[@"defaultPrivilege"] intValue];
         category=[object[@"category"] intValue];
+        
+        // construct file of image and attach it to PFObject
         PFFile *imageFile=object[@"logo"];
         logo=[UIImage imageWithData:[imageFile getData]];
     }

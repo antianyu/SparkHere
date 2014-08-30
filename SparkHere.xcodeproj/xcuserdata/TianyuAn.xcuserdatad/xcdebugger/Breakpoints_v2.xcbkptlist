@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "161"
             endingLineNumber = "161"
-            landmarkName = "-loginRequest"
+            landmarkName = "-constructUser"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -798,6 +798,22 @@
             startingLineNumber = "300"
             endingLineNumber = "300"
             landmarkName = "-constructListsFromMessageVC:tableView:tabBarItem:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SparkHere/ViewControllers/ChannelDetailViewController.m"
+            timestampString = "431107024.989068"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "445"
+            endingLineNumber = "445"
+            landmarkName = "-showDeleteChannelWaitingView"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

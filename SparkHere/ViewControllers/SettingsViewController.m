@@ -95,10 +95,14 @@
     
     if (receiveMessage && !receiveMessageSwitch.on)
     {
+        // cancel register
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
         
+        // set local settings
         settings.registeredForNotification=NO;
+        
+        // set installation object in server
         PFInstallation *currentInstallation=[PFInstallation currentInstallation];
         [currentInstallation setDeviceTokenFromData:settings.deviceToken];
         currentInstallation[@"receiveMessage"]=[NSNumber numberWithBool:NO];

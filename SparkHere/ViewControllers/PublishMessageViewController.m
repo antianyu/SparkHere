@@ -260,6 +260,7 @@
              return;
          }
 
+         // construct message object
          PFObject *newMessage=[PFObject objectWithClassName:@"Message"];
          newMessage[@"channelID"]=channel.channelID;
          newMessage[@"senderID"]=appDelegate.user.userID;
@@ -272,6 +273,7 @@
              newMessage[@"image"]=image;
          }
          
+         // save object to table of message
          [newMessage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
           {
               if (!error)

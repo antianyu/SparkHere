@@ -162,24 +162,29 @@
 
 - (void)loginRequest
 {
+    // query username in table of user
     PFQuery *query=[PFQuery queryWithClassName:@"User"];
     [query whereKey:@"username" equalTo:appDelegate.user.username];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
-         if (!error && objects.count>0)
+         if (!error && objects.count>0) // username exists
          {
+             // query password in table of user
              [query whereKey:@"password" equalTo:appDelegate.user.userPassword];
              [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
               {
-                  if (!error && objects.count>0)
+                  if (!error && objects.count>0) // username and password are matched
                   {
+                      // update global user with information obtained from server and save it to local storage
                       appDelegate.settings.autoLogin=YES;
                       [appDelegate setCurrentUser:[objects firstObject]];
                       
+                      // update user in installation object
                       PFInstallation *currentInstallation=[PFInstallation currentInstallation];
                       [currentInstallation setObject:appDelegate.user.userID forKey:@"currentUserID"];
                       [currentInstallation saveInBackground];
                       
+                      // set local flags and variables
                       appDelegate.refreshMessageList=YES;
                       appDelegate.refreshMyChannelList=YES;
                       [appDelegate.messageList removeAllObjects];
@@ -187,31 +192,33 @@
                       
                       [progressHUD removeFromSuperview];
                       
+                      // jump to main page
                       MainViewController *controller=[[MainViewController alloc]init];
                       [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
                       [self presentViewController:controller animated:YES completion:nil];
                   }
-                  else if(!error && objects.count==0)
+                  else if(!error && objects.count==0) // password is not matched
                   {
                       [progressHUD removeFromSuperview];
                       inputError=TextInputErrorPassword;
                       [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Username and password do not match!"  delegate:self];
                   }
-                  else
+                  else // query error
                   {
+                      // prompt user
                       [progressHUD removeFromSuperview];
                       inputError=TextInputErrorNone;
                       [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Query error!" delegate:self];
                   }
               }];
          }
-         else if(!error && objects.count==0)
+         else if(!error && objects.count==0) // username doesn't exist
          {
              [progressHUD removeFromSuperview];
              inputError=TextInputErrorUserName;
              [appDelegate showUIAlertViewWithTitle:@"Error!" message:@"Invalid username!" delegate:self];
          }
-         else
+         else // query error
          {
              [progressHUD removeFromSuperview];
              inputError=TextInputErrorNone;
@@ -222,11 +229,17 @@
 
 - (void)login
 {
+    // Hide keyboard
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    
+    // construct user
     appDelegate.user=nil;
     [self constructUser];
+    
+    // send login request
     if (appDelegate.user!=nil)
     {
+        // show waiting view
         [[UIApplication sharedApplication].keyWindow addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^
          {
