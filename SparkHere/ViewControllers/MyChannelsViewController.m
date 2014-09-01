@@ -63,10 +63,13 @@
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Channel_unselected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"Channel_selected.png"]];
     
-    [channelTableView reloadData];
     if (appDelegate.refreshMyChannelList)
     {
         [appDelegate constructListsFromMessageVC:NO tableView:channelTableView tabBarItem:nil];
+    }
+    else
+    {
+        [channelTableView reloadData];        
     }
 }
 

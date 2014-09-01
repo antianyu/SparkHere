@@ -37,7 +37,6 @@
 		5551D311199156DC005D4153 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D310199156DC005D4153 /* CoreLocation.framework */; };
 		5551D313199156E8005D4153 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D312199156E8005D4153 /* CFNetwork.framework */; };
 		5551D315199156F0005D4153 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D314199156F0005D4153 /* AudioToolbox.framework */; };
-		5551D31C1991588A005D4153 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5551D31B1991588A005D4153 /* Parse.framework */; };
 		5551D3221991593A005D4153 /* Category.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3211991593A005D4153 /* Category.plist */; };
 		5551D38819915AD3005D4153 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D36219915AD3005D4153 /* Channel.m */; };
 		5551D38919915AD3005D4153 /* ChannelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D36419915AD3005D4153 /* ChannelTableViewCell.m */; };
@@ -98,6 +97,8 @@
 		5551D40319915C34005D4153 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3D819915C34005D4153 /* RegisterViewController.xib */; };
 		5551D40419915C34005D4153 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551D3DA19915C34005D4153 /* SettingsViewController.m */; };
 		5551D40519915C34005D4153 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5551D3DB19915C34005D4153 /* SettingsViewController.xib */; };
+		55CEC79C19B3CC9A00DA1AC7 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CEC79A19B3CC9A00DA1AC7 /* Bolts.framework */; };
+		55CEC79D19B3CC9A00DA1AC7 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CEC79B19B3CC9A00DA1AC7 /* Parse.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,7 +150,6 @@
 		5551D310199156DC005D4153 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5551D312199156E8005D4153 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		5551D314199156F0005D4153 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		5551D31B1991588A005D4153 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = SparkHere/Parse.framework; sourceTree = "<group>"; };
 		5551D3211991593A005D4153 /* Category.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Category.plist; sourceTree = "<group>"; };
 		5551D35E19915ABE005D4153 /* PassBoolDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassBoolDelegate.h; sourceTree = "<group>"; };
 		5551D35F19915ABE005D4153 /* PassIntDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassIntDelegate.h; sourceTree = "<group>"; };
@@ -252,6 +252,8 @@
 		5551D3D919915C34005D4153 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		5551D3DA19915C34005D4153 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		5551D3DB19915C34005D4153 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		55CEC79A19B3CC9A00DA1AC7 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		55CEC79B19B3CC9A00DA1AC7 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,11 +261,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5551D31C1991588A005D4153 /* Parse.framework in Frameworks */,
+				55CEC79C19B3CC9A00DA1AC7 /* Bolts.framework in Frameworks */,
 				5551D315199156F0005D4153 /* AudioToolbox.framework in Frameworks */,
 				5551D313199156E8005D4153 /* CFNetwork.framework in Frameworks */,
 				5551D311199156DC005D4153 /* CoreLocation.framework in Frameworks */,
 				5551D30F199156D6005D4153 /* libz.dylib in Frameworks */,
+				55CEC79D19B3CC9A00DA1AC7 /* Parse.framework in Frameworks */,
 				5551D30D199156CF005D4153 /* MobileCoreServices.framework in Frameworks */,
 				5551D30B199156C9005D4153 /* QuartzCore.framework in Frameworks */,
 				5551D309199156C0005D4153 /* Security.framework in Frameworks */,
@@ -311,7 +314,8 @@
 		5551D2D219915647005D4153 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5551D31B1991588A005D4153 /* Parse.framework */,
+				55CEC79A19B3CC9A00DA1AC7 /* Bolts.framework */,
+				55CEC79B19B3CC9A00DA1AC7 /* Parse.framework */,
 				5551D314199156F0005D4153 /* AudioToolbox.framework */,
 				5551D312199156E8005D4153 /* CFNetwork.framework */,
 				5551D310199156DC005D4153 /* CoreLocation.framework */,
@@ -802,7 +806,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Minghao Fan (3726RN549C)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/TianyuAn/Downloads,
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SparkHere",
 				);
@@ -824,7 +827,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Minghao Fan (3726RN549C)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/TianyuAn/Downloads,
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SparkHere",
 				);

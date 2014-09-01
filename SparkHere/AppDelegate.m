@@ -121,7 +121,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     PFInstallation *currentInstallation=[PFInstallation currentInstallation];
-    application.applicationIconBadgeNumber=currentInstallation.badge;
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:currentInstallation.badge];
     [PFPush handlePush:userInfo];
 }
 

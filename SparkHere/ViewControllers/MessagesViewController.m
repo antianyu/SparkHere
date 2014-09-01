@@ -177,7 +177,7 @@
         
         NSMutableArray *subQueries=[[NSMutableArray alloc]init];
         
-        // if the user is in the range of channel, add query constraint of the channel
+        // add query constraint of the channel
         for (Channel *channel in appDelegate.myChannelList)
         {
             PFQuery *query=[PFQuery queryWithClassName:@"Message"];
@@ -221,6 +221,5 @@
         });
     });
 }
-
 
 @end
